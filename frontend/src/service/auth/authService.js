@@ -2,7 +2,8 @@ import { API_URL } from "../../utils/constants";
 
 export class AuthenticationService {
   async login(user) {
-    return fetch(`${API_URL}login`, {
+    console.log(user);
+    return fetch(`${API_URL}auth`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

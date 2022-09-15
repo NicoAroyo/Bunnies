@@ -4,15 +4,22 @@ import "./Login.scss";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
+import { AuthenticationService } from "../../service/auth/authService";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser, login, logout } from "../../redux/features/userSlice";
 
 const clientId =
   "521406177183-eo7jvfk1egu776rc7vdd76eo34rkqs0g.apps.googleusercontent.com";
+const authService = new AuthenticationService();
 
 export const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [profile, setProfile] = useState(null);
+
+  const dispatch = useDispatch();
+
+  const user = useSelector(currentUser);
 
   useEffect(() => {
     const initClient = () => {
@@ -24,27 +31,26 @@ export const Login = () => {
     gapi.load("client:auth2", initClient);
   });
 
-  const onSuccessGoogle = (res) => {
-    console.log("success:", res);
+  const onSuccessGoogle = async (res) => {
     const { profileObj } = res;
-    setProfile({
+    const { user } = await authService.login({
       loginType: "google",
       email: profileObj.email,
       firstName: profileObj.givenName,
       lastName: profileObj.familyName,
       imageUrl: profileObj.imageUrl,
-      accessToken: profileObj.accessToken,
+      accessToken: res.accessToken,
     });
+    dispatch(login({ ...user }));
   };
 
-  const loginFacebook = (response) => {
+  const loginFacebook = async (response) => {
     console.log(response);
     if (response.status === "unknown") {
       alert("Login failed!");
-      setProfile(null);
       return false;
     }
-    setProfile({
+    const user = await authService.login({
       loginType: "facebook",
       email: response.email,
       firstName: response.name.split(" ")[0],
@@ -52,19 +58,12 @@ export const Login = () => {
       imageUrl: response.picture.url,
       accessToken: response.accessToken,
     });
-  };
-
-  const onFailureGoogle = (err) => {
-    console.error("failed:", err);
-  };
-
-  const logout = () => {
-    setProfile(null);
+    dispatch(login({ ...user }));
   };
 
   return (
     <>
-      {!profile ? (
+      {!user ? (
         <div className="login-wrapper">
           <div className="login">
             <h2>Login to your account</h2>
@@ -91,7 +90,7 @@ export const Login = () => {
                   clientId={clientId}
                   buttonText="Sign in with Google"
                   onSuccess={onSuccessGoogle}
-                  onFailure={onFailureGoogle}
+                  onFailure={(err) => console.err(err)}
                   cookiePolicy={"single_host_origin"}
                   isSignedIn={true}
                 />
@@ -109,19 +108,19 @@ export const Login = () => {
         </div>
       ) : (
         <div>
-          <img src={profile?.imageUrl} alt="user image" />
+          <img src={user?.imageUrl} alt="user image" />
           <h3>User Logged in</h3>
           <p>
-            Name: {profile?.firstName} {profile.lastName}
+            Name: {user?.firstName} {user.lastName}
           </p>
-          <p>Email Address: {profile?.email}</p>
-          {profile.loginType === "facebook" ? (
-            <button onClick={logout}>logout</button>
+          <p>Email Address: {user?.email}</p>
+          {user.loginType === "facebook" ? (
+            <button onClick={() => dispatch(logout())}>logout</button>
           ) : (
             <GoogleLogout
               clientId={clientId}
               buttonText="Log out"
-              onLogoutSuccess={logout}
+              onLogoutSuccess={() => dispatch(logout())}
             />
           )}
         </div>
