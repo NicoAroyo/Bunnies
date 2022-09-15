@@ -26,9 +26,9 @@
   .sign-in-button-container {
     margin-top: 1rem;
     display: flex;
+    width: 40%;
     flex-direction: column;
     gap: 10px;
-    
   }
 
   h2 {
@@ -43,7 +43,7 @@
     margin-bottom: 20px;
     input {
       padding: 10px 8px;
-      width: 95%;
+      width: 100%;
       font-size: 16px;
       background: #323131;
       border: none;
@@ -92,4 +92,6 @@
   background: #222;
   height: 100vh;
 }
+
+
 
