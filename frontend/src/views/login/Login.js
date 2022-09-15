@@ -4,7 +4,6 @@ import "./Login.scss";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import FacebookLogin from "react-facebook-login";
-import FacebookLogout from "react-facebook-login";
 
 const clientId =
   "521406177183-eo7jvfk1egu776rc7vdd76eo34rkqs0g.apps.googleusercontent.com";
@@ -39,7 +38,7 @@ export const Login = () => {
   };
 
   const onFailure = (err) => {
-    console.log("failed:", err);
+    console.error("failed:", err);
   };
 
   const logout = () => {
@@ -119,7 +118,7 @@ export const Login = () => {
           <br />
           <br />
           {profile.loginType === "facebook" ? (
-            <FacebookLogout />
+            <button onClick={logout}>logout</button>
           ) : (
             <GoogleLogout
               clientId={clientId}
