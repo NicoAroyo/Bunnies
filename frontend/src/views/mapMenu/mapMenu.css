@@ -1,0 +1,11 @@
+.filtering {
+    background-color: burlywood;
+    width: 30%;
+    height: 1000px;
+}
+
+.maping{
+    background-color: brown;
+    display: grid;
+    place-items: center;
+}
