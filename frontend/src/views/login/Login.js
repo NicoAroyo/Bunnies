@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import "./Login.scss";
 import { gapi } from "gapi-script";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
+import FacebookLogin from "react-facebook-login";
+import FacebookLogout from "react-facebook-login";
 
 const clientId =
   "521406177183-eo7jvfk1egu776rc7vdd76eo34rkqs0g.apps.googleusercontent.com";
@@ -25,7 +27,15 @@ export const Login = () => {
 
   const onSuccess = (res) => {
     console.log("success:", res);
-    setProfile(res.profileObj);
+    const { profileObj } = res;
+    setProfile({
+      loginType: "google",
+      email: profileObj.email,
+      firstName: profileObj.givenName,
+      lastName: profileObj.familyName,
+      imageUrl: profileObj.imageUrl,
+      accessToken: profileObj.accessToken,
+    });
   };
 
   const onFailure = (err) => {
@@ -34,6 +44,23 @@ export const Login = () => {
 
   const logout = () => {
     setProfile(null);
+  };
+
+  const responseFacebook = (response) => {
+    console.log(response);
+    if (response.status === "unknown") {
+      alert("Login failed!");
+      setProfile(null);
+      return false;
+    }
+    setProfile({
+      loginType: "facebook",
+      email: response.email,
+      firstName: response.name.split(" ")[0],
+      lastName: response.name.split(" ")[1],
+      imageUrl: response.picture.url,
+      accessToken: response.accessToken,
+    });
   };
 
   return (
@@ -58,8 +85,8 @@ export const Login = () => {
                 type="password"
                 onChange={(e) => setPassword(e.target.value)}
               ></input>
-              <button>Login</button>
-              <button>Sign Up</button>
+              <button className="btn-login">Login</button>
+              <button className="btn-login">Sign Up</button>
               <div className="sign-in-button-container">
                 <GoogleLogin
                   clientId={clientId}
@@ -69,7 +96,14 @@ export const Login = () => {
                   cookiePolicy={"single_host_origin"}
                   isSignedIn={true}
                 />
-                <button>sign in with facebook</button>
+                <FacebookLogin
+                  appId="604669111136315"
+                  autoLoad={false}
+                  fields="name,email,picture"
+                  scope="public_profile,email,user_friends"
+                  callback={responseFacebook}
+                  icon="fa-facebook"
+                />
               </div>
             </div>
           </div>
@@ -78,15 +112,21 @@ export const Login = () => {
         <div>
           <img src={profile?.imageUrl} alt="user image" />
           <h3>User Logged in</h3>
-          <p>Name: {profile?.name}</p>
+          <p>
+            Name: {profile?.firstName} {profile.lastName}
+          </p>
           <p>Email Address: {profile?.email}</p>
           <br />
           <br />
-          <GoogleLogout
-            clientId={clientId}
-            buttonText="Log out"
-            onLogoutSuccess={logout}
-          />
+          {profile.loginType === "facebook" ? (
+            <FacebookLogout />
+          ) : (
+            <GoogleLogout
+              clientId={clientId}
+              buttonText="Log out"
+              onLogoutSuccess={logout}
+            />
+          )}
         </div>
       )}
     </>
