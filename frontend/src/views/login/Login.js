@@ -24,7 +24,7 @@ export const Login = () => {
     gapi.load("client:auth2", initClient);
   });
 
-  const onSuccess = (res) => {
+  const onSuccessGoogle = (res) => {
     console.log("success:", res);
     const { profileObj } = res;
     setProfile({
@@ -37,15 +37,7 @@ export const Login = () => {
     });
   };
 
-  const onFailure = (err) => {
-    console.error("failed:", err);
-  };
-
-  const logout = () => {
-    setProfile(null);
-  };
-
-  const responseFacebook = (response) => {
+  const loginFacebook = (response) => {
     console.log(response);
     if (response.status === "unknown") {
       alert("Login failed!");
@@ -60,6 +52,14 @@ export const Login = () => {
       imageUrl: response.picture.url,
       accessToken: response.accessToken,
     });
+  };
+
+  const onFailureGoogle = (err) => {
+    console.error("failed:", err);
+  };
+
+  const logout = () => {
+    setProfile(null);
   };
 
   return (
@@ -90,8 +90,8 @@ export const Login = () => {
                 <GoogleLogin
                   clientId={clientId}
                   buttonText="Sign in with Google"
-                  onSuccess={onSuccess}
-                  onFailure={onFailure}
+                  onSuccess={onSuccessGoogle}
+                  onFailure={onFailureGoogle}
                   cookiePolicy={"single_host_origin"}
                   isSignedIn={true}
                 />
@@ -100,7 +100,7 @@ export const Login = () => {
                   autoLoad={false}
                   fields="name,email,picture"
                   scope="public_profile,email,user_friends"
-                  callback={responseFacebook}
+                  callback={loginFacebook}
                   icon="fa-facebook"
                 />
               </div>
@@ -115,8 +115,6 @@ export const Login = () => {
             Name: {profile?.firstName} {profile.lastName}
           </p>
           <p>Email Address: {profile?.email}</p>
-          <br />
-          <br />
           {profile.loginType === "facebook" ? (
             <button onClick={logout}>logout</button>
           ) : (
