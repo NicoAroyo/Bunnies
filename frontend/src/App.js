@@ -7,10 +7,12 @@ import { Navbar } from "./views/navbar/Navbar";
 import { Home } from "./views/home/Home";
 import { FileUpload } from "./views/test/FileUpload";
 
+
 export const App = () => {
   return (
     <>
       {/* <Navbar></Navbar> */}
+     
       <Routes>
         <Route path="/" element={<Login />}></Route>
         <Route path="/map-menu" element={<MapMenu />}></Route>

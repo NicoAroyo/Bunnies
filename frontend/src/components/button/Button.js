@@ -1,5 +1,18 @@
 import React from "react";
+import "./Button.scss";
 
-export const Button = () => {
-  return <div>Button</div>;
+export const Button = (props) => {
+  return (
+    <button className="btn" {...props}>
+      {props.children}
+    </button>
+  );
+};
+
+export const SmallButton = (props) => {
+  return (
+    <button className="btn-small" {...props}>
+      {props.children}
+    </button>
+  );
 };
