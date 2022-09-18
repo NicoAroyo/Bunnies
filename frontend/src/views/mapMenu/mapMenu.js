@@ -1,4 +1,4 @@
-import "./mapMenu.css";
+import "./mapMenu.scss";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
