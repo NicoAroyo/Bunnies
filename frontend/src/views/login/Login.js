@@ -7,16 +7,8 @@ import FacebookLogin from "react-facebook-login";
 import { AuthenticationService } from "../../service/auth/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, login, logout } from "../../redux/features/userSlice";
-<<<<<<< HEAD
 import { Button } from "../../components/button/Button";
-=======
-<<<<<<< HEAD
-import {Nav} from "../../components/navbar/Navbar";
-
-=======
-import { Button } from "../../components/button/Button";
->>>>>>> 002a584ed2a0cfa3fe50a35333bd728b7c8d384d
->>>>>>> 1719153cea784d6ed576cb2bb09e5be6705d9ce3
+import { Nav } from "../../components/navbar/Navbar";
 
 const clientId =
   "521406177183-eo7jvfk1egu776rc7vdd76eo34rkqs0g.apps.googleusercontent.com";
@@ -82,19 +74,9 @@ export const Login = () => {
 
   return (
     <>
-<<<<<<< HEAD
-     
-      
-      {!user ? (
-        <div className="login-wrapper">
-          
-          <div className="login">
-            <h2>Login to your account</h2>
-=======
       <div className="login-wrapper">
         <div className="login">
           <h2>Login to your account</h2>
->>>>>>> 002a584ed2a0cfa3fe50a35333bd728b7c8d384d
 
           <div className="form-group">
             <label htmlFor="username">Email</label>

@@ -1,40 +1,53 @@
 import React from "react";
+import { GiRabbitHead } from "react-icons/gi";
+import { RiChatSmileFill } from "react-icons/ri";
+import { BsFillGrid1X2Fill } from "react-icons/bs";
 import "./Navbar.scss";
-import { Navigate } from "react-router-dom";
-import { Container } from "react-dom";
-// import {Logo} from "../../images/Logo.jpg"
-import { useEffect } from "react";
+import { Button, SmallButton } from "../button/Button";
+import { useDispatch, useSelector } from "react-redux";
+import { currentUser, logout } from "../../redux/features/userSlice";
+import { useNavigate } from "react-router-dom";
 
-import { VscAccount } from "react-icons/vsc";
-import {GiRabbitHead} from "react-icons/gi"
-import {RiChatSmileFill} from "react-icons/ri"
-import{BsFillGrid1X2Fill} from "react-icons/bs"
+export const Nav = () => {
+  const user = useSelector(currentUser);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-export const Nav = (props) => {
   return (
     <nav className="navbar" sticky="top">
       <a href="/" className="logo">
-        <img src="https://im.ge/i/1qNPwT"></img>
+        <img src={`${process.env.PUBLIC_URL}/images/logo.jpg`} />
       </a>
       <ul>
-        <li> <a href="/buns" className="link"><GiRabbitHead/></a></li>
-        <li> <a href="/chats" className="link"><RiChatSmileFill></RiChatSmileFill></a></li>
-        <li> <a href="/timeline" className="link"><BsFillGrid1X2Fill/></a></li>
+        <li>
+          <a href="/buns" className="link">
+            <GiRabbitHead />
+          </a>
+        </li>
+        <li>
+          <a href="/chats" className="link">
+            <RiChatSmileFill></RiChatSmileFill>
+          </a>
+        </li>
+        <li>
+          <a href="/timeline" className="link">
+            <BsFillGrid1X2Fill />
+          </a>
+        </li>
       </ul>
-     
-      {/* <ul> */}
-      {/* {props?.children?.map((children) => {
-        return(
+      <div className="login-logout">
+        {!user ? (
           <>
-          <li>
-          <a href={children.pathname}></a>
-          </li>
+            <SmallButton onClick={() => navigate("/login")}>Login</SmallButton>
+            <SmallButton>Sign In</SmallButton>
           </>
-        )
-      })}
-      
-      </ul> */}
+        ) : (
+          <>
+            <SmallButton onClick={() => dispatch(logout())}>Logout</SmallButton>
+            <img className="profile-image" src={user.imageUrl} />
+          </>
+        )}
+      </div>
     </nav>
   );
 };
-
