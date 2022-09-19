@@ -2,16 +2,25 @@ import React from "react";
 import { GiRabbitHead } from "react-icons/gi";
 import { RiChatSmileFill } from "react-icons/ri";
 import { BsFillGrid1X2Fill } from "react-icons/bs";
-import "./Navbar.scss";
-import { Button, SmallButton } from "../button/Button";
+import { SmallButton } from "../button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
+import "./Navbar.scss";
 
 export const Nav = () => {
-  const user = useSelector(currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const user = useSelector(currentUser);
+
+  const pageLogout = () => {
+    try {
+      dispatch(logout());
+      navigate("/login");
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <nav className="navbar" sticky="top">
@@ -43,7 +52,7 @@ export const Nav = () => {
           </>
         ) : (
           <>
-            <SmallButton onClick={() => dispatch(logout())}>Logout</SmallButton>
+            <SmallButton onClick={pageLogout}>Logout</SmallButton>
             <img className="profile-image" src={user.imageUrl} />
           </>
         )}

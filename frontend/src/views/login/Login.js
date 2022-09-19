@@ -45,7 +45,7 @@ export const Login = () => {
       accessToken: response.accessToken,
     });
     dispatch(login({ ...user }));
-    navigateHome();
+    navigate("/");
   };
 
   const loginFacebook = async (response) => {
@@ -54,7 +54,7 @@ export const Login = () => {
       alert("Login failed!");
       return false;
     }
-    const user = await authService.login({
+    const { user } = await authService.login({
       loginType: "facebook",
       email: response.email,
       firstName: response.name.split(" ")[0],
@@ -63,14 +63,10 @@ export const Login = () => {
       accessToken: response.accessToken,
     });
     dispatch(login({ ...user }));
-    navigateHome();
+    navigate("/");
   };
 
   const loginLocal = async () => {};
-
-  const navigateHome = () => {
-    navigate("/home");
-  };
 
   return (
     <>
@@ -94,10 +90,12 @@ export const Login = () => {
               onChange={(e) => setPassword(e.target.value)}
             ></input>
 
-            <button className="btn-login" onClick={loginLocal}>
-              Login
-            </button>
-            <button className="btn-login">Sign Up</button>
+            <div className="button-container">
+              <button className="btn-login" onClick={loginLocal}>
+                Login
+              </button>
+              <button className="btn-login">Sign Up</button>
+            </div>
 
             <div className="sign-in-button-container">
               <GoogleLogin

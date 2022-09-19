@@ -1,13 +1,15 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
+import { MapMenu } from "../mapMenu/mapMenu";
 
 export const Home = () => {
   const user = useSelector(currentUser);
 
   return (
     <div>
-      {(() => {
+      <MapMenu />
+      {/* {(() => {
         if (!user) {
           return <h2>youre not logged in</h2>;
         } else if (user.isAdmin) {
@@ -15,7 +17,7 @@ export const Home = () => {
         } else {
           return <h2>youre not an admin</h2>;
         }
-      })()}
+      })()} */}
     </div>
   );
 };

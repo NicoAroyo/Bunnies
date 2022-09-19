@@ -9,7 +9,7 @@ import {
   Marker,
 } from "@react-google-maps/api";
 
-function MapMenu() {
+export const MapMenu = () => {
   const initialMarkers = [
     {
       position: {
@@ -129,5 +129,4 @@ function MapMenu() {
       </div>
     </section>
   );
-}
-export default MapMenu;
+};
