@@ -2,12 +2,7 @@ import "./mapMenu.scss";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
-import {
-  GoogleMap,
-  InfoWindow,
-  LoadScript,
-  Marker,
-} from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, LoadScript, Marker,} from "@react-google-maps/api";
 
 function MapMenu() {
   const initialMarkers = [
@@ -18,23 +13,7 @@ function MapMenu() {
       },
       label: { color: "white", text: "P1" },
       draggable: true,
-    },
-    {
-      position: {
-        lat: 28.625293,
-        lng: 79.817926,
-      },
-      label: { color: "white", text: "P2" },
-      draggable: false,
-    },
-    {
-      position: {
-        lat: 28.625182,
-        lng: 79.81464,
-      },
-      label: { color: "white", text: "P3" },
-      draggable: true,
-    },
+    }
   ];
 
   const [activeInfoWindow, setActiveInfoWindow] = useState("");
@@ -42,7 +21,7 @@ function MapMenu() {
 
   const containerStyle = {
     width: "100%",
-    height: "400px",
+    height: "660px",
   };
 
   const center = {
@@ -66,7 +45,7 @@ function MapMenu() {
 
   return (
     <section>
-      <div className="maping">
+      <div className="maping right">
         <LoadScript googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M">
           <GoogleMap
             mapContainerStyle={containerStyle}
