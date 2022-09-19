@@ -10,10 +10,6 @@ import { currentUser, login, logout } from "../../redux/features/userSlice";
 import { Button } from "../../components/button/Button";
 import { Nav } from "../../components/navbar/Navbar";
 
-const clientId =
-  "521406177183-eo7jvfk1egu776rc7vdd76eo34rkqs0g.apps.googleusercontent.com";
-const authService = new AuthenticationService();
-
 export const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
@@ -21,52 +17,20 @@ export const Login = () => {
 
   const dispatch = useDispatch();
 
-  const user = useSelector(currentUser);
-
-  //google api
-  useEffect(() => {
-    const initClient = () => {
-      gapi.client.init({
-        clientId: clientId,
-        scope: "",
-      });
-    };
-    gapi.load("client:auth2", initClient);
-  });
-
-  const loginGoogle = async (response) => {
-    const { profileObj } = response;
-    const { user } = await authService.login({
-      loginType: "google",
-      email: profileObj.email,
-      firstName: profileObj.givenName,
-      lastName: profileObj.familyName,
-      imageUrl: profileObj.imageUrl,
-      accessToken: response.accessToken,
-    });
-    dispatch(login({ ...user }));
-    navigate("/");
-  };
-
-  const loginFacebook = async (response) => {
-    console.log(response);
-    if (response.status === "unknown") {
-      alert("Login failed!");
-      return false;
+  const submitLogin = async () => {
+    const authenticationService = new AuthenticationService();
+    try {
+      const response = await authenticationService.login({ email, password });
+      if (response.ok) {
+        dispatch(login({ ...response.user }));
+        navigate("/");
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      alert(error);
     }
-    const { user } = await authService.login({
-      loginType: "facebook",
-      email: response.email,
-      firstName: response.name.split(" ")[0],
-      lastName: response.name.split(" ")[1],
-      imageUrl: response.picture.url,
-      accessToken: response.accessToken,
-    });
-    dispatch(login({ ...user }));
-    navigate("/");
   };
-
-  const loginLocal = async () => {};
 
   return (
     <>
@@ -77,6 +41,7 @@ export const Login = () => {
           <div className="form-group">
             <label htmlFor="username">Email</label>
             <input
+              className="form-input"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             ></input>
@@ -85,36 +50,20 @@ export const Login = () => {
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <input
+              className="form-input"
               value={password}
               type="password"
               onChange={(e) => setPassword(e.target.value)}
             ></input>
+          </div>
 
-            <div className="button-container">
-              <button className="btn-login" onClick={loginLocal}>
-                Login
-              </button>
-              <button className="btn-login">Sign Up</button>
-            </div>
-
-            <div className="sign-in-button-container">
-              <GoogleLogin
-                clientId={clientId}
-                buttonText="Sign in with Google"
-                onSuccess={loginGoogle}
-                onFailure={(err) => console.err(err)}
-                cookiePolicy={"single_host_origin"}
-                isSignedIn={true}
-              />
-              <FacebookLogin
-                appId="604669111136315"
-                autoLoad={false}
-                fields="name,email,picture"
-                scope="public_profile,email,user_friends"
-                callback={loginFacebook}
-                icon="fa-facebook"
-              />
-            </div>
+          <div className="button-container">
+            <button className="btn-login" onClick={submitLogin}>
+              Login
+            </button>
+            <button className="btn-login" onClick={() => navigate("/sign-up")}>
+              don't have an account?? Sign Up
+            </button>
           </div>
         </div>
       </div>

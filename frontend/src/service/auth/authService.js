@@ -1,14 +1,25 @@
 import { API_URL } from "../../utils/constants";
 
 export class AuthenticationService {
-  async login(user) {
-    console.log(user);
-    return fetch(`${API_URL}auth`, {
+  async signUp(user) {
+    return fetch(`${API_URL}auth/sign-up`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(user),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async login(credentials) {
+    return fetch(`${API_URL}auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
     })
       .then(this.#success)
       .catch(this.#failure);

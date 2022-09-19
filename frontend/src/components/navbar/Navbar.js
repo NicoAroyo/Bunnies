@@ -16,7 +16,6 @@ export const Nav = () => {
   const pageLogout = () => {
     try {
       dispatch(logout());
-      navigate("/login");
     } catch (error) {
       console.error(error);
     }
@@ -48,7 +47,9 @@ export const Nav = () => {
         {!user ? (
           <>
             <SmallButton onClick={() => navigate("/login")}>Login</SmallButton>
-            <SmallButton>Sign In</SmallButton>
+            <SmallButton onClick={() => navigate("sign-up")}>
+              Sign Up
+            </SmallButton>
           </>
         ) : (
           <>
