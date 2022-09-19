@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import React from "react";
 import { GoogleMap, InfoWindow, LoadScript, Marker,} from "@react-google-maps/api";
 
-function MapMenu() {
+export const MapMenu = () => {
   const initialMarkers = [
     {
       position: {
@@ -108,5 +108,4 @@ function MapMenu() {
       </div>
     </section>
   );
-}
-export default MapMenu;
+};
