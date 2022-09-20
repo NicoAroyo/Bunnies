@@ -63,7 +63,9 @@ export const SignUp = () => {
     } else {
       try {
         const authService = new AuthenticationService();
+        delete newUser.confirmPassword;
         const response = await authService.signUp({ ...newUser });
+        console.log(response);
         if (response.ok && response.user) {
           dispatch(login({ ...response.user }));
           navigate("/");

@@ -22,8 +22,9 @@ export const Login = () => {
     try {
       const response = await authenticationService.login({ email, password });
       if (response.ok) {
+        localStorage.setItem("token", response.accessToken);
         dispatch(login({ ...response.user }));
-        navigate("/map-menu");
+        navigate("/");
       } else {
         throw new Error(response.message);
       }
