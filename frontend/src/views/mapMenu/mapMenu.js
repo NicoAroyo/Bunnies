@@ -3,84 +3,26 @@ import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import React from "react";
 import { GoogleMap, InfoWindow, LoadScript, Marker,} from "@react-google-maps/api";
+import { Wrapper, Status } from "@googlemaps/react-wrapper";
+import MapComponent from "../../components/map/map";
+
+
 
 export const MapMenu = () => {
-  const initialMarkers = [
-    {
-      position: {
-        lat: 28.625485,
-        lng: 79.821091,
-      },
-      label: { color: "white", text: "P1" },
-      draggable: true,
-    }
-  ];
 
-  const [activeInfoWindow, setActiveInfoWindow] = useState("");
-  const [markers, setMarkers] = useState(initialMarkers);
-
-  const containerStyle = {
-    width: "100%",
-    height: "660px",
-  };
-
-  const center = {
-    lat: 28.626137,
-    lng: 79.821603,
-  };
-
-  const mapClicked = (event) => {
-    console.log(event.latLng.lat(), event.latLng.lng());
-  };
-
-  const markerClicked = (marker, index) => {
-    setActiveInfoWindow(index);
-    console.log(marker, index);
-  };
-
-  const markerDragEnd = (event, index) => {
-    console.log(event.latLng.lat());
-    console.log(event.latLng.lng());
-  };
 
   return (
     <section>
       <div className="maping right">
-        <LoadScript googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M">
-          <GoogleMap
-            mapContainerStyle={containerStyle}
-            center={center}
-            zoom={15}
-            onClick={mapClicked}
-          >
-            {markers.map((marker, index) => (
-              <Marker
-                key={index}
-                position={marker.position}
-                label={marker.label}
-                draggable={marker.draggable}
-                onDragEnd={(event) => markerDragEnd(event, index)}
-                onClick={(event) => markerClicked(marker, index)}
-              >
-                {activeInfoWindow === index && (
-                  <InfoWindow position={marker.position}>
-                    <b>
-                      {marker.position.lat}, {marker.position.lng}
-                    </b>
-                  </InfoWindow>
-                )}
-              </Marker>
-            ))}
-          </GoogleMap>
-        </LoadScript>
+      <MapComponent  className="right"/>
       </div>
       <div className="filtering">
-        <div>
+        <div className="dobtn">
           <h5>publish new post</h5>
-          <button>publish new post</button>
+          <button className="btn">new post<img src={''}/></button>
           <div className="frinds">
             <h5>frinds</h5>
-            <button>frinds</button>
+            <button className="btn">Frinds<img src={''}/></button>
           </div>
         </div>
         <div>
