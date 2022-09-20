@@ -23,7 +23,7 @@ export const Login = () => {
       const response = await authenticationService.login({ email, password });
       if (response.ok) {
         dispatch(login({ ...response.user }));
-        navigate("/");
+        navigate("/map-menu");
       } else {
         throw new Error(response.message);
       }

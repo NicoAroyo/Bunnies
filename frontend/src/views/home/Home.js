@@ -2,13 +2,14 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { MapMenu } from "../mapMenu/mapMenu";
+import { MapAllPosts } from "../mapAllPosts/mapAllPosts";
 
 export const Home = () => {
   const user = useSelector(currentUser);
 
   return (
     <div>
-      <MapMenu />
+      <MapAllPosts/>
       {/* {(() => {
         if (!user) {
           return <h2>youre not logged in</h2>;

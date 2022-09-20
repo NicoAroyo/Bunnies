@@ -20,6 +20,7 @@ export const App = () => {
         <Route path="/" element={<Home />}></Route>
         <Route path="/file" element={<FileUpload />}></Route>
         <Route path="/buns" element={<Buns />}></Route>
+        <Route path="/map-start-view" element={<mapAllPosts/>}></Route>
       </Routes>
     </>
   );
