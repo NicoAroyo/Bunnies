@@ -35,7 +35,7 @@ const Map = () => {
   ];
 
   const [activeInfoWindow, setActiveInfoWindow] = useState("");
-  const [markers, setMarkers] = useState(initialMarkers);
+  const [markers, setMarkers] = useState([]);
 
   const containerStyle = {
     width: "100%",

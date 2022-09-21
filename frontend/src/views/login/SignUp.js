@@ -67,6 +67,7 @@ export const SignUp = () => {
         const response = await authService.signUp({ ...newUser });
         console.log(response);
         if (response.ok && response.user) {
+          localStorage.setItem(JSON.stringify(response.user));
           dispatch(login({ ...response.user }));
           navigate("/");
         } else {

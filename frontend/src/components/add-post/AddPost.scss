@@ -1,0 +1,13 @@
+.new-post {
+  display: flex;
+  flex-direction: column;
+  .user-pic {
+    width: 50px;
+    border-radius: 50%;
+  }
+
+  .map-container {
+    margin-left: 100px;
+    width: 50%;
+  }
+}

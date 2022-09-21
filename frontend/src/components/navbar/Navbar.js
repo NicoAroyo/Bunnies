@@ -15,7 +15,7 @@ export const Nav = () => {
 
   const pageLogout = () => {
     try {
-      localStorage.removeItem("token");
+      localStorage.removeItem("user");
       dispatch(logout());
     } catch (error) {
       console.error(error);
