@@ -3,9 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddPost } from "../../components/add-post/AddPost";
 import { Button } from "../../components/button/Button";
 import Map from "../../components/map/Map";
+import { Post } from "../../components/post/Post";
 import { currentUser, login } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
 import { MapMenu } from "../mapMenu/mapMenu";
+import "./Home.scss";
 
 export const Home = () => {
   const user = useSelector(currentUser);
@@ -32,26 +34,16 @@ export const Home = () => {
   }, []);
 
   return (
-    <main>
+    <main className="home">
       <Button onClick={() => setShowAddPostForm(!showAddPostForm)}>
         Add a post
       </Button>
       {showAddPostForm && <AddPost />}
-      {posts?.map((post) => {
-        return (
-          <div>
-            <img src={post?.imageUrl} />
-            <p>src: {post?.imageUrl}</p>
-            <p>content: {post?.content}</p>
-            <p>
-              location: {post?.location.lat}, {post?.location.lng}
-            </p>
-            <p>content: {post?.userId}</p>
-            <p>content: {post?.date}</p>
-            <p>content: {post?.privacy}</p>
-          </div>
-        );
-      })}
+      <div className="feed">
+        {posts?.map((post) => {
+          return <Post key={post._id} post={post} />;
+        })}
+      </div>
     </main>
   );
 };
