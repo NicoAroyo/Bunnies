@@ -2,6 +2,7 @@ import React from "react";
 import { GiRabbitHead } from "react-icons/gi";
 import { RiChatSmileFill } from "react-icons/ri";
 import { BsFillGrid1X2Fill } from "react-icons/bs";
+import { FaMap } from "react-icons/fa";
 import { SmallButton } from "../button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout } from "../../redux/features/userSlice";
@@ -41,6 +42,11 @@ export const Nav = () => {
         <li>
           <a href="/timeline" className="link">
             <BsFillGrid1X2Fill />
+          </a>
+        </li>
+        <li>
+          <a href="/map" className="link">
+            <FaMap />
           </a>
         </li>
       </ul>

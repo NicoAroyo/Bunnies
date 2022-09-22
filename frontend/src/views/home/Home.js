@@ -41,7 +41,6 @@ export const Home = () => {
         return (
           <div>
             <img src={post?.imageUrl} />
-            <img src="https://fakelookstorage.blob.core.windows.net/uploads/uploads/hilalosh.jpeg" />
             <p>src: {post?.imageUrl}</p>
             <p>content: {post?.content}</p>
             <p>

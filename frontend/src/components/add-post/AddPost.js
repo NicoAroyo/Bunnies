@@ -20,7 +20,6 @@ export const AddPost = () => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
-      console.log(response);
       const lat = response.coords.latitude;
       const lng = response.coords.longitude;
       setUserLocation({ lat, lng });
