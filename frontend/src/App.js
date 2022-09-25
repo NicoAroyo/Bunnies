@@ -10,6 +10,7 @@ import { Buns } from "./views/buns/Buns";
 import { SignUp } from "./views/login/SignUp";
 import { MapWithPosts } from "./components/map-with-posts/MapWithPosts";
 import { Profile } from "./views/profile/Profile";
+import { BlockedBuns } from "./views/buns/BlockedBuns";
 
 export const App = () => {
   return (
@@ -22,6 +23,7 @@ export const App = () => {
         <Route path="/map-menu" element={<MapMenu />}></Route>
         <Route path="/file" element={<FileUpload />}></Route>
         <Route path="/buns" element={<Buns />}></Route>
+        <Route path="/blockedBuns" element={<BlockedBuns/>}> </Route>
         <Route path="/map" element={<MapWithPosts />}></Route>
         <Route path="/map-start-view" element={<mapAllPosts />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>

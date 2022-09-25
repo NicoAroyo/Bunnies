@@ -24,30 +24,30 @@ export const Nav = () => {
   };
 
   return (
-    <nav className="navbar" sticky="top">
-      <a href="/" className="logo">
+    <div className="navbar" sticky="top">
+      <button onClick={()=> navigate("/")} className="logo">
         <img src={`${process.env.PUBLIC_URL}/images/logo.jpg`} />
-      </a>
+      </button>
       <ul>
         <li>
-          <a href="/buns" className="link">
+          <button onClick={()=> navigate("buns")} className="link">
             <GiRabbitHead />
-          </a>
+          </button>
         </li>
         <li>
-          <a href="/chats" className="link">
+          <button onClick={()=> navigate("/chats")} className="link">
             <RiChatSmileFill></RiChatSmileFill>
-          </a>
+          </button>
         </li>
         <li>
-          <a href="/timeline" className="link">
+          <button onClick={()=> navigate("/timeline")} className="link">
             <BsFillGrid1X2Fill />
-          </a>
+          </button>
         </li>
         <li>
-          <a href="/map" className="link">
+          <button onClick={()=> navigate("/map")} className="link">
             <FaMap />
-          </a>
+          </button>
         </li>
       </ul>
       <div className="login-logout">
@@ -65,6 +65,6 @@ export const Nav = () => {
           </>
         )}
       </div>
-    </nav>
+    </div>
   );
 };

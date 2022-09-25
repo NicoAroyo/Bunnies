@@ -8,6 +8,7 @@ import { RelationshipsService } from "../../service/relationships/relationshipsS
 import { UsersService } from "../../service/users/usersService";
 
 export const BlockedBuns = () => {
+    
    const user = useSelector( currentUser
    );
    const [blocked, setBlocked ]= useState([]);
@@ -15,7 +16,8 @@ export const BlockedBuns = () => {
    const [rsIds , setRsIds] = useState([]);
    const navigate = useNavigate();
    
-  useEffect(async() => {
+  useEffect(() => {
+    (async() => {
     const service = new RelationshipsService(); 
     const blockedIds = await service.getBlocked(user._id);
     setRsIds(blockedIds); 
@@ -23,15 +25,16 @@ export const BlockedBuns = () => {
     const userService = new UsersService();
      blockedIds.forEach(async(f) => {
       const block = await userService.getUserById(f.userId2);
-      blockeData = [...blockedData , block]
+      blockedData = [...blockedData , block]
     });
     const usersData = userService.getUsers();
     setUsers(usersData);
     setBlocked(blockedData);
+}) ();
   }, []);
 
   const removeBlock = async (id) => {
-    const idToDelete = rsIds.find(id === userId2);
+    const idToDelete = rsIds.find((r) => id === r.userId2);
     const service = new RelationshipsService(); 
    await service.deleteAsync(idToDelete); 
   }
@@ -66,4 +69,5 @@ export const BlockedBuns = () => {
     </div>
   );
   
+    
 };
