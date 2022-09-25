@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { GenericService } from "../../../service/genericService";
+import { formatDateTime } from "../../../utils/core";
 import { UserPic } from "../../user-pic/UserPic";
 import "./Comment.scss";
 
@@ -19,9 +20,12 @@ export const Comment = ({ comment }) => {
         imageurl={commentOwner?.imageUrl}
       />
       <div className="text">
-        <h4>
-          {commentOwner?.firstName} {commentOwner?.lastName}
-        </h4>
+        <div className="text-header">
+          <h4>
+            {commentOwner?.firstName} {commentOwner?.lastName}
+          </h4>
+          <p>{formatDateTime(comment?.date)}</p>
+        </div>
         <p>{comment?.content}</p>
       </div>
     </div>

@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { GenericService } from "../../service/genericService";
 import { formatDateTime } from "../../utils/core";
 import { UserPic } from "../user-pic/UserPic";
-import { AiOutlineComment } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
 import "./Post.scss";
 import { LikeButton } from "../like-button/LikeButton";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { Comment } from "./comment/Comment";
+import { SmallButton } from "../button/Button";
+import { useNavigate } from "react-router-dom";
 
 export const Post = ({ post }) => {
+  const navigate = useNavigate();
   const [postOwner, setPostOwner] = useState({});
   const [open, setOpen] = useState(false);
   const [comments, setComments] = useState(post.comments ?? []);
@@ -26,7 +29,9 @@ export const Post = ({ post }) => {
 
   const likePost = () => {};
   const dislikePost = () => {};
-  const openUserProfile = () => {};
+  const openUserProfile = () => {
+    navigate(`/profile/${postOwner._id}`);
+  };
   const postComment = async () => {
     const postsService = new GenericService("posts");
 
@@ -69,7 +74,7 @@ export const Post = ({ post }) => {
           like={() => likePost()}
           dislike={() => dislikePost()}
         />
-        <AiOutlineComment
+        <FaRegComment
           onClick={() => setOpen(!open)}
           style={{ cursor: "pointer" }}
         />
@@ -77,12 +82,13 @@ export const Post = ({ post }) => {
       <div className="comments">
         {open && (
           <>
-            <div>
+            <div className="comment-input-wrapper">
               <input
+                className="comment-input"
                 placeholder="add a comment"
                 onChange={(e) => setCommentText(e.target.value)}
               ></input>
-              <button onClick={postComment}>enter</button>
+              <button onClick={postComment}>Post</button>
             </div>
             {comments?.map((comment, ind) => {
               return <Comment key={ind} comment={comment} />;
