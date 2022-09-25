@@ -7,52 +7,51 @@ import { currentUser } from "../../redux/features/userSlice";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
 import { UsersService } from "../../service/users/usersService";
 
-export const Buns = () => {
+export const BlockedBuns = () => {
    const user = useSelector( currentUser
    );
-   const [friends, setFriends ]= useState([]);
+   const [blocked, setBlocked ]= useState([]);
    const [users , setUsers] = useState([]);
    const [rsIds , setRsIds] = useState([]);
    const navigate = useNavigate();
    
   useEffect(async() => {
     const service = new RelationshipsService(); 
-    const friendsIds = await service.getFriends(user._id);
-    setRsIds(friendsIds); 
-    let friendData = [];
+    const blockedIds = await service.getBlocked(user._id);
+    setRsIds(blockedIds); 
+    let blockedData = [];
     const userService = new UsersService();
-     friendsIds.forEach(async(f) => {
-      const friend = await userService.getUserById(f.userId2);
-      friendData = [...friendData , friend]
+     blockedIds.forEach(async(f) => {
+      const block = await userService.getUserById(f.userId2);
+      blockeData = [...blockedData , block]
     });
-    const blockedUsers = service.getBlocked(user._id);
     const usersData = userService.getUsers();
     setUsers(usersData);
-    setFriends(friendsData);
+    setBlocked(blockedData);
   }, []);
 
-  const removeFriend = async (id) => {
+  const removeBlock = async (id) => {
     const idToDelete = rsIds.find(id === userId2);
     const service = new RelationshipsService(); 
    await service.deleteAsync(idToDelete); 
   }
 
-  const addFriend = async (id) => {
+  const addBlock = async (id) => {
     const service = RelationshipsService(); 
-    const friendship = {userId1 : user._id, userId2 : id, type : "friends"};
-    await service.postAsync(friendship);
+    const blocked = {userId1 : user._id, userId2 : id, type : "blocked"};
+    await service.postAsync(blocked);
   }
 
   return (
     <div>
-      <Button onClick= {()=> navigate("/blockedBuns")}>Blocked Buns</Button>
-      {friends?.map((friend) => {
+      <Button onClick= {()=> navigate(-1)}>Back to Buns</Button>
+      {blocked?.map((block) => {
         return (
           <div>
             <h3>
-              {friend.firstName}
+              {block.firstName}
             </h3>
-            <Button onClick={() => removeFriend(friend._id)}>Remove</Button>
+            <Button onClick={() => removeBlock(block._id)}>Unblock</Button>
           </div>
         );
       })}
@@ -60,7 +59,7 @@ export const Buns = () => {
         return(
           <div>
             <h3>{user.firstName}</h3>
-            <Button onClick={() => addFriend(user._id)}>Add friend</Button>
+            <Button onClick={() => addBlock(user._id)}>Block</Button>
           </div>
         );
       })}
