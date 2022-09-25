@@ -8,19 +8,23 @@ import { Home } from "./views/home/Home";
 import { FileUpload } from "./views/test/FileUpload";
 import { Buns } from "./views/buns/Buns";
 import { SignUp } from "./views/login/SignUp";
+import { MapWithPosts } from "./components/map-with-posts/MapWithPosts";
+import { Profile } from "./views/profile/Profile";
 
 export const App = () => {
   return (
     <>
       <Nav />
       <Routes>
+        <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
         <Route path="/map-menu" element={<MapMenu />}></Route>
-        <Route path="/" element={<Home />}></Route>
         <Route path="/file" element={<FileUpload />}></Route>
         <Route path="/buns" element={<Buns />}></Route>
-        <Route path="/map-start-view" element={<mapAllPosts/>}></Route>
+        <Route path="/map" element={<MapWithPosts />}></Route>
+        <Route path="/map-start-view" element={<mapAllPosts />}></Route>
+        <Route path="/profile/:id" element={<Profile />}></Route>
       </Routes>
     </>
   );

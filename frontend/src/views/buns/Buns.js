@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+<<<<<<< HEAD
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
@@ -67,4 +68,37 @@ export const Buns = () => {
     </div>
   );
   
+=======
+import { GenericService } from "../../service/genericService";
+import { PostService } from "../../service/posts/postService";
+
+export const Buns = () => {
+  const [users, setUsers] = useState([]);
+  useEffect(() => {
+    (async () => {
+      const service = new GenericService("users");
+      const data = await service.getAllAsync();
+      console.log(data);
+      setUsers(data);
+    })();
+  }, []);
+  return (
+    <>
+      <main>
+        <h1>OUR BUNS:</h1>
+        {users.map((user) => {
+          return (
+            <>
+              <div>
+                <h2>{user.firstName}</h2>
+                <img src={user.imageUrl} alt="profile photo" />
+                <button>Add Friend</button>
+              </div>
+            </>
+          );
+        }, [])}
+      </main>
+    </>
+  );
+>>>>>>> b078f933a43fa82850ebb275e0dc2faf37511b15
 };
