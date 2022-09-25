@@ -19,12 +19,12 @@ export const Buns = () => {
     
     const service = new RelationshipsService(); 
     const friendsIds = await service.getFriends(user._id);
-    setRsIds(friendsIds); 
+    setRsIds(friendsIds);
     let friendData = [];
     const userService = new UsersService();
-     friendsIds.forEach(async(f) => {
+    friendsIds.forEach(async (f) => {
       const friend = await userService.getUserById(f.userId2);
-      friendData = [...friendData , friend]
+      friendData = [...friendData, friend];
     });
     const blockedUsers = service.getBlocked(user._id);
     const usersData = userService.getUsers();
@@ -34,6 +34,7 @@ export const Buns = () => {
 
   const removeFriend = async (id) => {
     const idToDelete = rsIds.find((r) => r.userId2 === id);
+<<<<<<< HEAD
     const service = new RelationshipsService(); 
    await service.deleteAsync(idToDelete); 
   }
@@ -41,24 +42,40 @@ export const Buns = () => {
   const addFriend = async (id) => {
     const service = RelationshipsService(); 
     const friendship =  new {userId1 : user._id, userId2 : id, type : "friends"};
+=======
+    const service = new RelationshipsService();
+    await service.deleteAsync(idToDelete);
+  };
+
+  const addFriend = async (id) => {
+    const service = new RelationshipsService();
+    const friendship = {
+      userId1: user._id,
+      userId2: id,
+      type: "friends",
+    };
+>>>>>>> 40529f04fea562f310b5f83c3d6478b81e99c916
     await service.postAsync(friendship);
-  }
+  };
 
   return (
     <div>
-      <Button onClick= {()=> navigate("/blockedBuns")}>Blocked Buns</Button>
+      <Button onClick={() => navigate("/blockedBuns")}>Blocked Buns</Button>
       {friends?.map((friend) => {
         return (
           <div>
-            <h3>
-              {friend.firstName}
-            </h3>
+            <h3>{friend.firstName}</h3>
             <Button onClick={() => removeFriend(friend._id)}>Remove</Button>
           </div>
         );
       })}
+<<<<<<< HEAD
       {users?.filter((item) => !friends.includes(item._id)).map((user) => {
         return(
+=======
+      {users?.map((user) => {
+        return (
+>>>>>>> 40529f04fea562f310b5f83c3d6478b81e99c916
           <div>
             <h3>{user.firstName}</h3>
             <Button onClick={() => addFriend(user._id)}>Add friend</Button>
@@ -67,5 +84,4 @@ export const Buns = () => {
       })}
     </div>
   );
-  
 };
