@@ -20,6 +20,12 @@ export class PostService {
     return fetch(`${API_URL}posts`).then(this.#success).catch(this.#failure);
   }
 
+  async getPostsByUser(id) {
+    return fetch(`${API_URL}posts/getPostsByUser/${id}`)
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
   async #success(response) {
     const data = await response.json();
     return data;
