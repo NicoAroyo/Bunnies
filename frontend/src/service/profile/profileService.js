@@ -1,12 +1,8 @@
 import { API_URL } from "../../utils/constants";
 
-export class UsersService {
-  async getUsers() {
-    return fetch(`${API_URL}users`).then(this.#success).catch(this.#failure);
-  }
-
-  async getUserById(userId) {
-    return fetch(`${API_URL}users/${userId}`)
+export class ProfileService {
+  async getProfile(userId) {
+    return fetch(`${API_URL}profile/${userId}`)
       .then(this.#success)
       .catch(this.#failure);
   }

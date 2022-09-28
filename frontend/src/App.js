@@ -1,6 +1,5 @@
 import React from "react";
 import { Login } from "./views/login/Login";
-import { MapMenu } from "./views/mapMenu/mapMenu";
 import "./App.scss";
 import { Route, Routes } from "react-router-dom";
 import { Nav } from "./components/navbar/Navbar";
@@ -20,10 +19,11 @@ export const App = () => {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
-        <Route path="/map-menu" element={<MapMenu />}></Route>
         <Route path="/file" element={<FileUpload />}></Route>
         <Route path="/buns" element={<Buns />}></Route>
-        <Route path="/blockedBuns" element={<BlockedBuns/>}> </Route>
+        <Route path="/blockedBuns" element={<BlockedBuns />}>
+          {" "}
+        </Route>
         <Route path="/map" element={<MapWithPosts />}></Route>
         <Route path="/map-start-view" element={<mapAllPosts />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>

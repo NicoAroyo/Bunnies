@@ -50,7 +50,7 @@ export const MapWithPosts = () => {
   );
 };
 
-const PostMarker = ({ post }) => {
+export const PostMarker = ({ post }) => {
   const [showInfo, setShowInfo] = useState(true);
   return (
     <MarkerF onClick={() => setShowInfo(!showInfo)} position={post.location}>

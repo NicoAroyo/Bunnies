@@ -9,7 +9,6 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
-import Map from "../map/Map";
 import "./AddPost.scss";
 
 export const AddPost = () => {
