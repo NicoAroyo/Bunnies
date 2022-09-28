@@ -5,6 +5,8 @@ import { Button } from "../../components/button/Button";
 import { currentUser } from "../../redux/features/userSlice";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
 import { UsersService } from "../../service/users/usersService";
+import {MdPersonAddAlt1} from "react-icons/md";
+import {HiUserRemove} from "react-icons/hi"
 
 export const Buns = () => {
   const user = useSelector(currentUser);
@@ -59,7 +61,7 @@ export const Buns = () => {
         return (
           <div>
             <h3>{friend.firstName}</h3>
-            <Button onClick={() => removeFriend(friend._id)}>Remove</Button>
+            <Button onClick={() => removeFriend(friend._id)}><HiUserRemove/></Button>
           </div>
         );
       })}
@@ -67,7 +69,7 @@ export const Buns = () => {
         return(
           <div>
             <h3>{user.firstName}</h3>
-            <Button onClick={() => addFriend(user._id)}>Add friend</Button>
+            <Button onClick={() => addFriend(user._id)}><MdPersonAddAlt1/></Button>
           </div>
         );
       })}
