@@ -59,7 +59,7 @@ export const Buns = () => {
       <Button onClick={() => navigate("/blockedBuns")}>Blocked Buns</Button>
       {friends?.map((friend) => {
         return (
-          <div>
+          <div key= {friend._id}>
             <h3>{friend.firstName}</h3>
             <Button onClick={() => removeFriend(friend._id)}><HiUserRemove/></Button>
           </div>
@@ -67,7 +67,7 @@ export const Buns = () => {
       })}
       {users?.map((user) => {
         return(
-          <div>
+          <div key= {user._id}>
             <h3>{user.firstName}</h3>
             <Button onClick={() => addFriend(user._id)}><MdPersonAddAlt1/></Button>
           </div>
