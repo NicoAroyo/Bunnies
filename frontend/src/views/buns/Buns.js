@@ -18,15 +18,22 @@ export const Buns = () => {
       console.log(user);
     const service = new RelationshipsService(); 
     const friendsIds = await service.getFriends(user._id);
+    console.log(friendsIds);
     setRsIds(friendsIds);
+    
     let friendData = [];
     const userService = new UsersService();
     friendsIds.forEach(async (f) => {
+      console.log(f);
+      console.log(f.userId2);
       const friend = await userService.getUserById(f.userId2);
-      friendData = [...friendData, friend];
+      console.log(friend);
+      friendData.push(friend);
     });
+    console.log(friendData);
     const blockedUsers = service.getBlocked(user._id);
-    const usersData = userService.getUsers();
+    const usersData = await userService.getUsers();
+    console.log("users" + usersData);
     setUsers(usersData);
     setFriends(friendData);
   }) ()
@@ -34,13 +41,14 @@ export const Buns = () => {
 
   const removeFriend = async (id) => {
     const idToDelete = rsIds.find((r) => r.userId2 === id);
+    console.log(idToDelete);
     const service = new RelationshipsService(); 
-   await service.deleteAsync(idToDelete); 
+   await service.deleteAsync(idToDelete._id); 
   }
 
   const addFriend = async (id) => {
-    const service = RelationshipsService(); 
-    const friendship =  new {userId1 : user._id, userId2 : id, type : "friends"};
+    const service = new RelationshipsService(); 
+    const friendship =  {userId1 : user._id, userId2 : id, type : "friends"};
     await service.postAsync(friendship);
   };
 
