@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { UserPic } from "../../components/user-pic/UserPic";
 import { GenericService } from "../../service/genericService";
 import { PostService } from "../../service/posts/postService";
@@ -11,12 +11,16 @@ import { RelationshipsService } from "../../service/relationships/relationshipsS
 import { Friend } from "../../components/friend/Friend";
 import { ProfileService } from "../../service/profile/profileService";
 import { SmallButton } from "../../components/button/Button";
+import { formatDateTime } from "../../utils/core";
+import { FaBaby, FaGraduationCap } from "react-icons/fa";
+import { MdOutlineWork } from "react-icons/md";
 
 export const Profile = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState({});
   const [content, setContent] = useState("posts");
   const user = useSelector(currentUser);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -37,7 +41,6 @@ export const Profile = () => {
             style={{ height: "150px", width: "150px" }}
             imageurl={profile?.user?.imageUrl}
           />
-
           <div className="profile-header-details">
             <div className="profile-header-top">
               <h2>
@@ -45,7 +48,9 @@ export const Profile = () => {
               </h2>
 
               {user?._id === profile?.user?._id ? (
-                <SmallButton>edit profile</SmallButton>
+                <SmallButton onClick={() => navigate("/edit-profile")}>
+                  edit profile
+                </SmallButton>
               ) : (
                 <div className="button-container">
                   <SmallButton>add friend</SmallButton>
@@ -58,6 +63,28 @@ export const Profile = () => {
               <h4>100 posts</h4>
               <h4>20 friends</h4>
             </div>
+            <p className="profile-bio">{profile?.user?.bio}</p>
+          </div>
+
+          <div className="profile-props">
+            {profile?.user?.workplace && (
+              <div className="property-group">
+                <MdOutlineWork />
+                <h4>{profile?.user?.workplace}</h4>
+              </div>
+            )}
+            {profile?.user?.education && (
+              <div className="property-group">
+                <FaGraduationCap />
+                <h4>{profile?.user?.education}</h4>
+              </div>
+            )}
+            {profile?.user?.birthDate && (
+              <div className="property-group">
+                <FaBaby />
+                <h4>{formatDateTime(profile?.user?.birthDate)}</h4>
+              </div>
+            )}
           </div>
         </section>
 
@@ -90,7 +117,7 @@ export const Profile = () => {
                 return (
                   <div className="profile-posts">
                     {profile?.posts?.map((post) => (
-                      <Post post={post} />
+                      <Post key={post._id} post={post} />
                     ))}
                   </div>
                 );

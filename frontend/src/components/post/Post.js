@@ -2,16 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { GenericService } from "../../service/genericService";
 import { formatDateTime } from "../../utils/core";
 import { UserPic } from "../user-pic/UserPic";
-import { FaMap, FaRegComment } from "react-icons/fa";
+import { FaEdit, FaMap, FaRegComment, FaTrash } from "react-icons/fa";
 import "./Post.scss";
 import { LikeButton } from "../like-button/LikeButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { Comment } from "./comment/Comment";
-import { SmallButton } from "../button/Button";
 import { useNavigate } from "react-router-dom";
-import { MapWithPosts, PostMarker } from "../map-with-posts/MapWithPosts";
-import { GoogleMap, LoadScript } from "@react-google-maps/api";
+import { PostMarker } from "../map-with-posts/MapWithPosts";
+import { GoogleMap } from "@react-google-maps/api";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -22,6 +21,7 @@ export const Post = ({ post }) => {
   const [map, setMap] = useState(false);
   const activeUser = useSelector(currentUser);
   const imageRef = useRef(null);
+  const user = useSelector(currentUser);
 
   useEffect(() => {
     (async () => {
@@ -33,6 +33,9 @@ export const Post = ({ post }) => {
 
   const likePost = () => {};
   const dislikePost = () => {};
+  const deletePost = () => {};
+  const editPost = () => {};
+
   const openUserProfile = () => {
     navigate(`/profile/${postOwner._id}`);
   };
@@ -67,15 +70,22 @@ export const Post = ({ post }) => {
 
   return (
     <div className="post">
-      <LoadScript googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M"></LoadScript>
-      <div onClick={openUserProfile} className="post-header">
-        <div className="user">
+      <div className="post-header">
+        <div onClick={openUserProfile} className="user">
           <UserPic imageurl={postOwner?.imageUrl} />
           <h3>
             {postOwner?.firstName} {postOwner?.lastName}
           </h3>
         </div>
-        <p>{formatDateTime(post?.date)}</p>
+        <div className="post-date-options">
+          <p>{formatDateTime(post?.date)}</p>
+          {(user?.isAdmin === true || postOwner?._id === user?._id) && (
+            <>
+              <FaTrash onClick={deletePost} />
+              <FaEdit onClick={editPost} />
+            </>
+          )}
+        </div>
       </div>
       <p className="post-content">{post?.content}</p>
       {map ? (

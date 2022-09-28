@@ -8,6 +8,15 @@
   box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
   width: 35%;
 
+  .post-date-options {
+    display: flex;
+    gap: 0.8rem;
+
+    svg {
+      cursor: pointer;
+    }
+  }
+
   .comments {
     display: flex;
     flex-direction: column;

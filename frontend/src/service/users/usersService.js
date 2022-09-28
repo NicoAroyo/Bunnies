@@ -11,6 +11,18 @@ export class UsersService {
       .catch(this.#failure);
   }
 
+  async editUser(user, userId) {
+    return fetch(`${API_URL}users/${userId}`, {
+      method: "PATCH",
+      body: JSON.stringify(user),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
   async #success(response) {
     const data = await response.json();
     return data;

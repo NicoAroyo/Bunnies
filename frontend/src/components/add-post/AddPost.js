@@ -1,10 +1,4 @@
-import {
-  GoogleMap,
-  InfoWindow,
-  LoadScript,
-  Marker,
-  MarkerF,
-} from "@react-google-maps/api";
+import { GoogleMap, InfoWindow, Marker, MarkerF } from "@react-google-maps/api";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
@@ -61,24 +55,22 @@ export const AddPost = () => {
           <img src=""></img>
           <label>select a location</label>
           <div className="map-container">
-            <LoadScript googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M">
-              <GoogleMap
-                mapContainerStyle={{
-                  width: "100%",
-                  height: "940px",
-                }}
-                center={userLocation}
-                zoom={15}
-                onClick={selectLocation}
-              >
-                {marker && (
-                  <MarkerF
-                    position={marker}
-                    onClick={() => setMarker(null)}
-                  ></MarkerF>
-                )}
-              </GoogleMap>
-            </LoadScript>
+            <GoogleMap
+              mapContainerStyle={{
+                width: "100%",
+                height: "940px",
+              }}
+              center={userLocation}
+              zoom={15}
+              onClick={selectLocation}
+            >
+              {marker && (
+                <MarkerF
+                  position={marker}
+                  onClick={() => setMarker(null)}
+                ></MarkerF>
+              )}
+            </GoogleMap>
           </div>
           <button onClick={uploadPost}>upload</button>
           <button onClick={() => console.log(newPost)}>LOG POST</button>

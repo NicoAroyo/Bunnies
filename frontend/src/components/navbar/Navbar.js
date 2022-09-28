@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { GiRabbitHead } from "react-icons/gi";
 import { RiChatSmileFill } from "react-icons/ri";
 import { BsFillGrid1X2Fill } from "react-icons/bs";
 import { FaMap } from "react-icons/fa";
 import { SmallButton } from "../button/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser, logout } from "../../redux/features/userSlice";
+import { currentUser, login, logout } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 
@@ -22,6 +22,14 @@ export const Nav = () => {
       console.error(error);
     }
   };
+
+  useEffect(() => {
+    const storageUser = localStorage.getItem("user");
+    if (storageUser) {
+      const userObj = JSON.parse(storageUser);
+      dispatch(login(userObj));
+    }
+  }, []);
 
   return (
     <div className="navbar" sticky="top">
