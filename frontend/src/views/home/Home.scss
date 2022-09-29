@@ -5,3 +5,16 @@
   justify-content: center;
   gap: 3rem;
 }
+
+.add-post {
+  margin-top: 1rem;
+  display: flex;
+
+  h4 {
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  }
+
+  input {
+    cursor: pointer;
+  }
+}

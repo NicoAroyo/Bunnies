@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
-import { Input } from "../../components/input/Input";
+import { Input, TextArea } from "../../components/input/Input";
 import { SmallButton } from "../../components/button/Button";
 import { UserPic } from "../../components/user-pic/UserPic";
 import { UsersService } from "../../service/users/usersService";
@@ -57,15 +57,15 @@ export const AddPost = () => {
       {user ? (
         <section className="new-post">
           <div className="new-post-content">
-            <UserPic imageurl={user?.imageUrl} />
             <div className="new-post-form-group">
               <label>Post content</label>
-              <Input
+              <TextArea
                 onChange={(e) =>
                   setNewPost({ ...setNewPost, content: e.target.value })
                 }
-              ></Input>
+              ></TextArea>
             </div>
+            <UserPic imageurl={user?.imageUrl} />
           </div>
           <div className="button-container">
             <SmallButton onClick={() => inputFileRef.current.click()}>
@@ -101,7 +101,10 @@ export const AddPost = () => {
               </GoogleMap>
             </div>
           )}
+          <h4 className="add-post-tag-others">Tag Other Buns!</h4>
           <Select
+            isMulti
+            closeMenuOnSelect={false}
             options={friends?.map((f) => {
               return {
                 label: `${f.firstName} ${f.lastName}`,

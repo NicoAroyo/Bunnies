@@ -1,8 +1,11 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddPost } from "../../components/add-post/AddPost";
-import { Button } from "../../components/button/Button";
+import { Button, SmallButton } from "../../components/button/Button";
+import { Input } from "../../components/input/Input";
+import { Modal } from "../../components/modal/Modal";
 import { Post } from "../../components/post/Post";
+import { UserPic } from "../../components/user-pic/UserPic";
 import { currentUser, login } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
 import "./Home.scss";
@@ -32,11 +35,22 @@ export const Home = () => {
 
   return (
     <main className="home">
-      <Button onClick={() => setShowAddPostForm(!showAddPostForm)}>
-        Add a post
-      </Button>
-      {showAddPostForm && <AddPost />}
+      <Modal
+        show={showAddPostForm}
+        closeModal={() => setShowAddPostForm(false)}
+      >
+        <AddPost />
+      </Modal>
       <div className="feed">
+        {user && (
+          <div className="add-post">
+            <div>
+              <h4>Would you like to share something?</h4>
+              <Input onClick={() => setShowAddPostForm(true)} />
+            </div>
+            <UserPic imageurl={user.imageUrl} />
+          </div>
+        )}
         {posts?.map((post) => {
           return <Post key={post._id} post={post} />;
         })}
