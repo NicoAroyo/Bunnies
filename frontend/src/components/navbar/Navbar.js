@@ -48,11 +48,6 @@ export const Nav = () => {
           </button>
         </li>
         <li>
-          <button onClick={() => navigate("/timeline")} className="link">
-            <BsFillGrid1X2Fill />
-          </button>
-        </li>
-        <li>
           <button onClick={() => navigate("/map")} className="link">
             <FaMap />
           </button>
