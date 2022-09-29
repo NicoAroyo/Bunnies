@@ -20,6 +20,17 @@ useEffect(() => {
   }) ()
   }, []);
 
+  const acceptRequest = async (request) => {
+    const service = new RelationshipsService(); 
+    request.type = "friends"; 
+    await service.patchAsync(request , request._id);
+  };
+
+  const deleteRequest = async(id) => {
+    const service = new RelationshipsService();
+    await service.deleteAsync(id);
+  };
+
 export const Requests = () => {
   return (
     
@@ -29,8 +40,8 @@ export const Requests = () => {
         requests?.map((request) => {
             return(
                 <div>
-                    <Button><BsFillCheckCircleFill/></Button>
-                    <Button><BsXCircleFill/></Button>
+                    <Button onClick = {(request) => acceptRequest(request)}><BsFillCheckCircleFill/></Button>
+                    <Button onClick = {(request) => deleteRequest(request._id)}><BsXCircleFill/></Button>
                 </div>
             );
         })
