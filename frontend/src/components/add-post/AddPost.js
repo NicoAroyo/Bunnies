@@ -8,7 +8,7 @@ import { SmallButton } from "../../components/button/Button";
 import { UserPic } from "../../components/user-pic/UserPic";
 import { UsersService } from "../../service/users/usersService";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
-import Select from "react-select";
+import { Select} from "react-select";
 import "./AddPost.scss";
 
 export const AddPost = () => {
