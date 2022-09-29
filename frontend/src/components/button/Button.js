@@ -11,7 +11,7 @@ export const Button = (props) => {
 
 export const SmallButton = (props) => {
   return (
-    <button className="btn-small" {...props}>
+    <button className={`btn-small ${props.isActive && "active"}`} {...props}>
       {props.children}
     </button>
   );

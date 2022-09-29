@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { GenericService } from "../../service/genericService";
 import { formatDateTime } from "../../utils/core";
 import { UserPic } from "../user-pic/UserPic";
-import { FaRegComment } from "react-icons/fa";
+import { FaEdit, FaMap, FaRegComment, FaTrash } from "react-icons/fa";
 import "./Post.scss";
 import { LikeButton } from "../like-button/LikeButton";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { Comment } from "./comment/Comment";
-import { SmallButton } from "../button/Button";
 import { useNavigate } from "react-router-dom";
+import { PostMarker } from "../map-with-posts/MapWithPosts";
+import { GoogleMap } from "@react-google-maps/api";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -17,7 +18,10 @@ export const Post = ({ post }) => {
   const [open, setOpen] = useState(false);
   const [comments, setComments] = useState(post.comments ?? []);
   const [commentText, setCommentText] = useState();
+  const [map, setMap] = useState(false);
   const activeUser = useSelector(currentUser);
+  const imageRef = useRef(null);
+  const user = useSelector(currentUser);
 
   useEffect(() => {
     (async () => {
@@ -29,9 +33,18 @@ export const Post = ({ post }) => {
 
   const likePost = () => {};
   const dislikePost = () => {};
+  const deletePost = () => {};
+  const editPost = () => {};
+
   const openUserProfile = () => {
     navigate(`/profile/${postOwner._id}`);
   };
+
+  const viewMap = (location) => {
+    setMap(!map);
+    console.log(location);
+  };
+
   const postComment = async () => {
     const postsService = new GenericService("posts");
 
@@ -57,17 +70,40 @@ export const Post = ({ post }) => {
 
   return (
     <div className="post">
-      <div onClick={openUserProfile} className="post-header">
-        <div className="user">
+      <div className="post-header">
+        <div onClick={openUserProfile} className="user">
           <UserPic imageurl={postOwner?.imageUrl} />
           <h3>
             {postOwner?.firstName} {postOwner?.lastName}
           </h3>
         </div>
-        <p>{formatDateTime(post?.date)}</p>
+        <div className="post-date-options">
+          <p>{formatDateTime(post?.date)}</p>
+          {(user?.isAdmin === true || postOwner?._id === user?._id) && (
+            <>
+              <FaTrash onClick={deletePost} />
+              <FaEdit onClick={editPost} />
+            </>
+          )}
+        </div>
       </div>
       <p className="post-content">{post?.content}</p>
-      <img className="post-image" src={post?.imageUrl} />
+      {map ? (
+        <>
+          <GoogleMap
+            mapContainerStyle={{
+              width: imageRef.current.clientWidth,
+              height: imageRef.current.clientHeight,
+            }}
+            center={post.location}
+            zoom={15}
+          >
+            <PostMarker post={post} />
+          </GoogleMap>
+        </>
+      ) : (
+        <img className="post-image" ref={imageRef} src={post?.imageUrl} />
+      )}
       <div className="post-footer">
         <LikeButton
           isLiked={true}
@@ -77,6 +113,10 @@ export const Post = ({ post }) => {
         <FaRegComment
           onClick={() => setOpen(!open)}
           style={{ cursor: "pointer" }}
+        />
+        <FaMap
+          style={{ cursor: "pointer" }}
+          onClick={() => viewMap(post.location)}
         />
       </div>
       <div className="comments">

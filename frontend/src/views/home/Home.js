@@ -2,11 +2,9 @@ import React, { useEffect, useReducer, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AddPost } from "../../components/add-post/AddPost";
 import { Button } from "../../components/button/Button";
-import Map from "../../components/map/Map";
 import { Post } from "../../components/post/Post";
 import { currentUser, login } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
-import { MapMenu } from "../mapMenu/mapMenu";
 import "./Home.scss";
 
 export const Home = () => {

@@ -28,29 +28,27 @@ export const MapWithPosts = () => {
 
   return (
     <>
-      <LoadScript googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M">
-        <GoogleMap
-          mapContainerStyle={{
-            width: "100vw",
-            height: "100vh",
-          }}
-          center={userLocation}
-          zoom={15}
-        >
-          {posts?.map((post) => {
-            return (
-              <>
-                <PostMarker post={post} />
-              </>
-            );
-          })}
-        </GoogleMap>
-      </LoadScript>
+      <GoogleMap
+        mapContainerStyle={{
+          width: "100vw",
+          height: "100vh",
+        }}
+        center={userLocation}
+        zoom={15}
+      >
+        {posts?.map((post) => {
+          return (
+            <>
+              <PostMarker post={post} />
+            </>
+          );
+        })}
+      </GoogleMap>
     </>
   );
 };
 
-const PostMarker = ({ post }) => {
+export const PostMarker = ({ post }) => {
   const [showInfo, setShowInfo] = useState(true);
   return (
     <MarkerF onClick={() => setShowInfo(!showInfo)} position={post.location}>
