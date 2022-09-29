@@ -11,7 +11,6 @@ export const Home = () => {
   const user = useSelector(currentUser);
   const [showAddPostForm, setShowAddPostForm] = useState(false);
   const [posts, setPosts] = useState([]);
-
   const dispatch = useDispatch();
 
   useEffect(() => {

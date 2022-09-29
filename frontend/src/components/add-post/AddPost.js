@@ -1,8 +1,14 @@
 import { GoogleMap, InfoWindow, Marker, MarkerF } from "@react-google-maps/api";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
+import { Input } from "../../components/input/Input";
+import { SmallButton } from "../../components/button/Button";
+import { UserPic } from "../../components/user-pic/UserPic";
+import { UsersService } from "../../service/users/usersService";
+import { RelationshipsService } from "../../service/relationships/relationshipsService";
+import Select from "react-select";
 import "./AddPost.scss";
 
 export const AddPost = () => {
@@ -10,6 +16,9 @@ export const AddPost = () => {
   const [newPost, setNewPost] = useState({});
   const [marker, setMarker] = useState({});
   const [userLocation, setUserLocation] = useState({});
+  const inputFileRef = useRef(null);
+  const [openMap, setOpenMap] = useState(false);
+  const [friends, setFriends] = useState([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
@@ -17,6 +26,13 @@ export const AddPost = () => {
       const lng = response.coords.longitude;
       setUserLocation({ lat, lng });
     });
+
+    const service = new UsersService();
+    (async () => {
+      const userFriends = await service.getUsers();
+      console.log(userFriends);
+      setFriends(userFriends);
+    })();
   }, []);
 
   const selectLocation = (e) => {
@@ -40,40 +56,62 @@ export const AddPost = () => {
     <>
       {user ? (
         <section className="new-post">
-          <img className="user-pic" src={user?.imageUrl} />
-          <label>content:</label>
+          <div className="new-post-content">
+            <UserPic imageurl={user?.imageUrl} />
+            <div className="new-post-form-group">
+              <label>Post content</label>
+              <Input
+                onChange={(e) =>
+                  setNewPost({ ...setNewPost, content: e.target.value })
+                }
+              ></Input>
+            </div>
+          </div>
+          <div className="button-container">
+            <SmallButton onClick={() => inputFileRef.current.click()}>
+              attach an image
+            </SmallButton>
+            <SmallButton onClick={() => setOpenMap(!openMap)}>
+              select location
+            </SmallButton>
+          </div>
           <input
-            onChange={(e) =>
-              setNewPost({ ...setNewPost, content: e.target.value })
-            }
-          ></input>
-          <label>image:</label>
-          <input
+            ref={inputFileRef}
             type={"file"}
             onChange={(e) => setNewPost({ ...newPost, files: e.target.files })}
           ></input>
           <img src=""></img>
-          <label>select a location</label>
-          <div className="map-container">
-            <GoogleMap
-              mapContainerStyle={{
-                width: "100%",
-                height: "940px",
-              }}
-              center={userLocation}
-              zoom={15}
-              onClick={selectLocation}
-            >
-              {marker && (
-                <MarkerF
-                  position={marker}
-                  onClick={() => setMarker(null)}
-                ></MarkerF>
-              )}
-            </GoogleMap>
-          </div>
-          <button onClick={uploadPost}>upload</button>
-          <button onClick={() => console.log(newPost)}>LOG POST</button>
+          {openMap && (
+            <div className="map-container">
+              <GoogleMap
+                mapContainerStyle={{
+                  width: "100%",
+                  height: "20rem",
+                }}
+                center={userLocation}
+                zoom={15}
+                onClick={selectLocation}
+              >
+                {marker && (
+                  <MarkerF
+                    position={marker}
+                    onClick={() => setMarker(null)}
+                  ></MarkerF>
+                )}
+              </GoogleMap>
+            </div>
+          )}
+          <Select
+            options={friends?.map((f) => {
+              return {
+                label: `${f.firstName} ${f.lastName}`,
+                value: f._id,
+              };
+            })}
+          ></Select>
+          <SmallButton isActive={true} onClick={uploadPost}>
+            upload
+          </SmallButton>
         </section>
       ) : (
         <h2>Log in to make a post</h2>

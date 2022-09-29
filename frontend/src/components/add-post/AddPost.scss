@@ -1,13 +1,35 @@
 .new-post {
   display: flex;
   flex-direction: column;
-  .user-pic {
-    width: 50px;
-    border-radius: 50%;
-  }
+  padding: 1rem;
+  width: 30%;
 
   .map-container {
-    margin-left: 100px;
-    width: 50%;
+    width: 100%;
+  }
+
+  .new-post-content {
+    display: flex;
+    gap: 5px;
+
+    input {
+      height: 1rem;
+      width: 100%;
+    }
+  }
+
+  .new-post-form-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  input[type="file"] {
+    visibility: hidden;
+  }
+
+  .button-container {
+    display: flex;
+    gap: 5px;
+    margin-top: 5px;
   }
 }
