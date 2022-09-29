@@ -33,7 +33,11 @@ export const App = () => {
         <Route path="/map-start-view" element={<mapAllPosts />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
         <Route path="/edit-profile" element={<EditProfile />}></Route>
+<<<<<<< HEAD
         <Route path="/chats" element={<Chats/>}></Route>
+=======
+        <Route path= "/requests" element= {<Requests/>}></Route>
+>>>>>>> 4175627a61193d03721aca243c2bf452d69b54d4
       </Routes>
       
     </>

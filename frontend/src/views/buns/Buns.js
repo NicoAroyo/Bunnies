@@ -7,6 +7,7 @@ import { RelationshipsService } from "../../service/relationships/relationshipsS
 import { UsersService } from "../../service/users/usersService";
 import {MdPersonAddAlt1} from "react-icons/md";
 import {HiUserRemove} from "react-icons/hi"
+import { Header } from "../../components/header/Header";
 
 export const Buns = () => {
   const user = useSelector(currentUser);
@@ -17,7 +18,7 @@ export const Buns = () => {
    
   useEffect(() => {
     (async() => {
-      console.log(user);
+    console.log(user);
     const service = new RelationshipsService(); 
     const friendsIds = await service.getFriends(user._id);
     console.log(friendsIds);
@@ -33,7 +34,7 @@ export const Buns = () => {
       friendData.push(friend);
     });
     console.log(friendData);
-    const blockedUsers = service.getBlocked(user._id);
+   // const blockedUsers = service.getBlocked(user._id);
     const usersData = await userService.getUsers();
     console.log("users" + usersData);
     setUsers(usersData);
@@ -50,13 +51,16 @@ export const Buns = () => {
 
   const addFriend = async (id) => {
     const service = new RelationshipsService(); 
-    const friendship =  {userId1 : user._id, userId2 : id, type : "friends"};
+    const friendship =  {userId1 : user._id, userId2 : id, type : "request"};
     await service.postAsync(friendship);
   };
 
   return (
     <div>
+      <Button onClick={() => navigate("/requests")}>Requests</Button>
       <Button onClick={() => navigate("/blockedBuns")}>Blocked Buns</Button>
+      <div>
+      <Header>Friends list</Header>
       {friends?.map((friend) => {
         return (
           <div key= {friend._id}>
@@ -66,6 +70,9 @@ export const Buns = () => {
           </div>
         );
       })}
+      </div>
+      <div>
+        <Header>Add friend</Header>
       {users?.map((user) => {
         return(
           <div key= {user._id}>
@@ -74,6 +81,7 @@ export const Buns = () => {
           </div>
         );
       })}
+      </div>
     </div>
   );
 };
