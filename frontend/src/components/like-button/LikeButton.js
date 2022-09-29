@@ -6,8 +6,9 @@ export const LikeButton = ({ isLiked = false, like, dislike }) => {
   const [liked, setLiked] = useState(isLiked);
 
   const click = () => {
-    setLiked(!liked);
-    like ? like() : dislike();
+    const likeState = !liked;
+    setLiked(likeState);
+    likeState ? like() : dislike();
   };
 
   return (

@@ -11,6 +11,9 @@ import { Comment } from "./comment/Comment";
 import { useNavigate } from "react-router-dom";
 import { PostMarker } from "../map-with-posts/MapWithPosts";
 import { GoogleMap } from "@react-google-maps/api";
+import { PostService } from "../../service/posts/postService";
+import { Modal } from "../../components/modal/Modal";
+import { SmallButton } from "../button/Button";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -19,6 +22,7 @@ export const Post = ({ post }) => {
   const [comments, setComments] = useState(post.comments ?? []);
   const [commentText, setCommentText] = useState();
   const [map, setMap] = useState(false);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const activeUser = useSelector(currentUser);
   const imageRef = useRef(null);
   const user = useSelector(currentUser);
@@ -31,9 +35,29 @@ export const Post = ({ post }) => {
     })();
   }, []);
 
-  const likePost = () => {};
-  const dislikePost = () => {};
-  const deletePost = () => {};
+  const likePost = async () => {
+    const postService = new PostService();
+    const likedPost = {
+      ...post,
+      likes: [...post.likes, { likedBy: user._id, type: "heart" }],
+    };
+    await postService.updatePost(likedPost, likedPost._id);
+  };
+
+  const dislikePost = async () => {
+    const postService = new PostService();
+    const dislikedPost = {
+      ...post,
+      likes: post.likes.filter((l) => l.likedBy !== user._id),
+    };
+    await postService.updatePost(dislikedPost, dislikedPost._id);
+  };
+
+  const deletePost = async () => {
+    const postService = new PostService();
+    await postService.deletePost(post);
+  };
+
   const editPost = () => {};
 
   const openUserProfile = () => {
@@ -42,7 +66,6 @@ export const Post = ({ post }) => {
 
   const viewMap = (location) => {
     setMap(!map);
-    console.log(location);
   };
 
   const postComment = async () => {
@@ -70,6 +93,18 @@ export const Post = ({ post }) => {
 
   return (
     <div className="post">
+      <Modal
+        show={showDeleteDialog}
+        closeModal={() => setShowDeleteDialog(false)}
+      >
+        <div>
+          <h3>Are you sure you want to delete?</h3>
+          <SmallButton onClick={() => deletePost()}>Yes</SmallButton>
+          <SmallButton onClick={() => setShowDeleteDialog(false)}>
+            No
+          </SmallButton>
+        </div>
+      </Modal>
       <div className="post-header">
         <div onClick={openUserProfile} className="user">
           <UserPic imageurl={postOwner?.imageUrl} />
@@ -81,7 +116,7 @@ export const Post = ({ post }) => {
           <p>{formatDateTime(post?.date)}</p>
           {(user?.isAdmin === true || postOwner?._id === user?._id) && (
             <>
-              <FaTrash onClick={deletePost} />
+              <FaTrash onClick={() => setShowDeleteDialog(true)} />
               <FaEdit onClick={editPost} />
             </>
           )}
@@ -106,7 +141,7 @@ export const Post = ({ post }) => {
       )}
       <div className="post-footer">
         <LikeButton
-          isLiked={true}
+          isLiked={post.likes?.some((l) => l.likedBy === user._id)}
           like={() => likePost()}
           dislike={() => dislikePost()}
         />

@@ -26,10 +26,8 @@ export const Home = () => {
       const postService = new PostService();
       (async () => {
         const data = await postService.getPosts();
-        console.log(data);
         setPosts(data);
       })();
-      console.log("POSTS", posts);
     } catch (error) {}
   }, []);
 
@@ -46,7 +44,10 @@ export const Home = () => {
           <div className="add-post">
             <div>
               <h4>Would you like to share something?</h4>
-              <Input onClick={() => setShowAddPostForm(true)} />
+              <Input
+                placeholder={"make a post"}
+                onClick={() => setShowAddPostForm(true)}
+              />
             </div>
             <UserPic imageurl={user.imageUrl} />
           </div>

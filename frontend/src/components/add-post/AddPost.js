@@ -8,7 +8,7 @@ import { SmallButton } from "../../components/button/Button";
 import { UserPic } from "../../components/user-pic/UserPic";
 import { UsersService } from "../../service/users/usersService";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
-import { Select} from "react-select";
+import Select from "react-select";
 import "./AddPost.scss";
 
 export const AddPost = () => {
@@ -45,7 +45,6 @@ export const AddPost = () => {
   const uploadPost = async () => {
     try {
       const postService = new PostService();
-      console.log("NEW POST", newPost);
       postService.uploadPost({ ...newPost, userId: user._id });
     } catch (error) {
       console.error(error);

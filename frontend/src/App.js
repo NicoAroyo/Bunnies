@@ -12,7 +12,7 @@ import { Profile } from "./views/profile/Profile";
 import { BlockedBuns } from "./views/buns/BlockedBuns";
 import { EditProfile } from "./views/profile/EditProfile";
 import { LoadScript } from "@react-google-maps/api";
-import {Chats} from "./views/chats/chats"
+import { Chats } from "./views/chats/chats";
 
 export const App = () => {
   return (
@@ -33,13 +33,8 @@ export const App = () => {
         <Route path="/map-start-view" element={<mapAllPosts />}></Route>
         <Route path="/profile/:id" element={<Profile />}></Route>
         <Route path="/edit-profile" element={<EditProfile />}></Route>
-<<<<<<< HEAD
-        <Route path="/chats" element={<Chats/>}></Route>
-=======
-        <Route path= "/requests" element= {<Requests/>}></Route>
->>>>>>> 4175627a61193d03721aca243c2bf452d69b54d4
+        <Route path="/chats" element={<Chats />}></Route>
       </Routes>
-      
     </>
   );
 };

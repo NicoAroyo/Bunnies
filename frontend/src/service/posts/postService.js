@@ -3,14 +3,29 @@ import { BlobService } from "./blobService";
 
 export class PostService {
   #blobService = new BlobService();
+
   async uploadPost(post) {
-    const url = await this.#blobService.uploadFiles(post.files[0]);
-    post.imageUrl = url;
-    delete post.files;
+    if (post.files) {
+      const url = await this.#blobService.uploadFiles(post.files[0]);
+      post.imageUrl = url;
+      post.fileName = post.files[0].name;
+      delete post.files;
+    }
     return fetch(`${API_URL}posts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(post),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async deletePost(post) {
+    if (post.fileName && post.imageUrl) {
+      await this.#blobService.deleteFile(post.fileName);
+    }
+    return fetch(`${API_URL}posts/${post._id}`, {
+      method: "DELETE",
     })
       .then(this.#success)
       .catch(this.#failure);
@@ -22,6 +37,16 @@ export class PostService {
 
   async getPostsByUser(id) {
     return fetch(`${API_URL}posts/getPostsByUser/${id}`)
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async updatePost(post, postId) {
+    return fetch(`${API_URL}posts/${postId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(post),
+    })
       .then(this.#success)
       .catch(this.#failure);
   }
