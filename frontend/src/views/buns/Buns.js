@@ -60,6 +60,7 @@ export const Buns = () => {
       {friends?.map((friend) => {
         return (
           <div key= {friend._id}>
+            
             <h3>{friend.firstName}</h3>
             <Button onClick={() => removeFriend(friend._id)}><HiUserRemove/></Button>
           </div>
