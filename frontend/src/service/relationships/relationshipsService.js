@@ -32,11 +32,11 @@ export class RelationshipsService {
   }
 
   async getRequests(userId){
-    return fetch(`${API_URL}relationships/getRequests/${userId}`).then(this.#success).catch(this.#failure);
+    return fetch(`${API_URL}relationships/getRequested/${userId}`).then(this.#success).catch(this.#failure);
   }
 
   async patchAsync(item, userId) {
-    return fetch(`${API_URL}relationships/getRequested/${userId}`, {
+    return fetch(`${API_URL}relationships/${userId}`, {
       method: "PATCH",
       body: JSON.stringify(item),
       headers: {

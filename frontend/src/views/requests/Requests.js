@@ -12,13 +12,15 @@ import {BsFillCheckCircleFill, BsXCircleFill}  from "react-icons/bs"
 export const Requests = () => {
 
     const user = useSelector(currentUser);
-const [requests , setRequests] = useState();
+    const [requests , setRequests] = useState([]);
 const navigate = useNavigate()
 
 useEffect(() => {
     (async() => {
         const service = new RelationshipsService(); 
-        const request = await service.getRequests(user._id);
+        
+        const requests = await service.getRequests(user._id);
+        console.log(requests);
         setRequests(requests);
   }) ()
   }, []);
@@ -38,16 +40,14 @@ useEffect(() => {
     
     <>
     <h1>Your requests</h1>
-    {
-        requests?.map((request) => {
-            return(
-                <div>
-                    <Button onClick = {(request) => acceptRequest(request)}><BsFillCheckCircleFill/></Button>
-                    <Button onClick = {(request) => deleteRequest(request._id)}><BsXCircleFill/></Button>
-                </div>
-            );
-        })
-    }
+    {requests?.map((request) => {
+        return (
+          <div key= {request._id}>
+            <Button onClick={() => acceptRequest(request)}><BsFillCheckCircleFill/></Button>
+            <Button onClick={() => deleteRequest(request._id)}><BsXCircleFill /></Button>
+          </div>
+        );
+      })}
     </>
   )
 }
