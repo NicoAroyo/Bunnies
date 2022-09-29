@@ -1,14 +1,17 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { useEffect , useState  } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { RelationshipsService } from '../../service/relationships/relationshipsService'
-import { currentUser } from '../../redux/features/userSlice'
-import { Button } from '../../components/button/Button'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/button/Button";
+import { currentUser } from "../../redux/features/userSlice";
+import { RelationshipsService } from "../../service/relationships/relationshipsService";
+import { UsersService } from "../../service/users/usersService";
 import {BsFillCheckCircleFill, BsXCircleFill}  from "react-icons/bs"
 
 
-const user = useSelector(currentUser);
+
+export const Requests = () => {
+
+    const user = useSelector(currentUser);
 const [requests , setRequests] = useState();
 const navigate = useNavigate()
 
@@ -31,7 +34,6 @@ useEffect(() => {
     await service.deleteAsync(id);
   };
 
-export const Requests = () => {
   return (
     
     <>
