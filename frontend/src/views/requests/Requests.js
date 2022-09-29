@@ -1,14 +1,17 @@
-import React from 'react'
-import { useSelector } from 'react-redux'
-import { useEffect , useState  } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { RelationshipsService } from '../../service/relationships/relationshipsService'
-import { currentUser } from '../../redux/features/userSlice'
-import { Button } from '../../components/button/Button'
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Button } from "../../components/button/Button";
+import { currentUser } from "../../redux/features/userSlice";
+import { RelationshipsService } from "../../service/relationships/relationshipsService";
+import { UsersService } from "../../service/users/usersService";
 import {BsFillCheckCircleFill, BsXCircleFill}  from "react-icons/bs"
 
 
-const user = useSelector(currentUser);
+
+export const Requests = () => {
+
+    const user = useSelector(currentUser);
 const [requests , setRequests] = useState();
 const navigate = useNavigate()
 
@@ -20,7 +23,17 @@ useEffect(() => {
   }) ()
   }, []);
 
-export const Requests = () => {
+  const acceptRequest = async (request) => {
+    const service = new RelationshipsService(); 
+    request.type = "friends"; 
+    await service.patchAsync(request , request._id);
+  };
+
+  const deleteRequest = async(id) => {
+    const service = new RelationshipsService();
+    await service.deleteAsync(id);
+  };
+
   return (
     
     <>
@@ -29,8 +42,8 @@ export const Requests = () => {
         requests?.map((request) => {
             return(
                 <div>
-                    <Button><BsFillCheckCircleFill/></Button>
-                    <Button><BsXCircleFill/></Button>
+                    <Button onClick = {(request) => acceptRequest(request)}><BsFillCheckCircleFill/></Button>
+                    <Button onClick = {(request) => deleteRequest(request._id)}><BsXCircleFill/></Button>
                 </div>
             );
         })

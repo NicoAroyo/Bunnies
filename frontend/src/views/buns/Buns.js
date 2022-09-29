@@ -17,7 +17,7 @@ export const Buns = () => {
    
   useEffect(() => {
     (async() => {
-      console.log(user);
+    console.log(user);
     const service = new RelationshipsService(); 
     const friendsIds = await service.getFriends(user._id);
     console.log(friendsIds);
@@ -33,7 +33,7 @@ export const Buns = () => {
       friendData.push(friend);
     });
     console.log(friendData);
-    const blockedUsers = service.getBlocked(user._id);
+   // const blockedUsers = service.getBlocked(user._id);
     const usersData = await userService.getUsers();
     console.log("users" + usersData);
     setUsers(usersData);
@@ -50,12 +50,13 @@ export const Buns = () => {
 
   const addFriend = async (id) => {
     const service = new RelationshipsService(); 
-    const friendship =  {userId1 : user._id, userId2 : id, type : "friends"};
+    const friendship =  {userId1 : user._id, userId2 : id, type : "request"};
     await service.postAsync(friendship);
   };
 
   return (
     <div>
+      <Button onClick={() => navigate("/requests")}>Requests</Button>
       <Button onClick={() => navigate("/blockedBuns")}>Blocked Buns</Button>
       {friends?.map((friend) => {
         return (
