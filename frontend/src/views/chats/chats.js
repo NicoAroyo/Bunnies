@@ -4,23 +4,32 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/button/Button";
 import "./chats.scss";
 export const Chats = () => {
- 
+    const [message, setMessage] = useState("");
+
+
+  
+
+    const addMassage =() => {
+    
+    }
+
+
     return (
       <div>
          <div className="viewMessage" >
-            <div className="message">
-                  <h4>img - </h4>
-            <h3>hello chets</h3>
-            </div>
+         <div className="message">
+        <h1>img -</h1>
+        <h1>{message}</h1>
+      </div>
          </div>
 
 
         <div className="allsend">
          <div>
-           <input type="text" className="textMess" ></input> 
+           <input type="text" onChange={(e) =>setMessage(e.target.value)}  autoComplete="off" className="textMess" ></input> 
         </div>
         <div className="btnSend">
-       <Button>Send a message</Button>
+       <Button onClick={() => addMassage()}>Send a message</Button>
        </div>
         </div>
       
