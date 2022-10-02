@@ -14,6 +14,7 @@ import { GoogleMap } from "@react-google-maps/api";
 import { PostService } from "../../service/posts/postService";
 import { Modal } from "../../components/modal/Modal";
 import { SmallButton } from "../button/Button";
+import { AddPost } from "../add-post/AddPost";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ export const Post = ({ post }) => {
   const [commentText, setCommentText] = useState();
   const [map, setMap] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [edit, setEdit] = useState(false);
   const activeUser = useSelector(currentUser);
   const imageRef = useRef(null);
   const user = useSelector(currentUser);
@@ -58,7 +60,9 @@ export const Post = ({ post }) => {
     await postService.deletePost(post);
   };
 
-  const editPost = () => {};
+  const editPost = () => {
+    setEdit(true);
+  };
 
   const openUserProfile = () => {
     navigate(`/profile/${postOwner?._id}`);
@@ -89,6 +93,9 @@ export const Post = ({ post }) => {
 
   return (
     <div className="post">
+      <Modal show={edit ? 1 : 0} closemodal={() => setEdit(false)}>
+        <AddPost postToEdit={post}></AddPost>
+      </Modal>
       <Modal
         show={showDeleteDialog ? 1 : 0}
         closemodal={() => setShowDeleteDialog(false)}
@@ -122,7 +129,17 @@ export const Post = ({ post }) => {
           )}
         </div>
       </div>
-      <p className="post-content">{post?.content}</p>
+      <p className="post-content">
+        {post?.content + "\n"}
+        {post?.tagged?.map((t) => (
+          <p
+            onClick={() => navigate(`/profile/${t.value}`)}
+            className="tagged-person"
+          >
+            @{t.label}
+          </p>
+        ))}
+      </p>
       {map ? (
         <>
           <GoogleMap

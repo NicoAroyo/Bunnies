@@ -13,7 +13,7 @@ export class AuthenticationService {
       .catch(this.#failure);
   }
 
-  async check() {
+  async getUser() {
     return fetch(`${AUTH_URL}profile-by-token`, {
       headers: {
         Authorization: `Bearer ${JSON.parse(
@@ -28,6 +28,18 @@ export class AuthenticationService {
 
   async login(credentials) {
     return fetch(`${AUTH_URL}login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(credentials),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async socialLogin(credentials) {
+    return fetch(`${AUTH_URL}social-login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

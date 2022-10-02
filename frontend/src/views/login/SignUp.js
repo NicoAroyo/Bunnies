@@ -27,27 +27,37 @@ export const SignUp = () => {
     gapi.load("client:auth2", initClient);
   });
 
-  const loginGoogle = (response) => {
-    console.log(response);
+  const loginGoogle = async (response) => {
+    const authService = new AuthenticationService();
     const { profileObj } = response;
-    const googleUser = {
-      email: profileObj.email,
-      firstName: profileObj.givenName,
-      lastName: profileObj.familyName,
-      imageUrl: profileObj.imageUrl,
+    const { email, givenName, familyName, imageUrl } = profileObj;
+    const googleUserCredentials = {
+      email,
+      imageUrl,
+      firstName: givenName,
+      lastName: familyName,
     };
-    setNewUser({ ...googleUser });
+    const res = await authService.socialLogin(googleUserCredentials);
+    console.log("FROM GOOGLE LOGIN", res);
+    dispatch(login({ ...res.user }));
+    localStorage.setItem("access-token", JSON.stringify(res.accessToken));
+    navigate("/");
   };
 
-  const loginFacebook = (response) => {
+  const loginFacebook = async (response) => {
     // console.log(response);
-    const facebookUser = {
+    const authService = new AuthenticationService();
+    const facebookUserCredentials = {
       email: response.email,
       firstName: response.name.split(" ")[0],
       lastName: response.name.split(" ")[1],
       imageUrl: response.picture.url,
     };
-    setNewUser({ ...facebookUser });
+    const res = await authService.socialLogin(facebookUserCredentials);
+    console.log("FROM FACEBOOK LOGIN", res);
+    dispatch(login({ ...res.user }));
+    localStorage.setItem("access-token", JSON.stringify(res.accessToken));
+    navigate("/");
   };
 
   const signup = async () => {
@@ -65,9 +75,11 @@ export const SignUp = () => {
         const authService = new AuthenticationService();
         delete newUser.confirmPassword;
         const response = await authService.signUp({ ...newUser });
-        console.log(response);
         if (response.ok && response.user) {
-          localStorage.setItem(JSON.stringify(response.user));
+          localStorage.setItem(
+            "access-token",
+            JSON.stringify(response.accessToken)
+          );
           dispatch(login({ ...response.user }));
           navigate("/");
         } else {

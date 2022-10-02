@@ -18,14 +18,17 @@ import { AuthenticationService } from "./service/auth/authService";
 import { login } from "./redux/features/userSlice";
 
 export const App = () => {
+  ///
   const dispatch = useDispatch();
   useEffect(() => {
     const token = localStorage.getItem("access-token");
-    console.log("FROM APP", token);
+    if (!token) {
+      return;
+    }
     (async () => {
       const service = new AuthenticationService();
-      const response = await service.check();
-      console.log(response);
+      const response = await service.getUser();
+      console.log("FROM APP", response);
       dispatch(login({ ...response }));
     })();
   }, []);

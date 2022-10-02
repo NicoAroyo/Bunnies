@@ -13,7 +13,12 @@ export class PostService {
     }
     return fetch(`${API_URL}posts`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
+      },
       body: JSON.stringify(post),
     })
       .then(this.#success)
@@ -42,6 +47,7 @@ export class PostService {
   }
 
   async updatePost(post, postId) {
+    console.log("FROM UPDATE POST", post);
     return fetch(`${API_URL}posts/${postId}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
