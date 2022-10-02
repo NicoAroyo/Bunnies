@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Login } from "./views/login/Login";
 import "./App.scss";
 import { Route, Routes } from "react-router-dom";
@@ -13,8 +13,23 @@ import { BlockedBuns } from "./views/buns/BlockedBuns";
 import { EditProfile } from "./views/profile/EditProfile";
 import { LoadScript } from "@react-google-maps/api";
 import { Chats } from "./views/chats/chats";
+import { useDispatch } from "react-redux";
+import { AuthenticationService } from "./service/auth/authService";
+import { login } from "./redux/features/userSlice";
 
 export const App = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const token = localStorage.getItem("access-token");
+    console.log("FROM APP", token);
+    (async () => {
+      const service = new AuthenticationService();
+      const response = await service.check();
+      console.log(response);
+      dispatch(login({ ...response }));
+    })();
+  }, []);
+
   return (
     <>
       <LoadScript

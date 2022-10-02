@@ -19,7 +19,7 @@ export const Profile = () => {
   const { id } = useParams();
   const [profile, setProfile] = useState({});
   const [content, setContent] = useState("posts");
-  const user = useSelector(currentUser);
+  const activeUser = useSelector(currentUser);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -27,9 +27,6 @@ export const Profile = () => {
       const profileService = new ProfileService();
       const profile = await profileService.getProfile(id);
       setProfile(profile);
-
-      console.log(profile.user);
-      console.log(user);
     })();
   }, []);
 
@@ -47,7 +44,7 @@ export const Profile = () => {
                 {profile?.user?.firstName} {profile?.user?.lastName}
               </h2>
 
-              {user?._id === profile?.user?._id ? (
+              {activeUser?._id === profile?.user?._id ? (
                 <SmallButton onClick={() => navigate("/edit-profile")}>
                   edit profile
                 </SmallButton>
@@ -91,19 +88,19 @@ export const Profile = () => {
         <hr />
         <div className="profile-nav">
           <SmallButton
-            isActive={content === "posts"}
+            isactive={content === "posts"}
             onClick={() => setContent("posts")}
           >
             posts
           </SmallButton>
           <SmallButton
-            isActive={content === "friends"}
+            isactive={content === "friends"}
             onClick={() => setContent("friends")}
           >
             friends
           </SmallButton>
           <SmallButton
-            isActive={content === "groups"}
+            isactive={content === "groups"}
             onClick={() => setContent("groups")}
           >
             groups

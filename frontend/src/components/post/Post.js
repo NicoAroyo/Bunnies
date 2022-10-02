@@ -39,18 +39,18 @@ export const Post = ({ post }) => {
     const postService = new PostService();
     const likedPost = {
       ...post,
-      likes: [...post.likes, { likedBy: user._id, type: "heart" }],
+      likes: [...post.likes, { likedBy: user?._id, type: "heart" }],
     };
-    await postService.updatePost(likedPost, likedPost._id);
+    await postService.updatePost(likedPost, likedPost?._id);
   };
 
   const dislikePost = async () => {
     const postService = new PostService();
     const dislikedPost = {
       ...post,
-      likes: post.likes.filter((l) => l.likedBy !== user._id),
+      likes: post.likes.filter((l) => l.likedBy !== user?._id),
     };
-    await postService.updatePost(dislikedPost, dislikedPost._id);
+    await postService.updatePost(dislikedPost, dislikedPost?._id);
   };
 
   const deletePost = async () => {
@@ -61,11 +61,7 @@ export const Post = ({ post }) => {
   const editPost = () => {};
 
   const openUserProfile = () => {
-    navigate(`/profile/${postOwner._id}`);
-  };
-
-  const viewMap = (location) => {
-    setMap(!map);
+    navigate(`/profile/${postOwner?._id}`);
   };
 
   const postComment = async () => {
@@ -94,15 +90,19 @@ export const Post = ({ post }) => {
   return (
     <div className="post">
       <Modal
-        show={showDeleteDialog}
-        closeModal={() => setShowDeleteDialog(false)}
+        show={showDeleteDialog ? 1 : 0}
+        closemodal={() => setShowDeleteDialog(false)}
       >
-        <div>
-          <h3>Are you sure you want to delete?</h3>
-          <SmallButton onClick={() => deletePost()}>Yes</SmallButton>
-          <SmallButton onClick={() => setShowDeleteDialog(false)}>
-            No
-          </SmallButton>
+        <div className="delete-dialog">
+          <h3>Are you sure you want to delete this beautiful post?</h3>
+          <div>
+            <SmallButton onClick={() => deletePost()}>
+              Yes it belongs in the trash
+            </SmallButton>
+            <SmallButton onClick={() => setShowDeleteDialog(false)}>
+              Noooo
+            </SmallButton>
+          </div>
         </div>
       </Modal>
       <div className="post-header">
@@ -131,7 +131,7 @@ export const Post = ({ post }) => {
               height: imageRef.current.clientHeight,
             }}
             center={post.location}
-            zoom={15}
+            zoom={10}
           >
             <PostMarker post={post} />
           </GoogleMap>
@@ -141,7 +141,7 @@ export const Post = ({ post }) => {
       )}
       <div className="post-footer">
         <LikeButton
-          isLiked={post.likes?.some((l) => l.likedBy === user._id)}
+          isLiked={post.likes?.some((l) => l.likedBy === user?._id)}
           like={() => likePost()}
           dislike={() => dislikePost()}
         />
@@ -149,10 +149,7 @@ export const Post = ({ post }) => {
           onClick={() => setOpen(!open)}
           style={{ cursor: "pointer" }}
         />
-        <FaMap
-          style={{ cursor: "pointer" }}
-          onClick={() => viewMap(post.location)}
-        />
+        <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
       </div>
       <div className="comments">
         {open && (

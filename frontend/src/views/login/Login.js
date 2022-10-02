@@ -21,8 +21,12 @@ export const Login = () => {
     const authenticationService = new AuthenticationService();
     try {
       const response = await authenticationService.login({ email, password });
+      console.log(response);
       if (response.ok) {
-        localStorage.setItem("user", JSON.stringify(response.user));
+        localStorage.setItem(
+          "access-token",
+          JSON.stringify(response.accessToken)
+        );
         dispatch(login({ ...response.user }));
         navigate("/");
       } else {

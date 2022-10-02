@@ -28,7 +28,7 @@ export const SignUp = () => {
   });
 
   const loginGoogle = (response) => {
-    // console.log(response);
+    console.log(response);
     const { profileObj } = response;
     const googleUser = {
       email: profileObj.email,

@@ -111,7 +111,7 @@ export const AddPost = () => {
               };
             })}
           ></Select>
-          <SmallButton isActive={true} onClick={uploadPost}>
+          <SmallButton isactive={1} onClick={uploadPost}>
             upload
           </SmallButton>
         </section>

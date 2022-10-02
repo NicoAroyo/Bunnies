@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "./Modal.scss";
 import { AiOutlineCloseCircle } from "react-icons/ai";
-export const Modal = (props) => {
-  const [showModal, setShowModal] = useState(props.show);
 
+export const Modal = (props) => {
   return (
     <div
-      onClick={() => props.closeModal()}
+      onClick={props.closemodal}
       className={props.show ? "modal-wrapper" : "hidden"}
     >
       <div
@@ -16,7 +15,7 @@ export const Modal = (props) => {
       >
         <AiOutlineCloseCircle
           className="topcorner"
-          onClick={() => props.closeModal()}
+          onClick={props.closemodal}
         />
         {props.children}
       </div>
