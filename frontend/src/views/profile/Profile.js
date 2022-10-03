@@ -26,9 +26,10 @@ export const Profile = () => {
     (async () => {
       const profileService = new ProfileService();
       const profile = await profileService.getProfile(id);
+      console.log(profile);
       setProfile(profile);
     })();
-  }, []);
+  }, [id]);
 
   return (
     <>
@@ -88,19 +89,19 @@ export const Profile = () => {
         <hr />
         <div className="profile-nav">
           <SmallButton
-            isactive={content === "posts"}
+            isactive={content === "posts" ? 1 : 0}
             onClick={() => setContent("posts")}
           >
             posts
           </SmallButton>
           <SmallButton
-            isactive={content === "friends"}
+            isactive={content === "friends" ? 1 : 0}
             onClick={() => setContent("friends")}
           >
             friends
           </SmallButton>
           <SmallButton
-            isactive={content === "groups"}
+            isactive={content === "groups" ? 1 : 0}
             onClick={() => setContent("groups")}
           >
             groups
@@ -111,7 +112,9 @@ export const Profile = () => {
           {(() => {
             switch (content) {
               case "posts":
-                return (
+                return profile.posts?.length === 0 ? (
+                  <h3>No Posts to display</h3>
+                ) : (
                   <div className="profile-posts">
                     {profile?.posts?.map((post) => (
                       <Post key={post._id} post={post} />

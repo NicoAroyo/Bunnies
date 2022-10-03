@@ -12,7 +12,6 @@ import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
 import "./AddPost.scss";
 
 export const AddPost = ({ postToEdit = {} }) => {
-  const user = useSelector(currentUser);
   const [post, setPost] = useState(postToEdit);
   const [marker, setMarker] = useState({});
   const [userLocation, setUserLocation] = useState({});
@@ -21,9 +20,8 @@ export const AddPost = ({ postToEdit = {} }) => {
   const [friends, setFriends] = useState([]);
   const [existingPost, setExistingPost] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
-  const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
-  });
+  useJsApiLoader({ googleMapsApiKey: GOOGLE_MAPS_API_KEY });
+  const user = useSelector(currentUser);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
@@ -41,6 +39,7 @@ export const AddPost = ({ postToEdit = {} }) => {
       const service = new RelationshipsService();
       (async () => {
         const userFriends = await service.getFriends(user._id);
+        console.log("FRIENDS FROM ADD POST", userFriends);
         setFriends(userFriends);
       })();
     });
@@ -124,10 +123,12 @@ export const AddPost = ({ postToEdit = {} }) => {
             onChange={(options) => setPost({ ...post, tagged: options })}
             closeMenuOnSelect={false}
             options={friends?.map((f) => {
-              return {
-                label: `${f.firstName} ${f.lastName}`,
-                value: f._id,
-              };
+              return (
+                f !== null && {
+                  label: `${f.friend?.firstName} ${f.friend?.lastName}`,
+                  value: f.friend?._id,
+                }
+              );
             })}
           ></Select>
           <SmallButton isactive={1} onClick={uploadPost}>
