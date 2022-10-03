@@ -43,29 +43,33 @@ export const Buns = () => {
       <Button onClick={() => navigate("/blockedBuns")}>Blocked Buns</Button>
       <div>
         <Header>Friends list</Header>
-        {/* {friends?.map((friend) => {
-          if (Object.keys(friend).length !== 0) {
-            return (
-              <div key={friend?.id}>
-                <div>{friend?.friend?.firstName}</div>
-                <Button onClick={() => removeFriend(friend.id)}>
+        {friends?.map((item) => {
+          // if (Object.keys(friend).length !== 0) {
+
+          return (
+            item !== null && (
+              <div key={item?.id}>
+                <div>{item?.friend?.firstName}</div>
+                <Button onClick={() => removeFriend(item.id)}>
                   <HiUserRemove />
                 </Button>
               </div>
-            );
-          } else return <></>;
-        })} */}
+            )
+          );
+        })}
       </div>
       <div>
         <Header>Add friend</Header>
         {users?.map((user) => {
           return (
-            <div key={user._id}>
-              <h3>{user.firstName}</h3>
-              <Button onClick={() => addFriend(user._id)}>
-                <MdPersonAddAlt1 />
-              </Button>
-            </div>
+            user !== null && (
+              <div key={user._id}>
+                <h3>{user.firstName}</h3>
+                <Button onClick={() => addFriend(user._id)}>
+                  <MdPersonAddAlt1 />
+                </Button>
+              </div>
+            )
           );
         })}
       </div>
