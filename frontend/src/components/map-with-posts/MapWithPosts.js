@@ -1,18 +1,17 @@
-import {
-  GoogleMap,
-  InfoWindowF,
-  LoadScript,
-  MarkerF,
-} from "@react-google-maps/api";
-
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import React, { useEffect, useState } from "react";
 import { PostService } from "../../service/posts/postService";
-import { Post } from "../post/Post";
+import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
+import { PostMarker } from "../post-marker/PostMarker";
+import { Spinner } from "../spinner/Spinner";
 import "./MapWithPosts.js";
 
 export const MapWithPosts = () => {
   const [userLocation, setUserLocation] = useState({});
   const [posts, setPosts] = useState([]);
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+  });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
@@ -28,50 +27,20 @@ export const MapWithPosts = () => {
     })();
   }, []);
 
-  return (
-    <>
-      <LoadScript googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M">
-        <GoogleMap
-          mapContainerStyle={{
-            width: "100vw",
-            height: "100vh",
-          }}
-          center={userLocation}
-          zoom={15}
-        >
-          {posts?.map((post) => {
-            return <> {post.location && <PostMarker post={post} />}</>;
-          })}
-        </GoogleMap>
-      </LoadScript>
-    </>
-  );
-};
-
-export const PostMarker = ({ post }) => {
-  const [showInfo, setShowInfo] = useState(false);
-
-  return (
-    <MarkerF onClick={() => setShowInfo(!showInfo)} position={post.location}>
-      {showInfo ? (
-        <InfoWindowF
-          position={post.location}
-          onCloseClick={() => setShowInfo(false)}
-        >
-          <Post post={post} />
-        </InfoWindowF>
-      ) : (
-        <InfoWindowF
-          position={post.location}
-          onCloseClick={() => setShowInfo(false)}
-        >
-          <img
-            onClick={() => setShowInfo(!showInfo)}
-            style={{ height: "100px", width: "100px", cursor: "pointer" }}
-            src={post.imageUrl}
-          />
-        </InfoWindowF>
-      )}
-    </MarkerF>
+  return !isLoaded ? (
+    <Spinner />
+  ) : (
+    <GoogleMap
+      mapContainerStyle={{
+        width: "100vw",
+        height: "100vh",
+      }}
+      center={userLocation}
+      zoom={15}
+    >
+      {posts?.map((post) => {
+        return <> {post.location && <PostMarker post={post} />}</>;
+      })}
+    </GoogleMap>
   );
 };

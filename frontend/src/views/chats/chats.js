@@ -14,9 +14,9 @@ export const Chats = () => {
   const [message, setMessage] = useState("");
 
   const [messages, setMessages] = useState([]);
-  const [rsIds , setRsIds] = useState([]);
-   const [friends, setFriends ]= useState([]);
-   const [users , setUsers] = useState([]);
+  const [rsIds, setRsIds] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [users, setUsers] = useState([]);
 
   useEffect(() => {
     setUser(userState);
@@ -24,15 +24,13 @@ export const Chats = () => {
   }, [userState]);
 
   useEffect(() => {
-    (async() => {
-
-    const service = new RelationshipsService(); 
-    const friendsIds = await service.getFriends(userState.id);
-    console.log(friendsIds);
-    setRsIds(friendsIds);
-    })});
-    
-  
+    (async () => {
+      const service = new RelationshipsService();
+      const friendsIds = await service.getFriends(userState.id);
+      console.log(friendsIds);
+      setRsIds(friendsIds);
+    })();
+  });
 
   const addMassage = () => {
     setMessages([...messages, message]);
@@ -44,17 +42,17 @@ export const Chats = () => {
   return (
     <div>
       <div className="viewMessage">
-          <h1>
-            {messages.map((message) => (
-                <div className="proMessage">
-                 <UserPic
-            imageurl={user?.imageUrl}
-            style={{ height: "40px", width: "40px" }}/>
-               <p>{message}</p>
-                </div>
-            ))}
-          </h1>
-        
+        <h1>
+          {messages.map((message) => (
+            <div className="proMessage">
+              <UserPic
+                imageurl={user?.imageUrl}
+                style={{ height: "40px", width: "40px" }}
+              />
+              <p>{message}</p>
+            </div>
+          ))}
+        </h1>
       </div>
 
       <div className="allsend">
@@ -74,7 +72,9 @@ export const Chats = () => {
       <div className="groups">
         <select onChange={() => handleChange()} className="comboboxGroup">
           <option>group</option>
-          {rsIds.map((friend) =><option>{friend}</option>)}
+          {rsIds.map((friend) => (
+            <option>{friend}</option>
+          ))}
         </select>
       </div>
     </div>

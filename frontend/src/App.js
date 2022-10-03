@@ -4,7 +4,6 @@ import "./App.scss";
 import { Route, Routes } from "react-router-dom";
 import { Nav } from "./components/navbar/Navbar";
 import { Home } from "./views/home/Home";
-import { FileUpload } from "./views/test/FileUpload";
 import { Buns } from "./views/buns/Buns";
 import { SignUp } from "./views/login/SignUp";
 import { MapWithPosts } from "./components/map-with-posts/MapWithPosts";
@@ -28,23 +27,18 @@ export const App = () => {
     (async () => {
       const service = new AuthenticationService();
       const response = await service.getUser();
-      console.log("FROM APP", response);
       dispatch(login({ ...response }));
     })();
   }, []);
 
   return (
     <>
-      <LoadScript
-        loadingElement={<></>}
-        googleMapsApiKey="AIzaSyCRznr_S5ccK9D4I0FBaAUWkpZ7H9TX1-M"
-      ></LoadScript>
       <Nav />
+
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
-        <Route path="/file" element={<FileUpload />}></Route>
         <Route path="/buns" element={<Buns />}></Route>
         <Route path="/blockedBuns" element={<BlockedBuns />}></Route>
         <Route path="/map" element={<MapWithPosts />}></Route>
