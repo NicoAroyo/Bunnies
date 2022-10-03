@@ -12,9 +12,13 @@ import { BlockedBuns } from "./views/buns/BlockedBuns";
 import { EditProfile } from "./views/profile/EditProfile";
 import { LoadScript } from "@react-google-maps/api";
 import { Chats } from "./views/chats/chats";
+<<<<<<< HEAD
+import { Requests } from "./views/requests/Requests";
+=======
 import { useDispatch } from "react-redux";
 import { AuthenticationService } from "./service/auth/authService";
 import { login } from "./redux/features/userSlice";
+>>>>>>> 8a2d1674e3b5070b023889852498ab7d624126ec
 
 export const App = () => {
   ///
@@ -46,6 +50,7 @@ export const App = () => {
         <Route path="/profile/:id" element={<Profile />}></Route>
         <Route path="/edit-profile" element={<EditProfile />}></Route>
         <Route path="/chats" element={<Chats />}></Route>
+        <Route path="/requests" element={<Requests/>}></Route>
       </Routes>
     </>
   );
