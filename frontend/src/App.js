@@ -13,6 +13,7 @@ import { BlockedBuns } from "./views/buns/BlockedBuns";
 import { EditProfile } from "./views/profile/EditProfile";
 import { LoadScript } from "@react-google-maps/api";
 import { Chats } from "./views/chats/chats";
+import { Requests } from "./views/requests/Requests";
 
 export const App = () => {
   return (
@@ -34,6 +35,7 @@ export const App = () => {
         <Route path="/profile/:id" element={<Profile />}></Route>
         <Route path="/edit-profile" element={<EditProfile />}></Route>
         <Route path="/chats" element={<Chats />}></Route>
+        <Route path="/requests" element={<Requests/>}></Route>
       </Routes>
     </>
   );
