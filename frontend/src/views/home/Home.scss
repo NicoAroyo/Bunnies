@@ -1,9 +1,15 @@
+.home {
+  display: flex;
+  justify-content: center;
+}
+
 .feed {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 3rem;
+  width: 35%;
 }
 
 .add-post {

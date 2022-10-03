@@ -1,7 +1,7 @@
 import { BlobServiceClient, BlockBlobClient } from "@azure/storage-blob";
 
 const blobSasUrl =
-  "https://fakelookstorage.blob.core.windows.net/uploads?sp=racwdl&st=2022-09-29T13:41:41Z&se=2022-10-19T21:41:41Z&sv=2021-06-08&sr=c&sig=Vg2fd5ZCER%2F7v0c1JvWkaWU02x%2Fflc1tAMb2w7cVpE0%3D";
+  "https://fakelookstorage.blob.core.windows.net/uploads?sp=racwdli&st=2022-10-01T18:49:37Z&se=2022-10-30T03:49:37Z&sv=2021-06-08&sr=c&sig=eVakDUDOLxNg9d2Y5WpvtIeqaiz6i4fkpbeL3GCgpMY%3D";
 
 export class BlobService {
   #blobServiceClient = new BlobServiceClient(blobSasUrl);

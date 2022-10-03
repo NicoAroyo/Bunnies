@@ -8,6 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { currentUser, login, logout } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.scss";
+import { AuthenticationService } from "../../service/auth/authService";
+import { UserPic } from "../user-pic/UserPic";
+import { UsersService } from "../../service/users/usersService";
 
 export const Nav = () => {
   const navigate = useNavigate();
@@ -16,20 +19,12 @@ export const Nav = () => {
 
   const pageLogout = () => {
     try {
-      localStorage.removeItem("user");
+      localStorage.removeItem("access-token");
       dispatch(logout());
     } catch (error) {
       console.error(error);
     }
   };
-
-  useEffect(() => {
-    const storageUser = localStorage.getItem("user");
-    if (storageUser) {
-      const userObj = JSON.parse(storageUser);
-      dispatch(login(userObj));
-    }
-  }, []);
 
   return (
     <div className="navbar" sticky="top">
@@ -64,7 +59,10 @@ export const Nav = () => {
         ) : (
           <>
             <SmallButton onClick={pageLogout}>Logout</SmallButton>
-            <img className="profile-image" src={user.imageUrl} />
+            <SmallButton onClick={() => navigate(`profile/${user._id}`)}>
+              Check profile
+            </SmallButton>
+            <UserPic imageurl={user.imageUrl} />
           </>
         )}
       </div>

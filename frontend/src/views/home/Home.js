@@ -18,24 +18,21 @@ export const Home = () => {
 
   useEffect(() => {
     try {
-      const storageUser = localStorage.getItem("user");
-      if (storageUser) {
-        const userObj = JSON.parse(storageUser);
-        dispatch(login(userObj));
-      }
       const postService = new PostService();
       (async () => {
         const data = await postService.getPosts();
         setPosts(data);
       })();
-    } catch (error) {}
+    } catch (error) {
+      console.error(error);
+    }
   }, []);
 
   return (
     <main className="home">
       <Modal
-        show={showAddPostForm}
-        closeModal={() => setShowAddPostForm(false)}
+        show={showAddPostForm ? 1 : 0}
+        closemodal={() => setShowAddPostForm(false)}
       >
         <AddPost />
       </Modal>
