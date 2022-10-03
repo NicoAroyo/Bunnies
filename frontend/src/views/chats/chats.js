@@ -30,7 +30,7 @@ export const Chats = () => {
       console.log(friendsIds);
       setRsIds(friendsIds);
     })();
-  });
+  })([]);
 
   const addMassage = () => {
     setMessages([...messages, message]);
