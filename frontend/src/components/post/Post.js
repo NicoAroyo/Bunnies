@@ -9,12 +9,13 @@ import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { Comment } from "./comment/Comment";
 import { useNavigate } from "react-router-dom";
-import { PostMarker } from "../map-with-posts/MapWithPosts";
-import { GoogleMap } from "@react-google-maps/api";
+import { GoogleMap, useJsApiLoader } from "@react-google-maps/api";
 import { PostService } from "../../service/posts/postService";
 import { Modal } from "../../components/modal/Modal";
 import { SmallButton } from "../button/Button";
 import { AddPost } from "../add-post/AddPost";
+import { PostMarker } from "../post-marker/PostMarker";
+import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -28,6 +29,8 @@ export const Post = ({ post }) => {
   const activeUser = useSelector(currentUser);
   const imageRef = useRef(null);
   const user = useSelector(currentUser);
+
+  useJsApiLoader({ googleMapsApiKey: GOOGLE_MAPS_API_KEY });
 
   useEffect(() => {
     (async () => {
@@ -132,27 +135,26 @@ export const Post = ({ post }) => {
       <p className="post-content">
         {post?.content + "\n"}
         {post?.tagged?.map((t) => (
-          <p
+          <span
+            key={t.value}
             onClick={() => navigate(`/profile/${t.value}`)}
             className="tagged-person"
           >
-            @{t.label}
-          </p>
+            <br />@{t.label}
+          </span>
         ))}
       </p>
       {map ? (
-        <>
-          <GoogleMap
-            mapContainerStyle={{
-              width: imageRef.current.clientWidth,
-              height: imageRef.current.clientHeight,
-            }}
-            center={post.location}
-            zoom={10}
-          >
-            <PostMarker post={post} />
-          </GoogleMap>
-        </>
+        <GoogleMap
+          mapContainerStyle={{
+            width: imageRef.current.clientWidth,
+            height: imageRef.current.clientHeight,
+          }}
+          center={post.location}
+          zoom={10}
+        >
+          <PostMarker post={post} />
+        </GoogleMap>
       ) : (
         <img className="post-image" ref={imageRef} src={post?.imageUrl} />
       )}
@@ -166,7 +168,9 @@ export const Post = ({ post }) => {
           onClick={() => setOpen(!open)}
           style={{ cursor: "pointer" }}
         />
-        <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
+        {post.location && (
+          <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
+        )}
       </div>
       <div className="comments">
         {open && (

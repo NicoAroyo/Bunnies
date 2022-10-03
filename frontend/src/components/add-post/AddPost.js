@@ -1,4 +1,4 @@
-import { GoogleMap, MarkerF } from "@react-google-maps/api";
+import { GoogleMap, MarkerF, useJsApiLoader } from "@react-google-maps/api";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
@@ -6,10 +6,10 @@ import { PostService } from "../../service/posts/postService";
 import { TextArea } from "../../components/input/Input";
 import { SmallButton } from "../../components/button/Button";
 import { UserPic } from "../../components/user-pic/UserPic";
-import { UsersService } from "../../service/users/usersService";
 import Select from "react-select";
-import "./AddPost.scss";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
+import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
+import "./AddPost.scss";
 
 export const AddPost = ({ postToEdit = {} }) => {
   const user = useSelector(currentUser);
@@ -21,6 +21,9 @@ export const AddPost = ({ postToEdit = {} }) => {
   const [friends, setFriends] = useState([]);
   const [existingPost, setExistingPost] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: GOOGLE_MAPS_API_KEY,
+  });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
