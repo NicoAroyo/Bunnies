@@ -1,16 +1,13 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { GiRabbitHead } from "react-icons/gi";
 import { RiChatSmileFill } from "react-icons/ri";
-import { BsFillGrid1X2Fill } from "react-icons/bs";
 import { FaMap } from "react-icons/fa";
 import { SmallButton } from "../button/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { currentUser, login, logout } from "../../redux/features/userSlice";
+import { currentUser, logout } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.scss";
-import { AuthenticationService } from "../../service/auth/authService";
 import { UserPic } from "../user-pic/UserPic";
-import { UsersService } from "../../service/users/usersService";
 
 export const Nav = () => {
   const navigate = useNavigate();

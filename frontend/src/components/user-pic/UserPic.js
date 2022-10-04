@@ -7,7 +7,7 @@ export const UserPic = (props) => {
       referrerPolicy="no-referrer"
       className="user-picture"
       {...props}
-      src={props.imageurl}
+      src={props.imageurl || `${process.env.PUBLIC_URL}/images/default-pic.jpg`}
     />
   );
 };

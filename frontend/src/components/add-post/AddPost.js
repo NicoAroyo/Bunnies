@@ -123,12 +123,10 @@ export const AddPost = ({ postToEdit = {} }) => {
             onChange={(options) => setPost({ ...post, tagged: options })}
             closeMenuOnSelect={false}
             options={friends?.map((f) => {
-              return (
-                f !== null && {
-                  label: `${f.friend?.firstName} ${f.friend?.lastName}`,
-                  value: f.friend?._id,
-                }
-              );
+              return {
+                label: `${f?.friend?.firstName} ${f?.friend?.lastName}`,
+                value: f?.friend?._id,
+              };
             })}
           ></Select>
           <SmallButton isactive={1} onClick={uploadPost}>

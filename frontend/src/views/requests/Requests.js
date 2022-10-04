@@ -6,6 +6,7 @@ import { currentUser } from "../../redux/features/userSlice";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
 import { UsersService } from "../../service/users/usersService";
 import { BsFillCheckCircleFill, BsXCircleFill } from "react-icons/bs";
+import { UserPic } from "../../components/user-pic/UserPic";
 
 export const Requests = () => {
   const user = useSelector(currentUser);
@@ -16,7 +17,7 @@ export const Requests = () => {
     (async () => {
       const service = new RelationshipsService();
       const requests = await service.getRequests(user._id);
-      console.log(requests);
+      console.log("REQUESTS", requests);
       setRequests(requests);
     })();
   }, []);
@@ -38,10 +39,14 @@ export const Requests = () => {
       {requests?.map((request) => {
         return (
           <div key={request._id}>
+            <UserPic imageurl={request?.requested?.imageUrl} />
+            <h3>
+              {request?.requested?.firstName} {request?.requested?.lastName}
+            </h3>
             <Button onClick={() => acceptRequest(request.req)}>
               <BsFillCheckCircleFill />
             </Button>
-            <Button onClick={() => deleteRequest(request.req._id)}>
+            <Button onClick={() => deleteRequest(request.req.id)}>
               <BsXCircleFill />
             </Button>
           </div>

@@ -1,6 +1,63 @@
 import { API_URL } from "../../utils/constants";
 
 export class RelationshipsService {
+  async sendFriendRequest({ receiverId, sender }) {
+    return fetch(`${API_URL}relationships/send-friend-request/${receiverId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(sender),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async withdrawFriendRequest({ receiverId, sender }) {
+    return fetch(
+      `${API_URL}relationships/withdraw-friend-request/${receiverId}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sender),
+      }
+    )
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async acceptFriendRequest({ receiver, senderId }) {
+    return fetch(`${API_URL}relationships/accept-friend-request/${senderId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(receiver),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async rejectFriendRequest({ receiver, senderId }) {
+    return fetch(`${API_URL}relationships/reject-friend-request/${senderId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(receiver),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async getFriends(userId) {
+    return fetch(`${API_URL}relationships/get-friends/${userId}`)
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
   async deleteAsync(id) {
     return fetch(`${API_URL}relationships/${id}`, {
       method: "DELETE",
@@ -17,12 +74,6 @@ export class RelationshipsService {
         "Content-Type": "application/json",
       },
     })
-      .then(this.#success)
-      .catch(this.#failure);
-  }
-
-  async getFriends(userId) {
-    return fetch(`${API_URL}relationships/getFriends/${userId}`)
       .then(this.#success)
       .catch(this.#failure);
   }

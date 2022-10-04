@@ -26,7 +26,7 @@ export const Profile = () => {
     (async () => {
       const profileService = new ProfileService();
       const profile = await profileService.getProfile(id);
-      console.log(profile);
+      console.log("PROFILE", profile);
       setProfile(profile);
     })();
   }, [id]);
