@@ -15,8 +15,10 @@ const relationshipsService = new RelationshipsService();
 
 export const Buns = () => {
   const user = useSelector(currentUser);
-  const [friends, setFriends] = useState([]);
   const [users, setUsers] = useState([]);
+  const [friends, setFriends] = useState([]);
+  const [sent, setSent] = useState([]);
+  const [received, setReceived] = useState([]);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -25,30 +27,40 @@ export const Buns = () => {
       console.log("USER FROM BUNS", user);
 
       const service = new RelationshipsService();
-      const friends = await service.getFriends(user._id);
-      console.log("friends", friends);
+      const friends = await service.getRelationships({
+        userId: user._id,
+        relationship: "friends",
+      });
+      console.log("FRIENDS FROM BUNS", friends);
+      setFriends(friends);
+
+      const sent = await service.getRelationships({
+        userId: user._id,
+        relationship: "requestsSent",
+      });
+      setSent(sent);
+
+      const received = await service.getRelationships({
+        userId: user._id,
+        relationship: "requestsReceived",
+      });
+      setReceived(received);
+      console.log("RECEIVED FRIEND REQUESTS", received);
 
       const userService = new UsersService();
       const users = await userService.getUsers();
       console.log("ALL USERS FROM BUNS", users);
-      // const users = await service.getRelevantUsers(user._id);
 
       setUsers(users);
-      setFriends(friends);
     })();
   }, [user]);
 
   const removeFriend = async (id) => {
-    const service = new RelationshipsService();
-    await service.deleteAsync(id);
-    setFriends(friends.filter((f) => f.id !== id));
+    // const service = new RelationshipsService();
+    // await service.deleteAsync(id);
   };
 
   const sendFriendRequest = async (id) => {
-    // const service = new RelationshipsService();
-    // const friendship = { userId1: user._id, userId2: id, type: "request" };
-    // await service.postAsync(friendship);
-    // setUsers(users.filter((u) => u.id !== id));
     const response = await relationshipsService.sendFriendRequest({
       receiverId: id,
       sender: user,
@@ -56,27 +68,76 @@ export const Buns = () => {
     setUsers(users.filter((user) => user._id !== id));
   };
 
+  const acceptFriendRequest = async (senderId) => {
+    const x = await relationshipsService.acceptFriendRequest({
+      receiver: user,
+      senderId,
+    });
+    console.log("AFTER ACCEPTING", x);
+  };
+
+  const withdrawFriendRequest = async (receiverId) => {
+    const x = await relationshipsService.withdrawFriendRequest({
+      receiverId,
+      sender: user,
+    });
+    console.log("AFTER WITHDRAWING", x);
+  };
+
   return (
     <div className="buns">
       <div>
         NOT FRIENDS
-        {users.map((user) => {
+        {users?.map((u) => {
           return (
-            <UserCard user={user}>
-              <button>send friend req</button>
-            </UserCard>
+            !u.friends?.some((f) => f !== u?._id) &&
+            u?._id != user?._id && (
+              <UserCard user={u}>
+                <button onClick={() => sendFriendRequest(u._id)}>
+                  send friend req
+                </button>
+              </UserCard>
+            )
           );
         })}
       </div>
       <div>
         FRIENDS
-        {user.friends.map((friend) => {
-          return <p>{friend}</p>;
+        {friends.map((friend) => {
+          return (
+            <UserCard user={friend}>
+              <button onClick={() => removeFriend(friend._id)}>
+                remove friend
+              </button>
+            </UserCard>
+          );
         })}
       </div>
 
-      <div>OUTGOING</div>
-      <div>INCOMING</div>
+      <div>
+        OUTGOING FRIEND REQUESTS
+        {sent.map((req) => {
+          return (
+            <UserCard user={req}>
+              <button onClick={() => withdrawFriendRequest(req?._id)}>
+                withdraw
+              </button>
+            </UserCard>
+          );
+        })}
+      </div>
+      <div>
+        RECEIVED FRIEND REQUESTS
+        {received.map((req) => {
+          return (
+            <UserCard user={req}>
+              <button onClick={() => acceptFriendRequest(req?._id)}>
+                accept
+              </button>
+            </UserCard>
+          );
+        })}
+      </div>
     </div>
     // <div>
     //   <Button onClick={() => navigate("/requests")}>Requests</Button>

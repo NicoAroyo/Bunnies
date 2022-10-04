@@ -7,7 +7,7 @@ export class RelationshipsService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(sender),
+      body: JSON.stringify({ sender }),
     })
       .then(this.#success)
       .catch(this.#failure);
@@ -21,7 +21,7 @@ export class RelationshipsService {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(sender),
+        body: JSON.stringify({ sender }),
       }
     )
       .then(this.#success)
@@ -34,7 +34,7 @@ export class RelationshipsService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(receiver),
+      body: JSON.stringify({ receiver }),
     })
       .then(this.#success)
       .catch(this.#failure);
@@ -46,8 +46,15 @@ export class RelationshipsService {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(receiver),
+      body: JSON.stringify({ receiver }),
     })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  //friends, requestsReceived, requestsSent
+  async getRelationships({ relationship, userId }) {
+    return fetch(`${API_URL}relationships/get-users/${userId}/${relationship}`)
       .then(this.#success)
       .catch(this.#failure);
   }
