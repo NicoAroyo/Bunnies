@@ -52,6 +52,18 @@ export class RelationshipsService {
       .catch(this.#failure);
   }
 
+  // async removeFriend({ receiver, senderId }) {
+  //   return fetch(`${API_URL}relationships/reject-friend-request/${senderId}`, {
+  //     method: "PATCH",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({ receiver }),
+  //   })
+  //     .then(this.#success)
+  //     .catch(this.#failure);
+  // }
+
   //friends, requestsReceived, requestsSent
   async getRelationships({ relationship, userId }) {
     return fetch(`${API_URL}relationships/get-users/${userId}/${relationship}`)
