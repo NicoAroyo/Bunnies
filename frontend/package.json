@@ -24,7 +24,8 @@
     "react-select": "^5.4.0",
     "redux": "^4.2.0",
     "sass": "^1.54.9",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "websocket": "^1.0.34"
   },
   "scripts": {
     "start": "react-scripts start",

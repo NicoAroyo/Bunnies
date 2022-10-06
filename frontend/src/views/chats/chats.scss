@@ -4,12 +4,14 @@
 }
 
 .textMess{
-    width: 300%;
-    height: 6ch;
+    height: 50px;
+    width: 300px ;
+    max-height: 50px;
+    transition: max-height 1s ease;
 }
 
 .btnSend {
-    margin-left: 44%;
+    display: flex;
 }
 
 .message{
