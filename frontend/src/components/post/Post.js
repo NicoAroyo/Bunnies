@@ -97,7 +97,7 @@ export const Post = ({ post }) => {
   return (
     <div className="post">
       <Modal show={edit ? 1 : 0} closemodal={() => setEdit(false)}>
-        <AddPost postToEdit={post}></AddPost>
+        <AddPost postToEdit={post} close={() => setEdit(false)}></AddPost>
       </Modal>
       <Modal
         show={showDeleteDialog ? 1 : 0}

@@ -7,33 +7,34 @@ export const PostMarker = ({ post }) => {
   const [showInfo, setShowInfo] = useState(false);
 
   return (
-    <MarkerF onClick={() => setShowInfo(!showInfo)} position={post.location}>
-      {showInfo ? (
-        <InfoWindowF
-          options={{ closeBoxURL: "", enableEventPropagation: true }}
-          position={post.location}
-          onCloseClick={() => setShowInfo(false)}
-        >
-          <Post post={post} />
-        </InfoWindowF>
-      ) : (
-        <InfoWindowF
-          options={{ closeBoxURL: "", enableEventPropagation: true }}
-          position={post.location}
-          onCloseClick={() => setShowInfo(false)}
-        >
-          <img
-            onClick={() => setShowInfo(!showInfo)}
-            style={{
-              height: "100px",
-              width: "100px",
-              marginLeft: "25px",
-              cursor: "pointer",
-            }}
-            src={post.imageUrl}
-          />
-        </InfoWindowF>
-      )}
-    </MarkerF>
+    <>
+      <MarkerF
+        position={post?.location}
+        icon={{
+          url: "/images/down-arrow.svg",
+          scaledSize: new window.google.maps.Size(30, 30),
+        }}
+      ></MarkerF>
+      <MarkerF
+        onClick={() => setShowInfo(!showInfo)}
+        position={post.location}
+        icon={{
+          anchor: new window.google.maps.Point(15, 50),
+          url: post.imageUrl,
+          scaledSize: new window.google.maps.Size(30, 30),
+        }}
+      >
+        {showInfo && (
+          <InfoWindowF
+            position={post.location}
+            onCloseClick={() => setShowInfo(false)}
+          >
+            <div style={{ width: "300px", height: "300px" }}>
+              <Post post={post} />
+            </div>
+          </InfoWindowF>
+        )}
+      </MarkerF>
+    </>
   );
 };

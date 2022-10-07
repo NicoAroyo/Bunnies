@@ -1,0 +1,21 @@
+.map-with-posts {
+  display: grid;
+  grid-template-columns: 20% 1fr;
+
+  .map-menu {
+    padding: 1rem;
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin: 5px 0;
+
+      input {
+        width: 95%;
+      }
+    }
+  }
+
+  .map {
+  }
+}

@@ -3,15 +3,16 @@ import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
-import { TextArea } from "../../components/input/Input";
+import { Input, TextArea } from "../../components/input/Input";
 import { SmallButton } from "../../components/button/Button";
 import { UserPic } from "../../components/user-pic/UserPic";
 import Select from "react-select";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
 import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
+import { GrCheckboxSelected } from "react-icons/gr";
 import "./AddPost.scss";
 
-export const AddPost = ({ postToEdit = {} }) => {
+export const AddPost = ({ postToEdit = {}, close }) => {
   const [post, setPost] = useState(postToEdit);
   const [marker, setMarker] = useState({});
   const [userLocation, setUserLocation] = useState({});
@@ -38,8 +39,10 @@ export const AddPost = ({ postToEdit = {} }) => {
 
       const service = new RelationshipsService();
       (async () => {
-        const userFriends = await service.getFriends(user._id);
-        console.log("FRIENDS FROM ADD POST", userFriends);
+        const userFriends = await service.getRelationships({
+          userId: user._id,
+          relationship: "friends",
+        });
         setFriends(userFriends);
       })();
     });
@@ -52,15 +55,33 @@ export const AddPost = ({ postToEdit = {} }) => {
     setMarker({ lat, lng });
   };
 
+  const selectCurrentLocation = () => {
+    setPost({ ...post, location: userLocation });
+    setMarker(userLocation);
+  };
+
   const uploadPost = async () => {
     try {
       const postService = new PostService();
       if (isEditMode) {
         console.log("NEW POST", postToEdit);
-        await postService.updatePost({ ...post, userId: user._id }, post._id);
+        await postService.updatePost(
+          {
+            ...post,
+            userId: user._id,
+            publishedBy: `${user.firstName} ${user.lastName}`,
+          },
+          post._id
+        );
       } else {
-        await postService.uploadPost({ ...post, userId: user._id });
+        await postService.uploadPost({
+          ...post,
+          userId: user._id,
+          publishedBy: `${user.firstName} ${user.lastName}`,
+        });
       }
+      close();
+      alert("Post Uploaded!");
     } catch (error) {
       console.error(error);
     }
@@ -82,13 +103,17 @@ export const AddPost = ({ postToEdit = {} }) => {
           </div>
           <div className="button-container">
             <SmallButton onClick={() => inputFileRef.current.click()}>
+              {(post.imageUrl || post.files) && <GrCheckboxSelected />}
               attach an image
             </SmallButton>
-            {post.imageUrl && <p>Image Selected</p>}
             <SmallButton onClick={() => setOpenMap(!openMap)}>
+              {Object.keys(marker).length !== 0 && <GrCheckboxSelected />}
               select location
             </SmallButton>
-            {Object.keys(marker).length !== 0 && <p>Location Selected</p>}
+            <SmallButton onClick={() => selectCurrentLocation()}>
+              {Object.keys(marker).length !== 0 && <GrCheckboxSelected />}
+              use your current location
+            </SmallButton>
           </div>
           <input
             ref={inputFileRef}
@@ -116,19 +141,31 @@ export const AddPost = ({ postToEdit = {} }) => {
               </GoogleMap>
             </div>
           )}
-          <h4 className="add-post-tag-others">Tag Other Buns!</h4>
-          <Select
-            isMulti
-            defaultValue={postToEdit?.tagged}
-            onChange={(options) => setPost({ ...post, tagged: options })}
-            closeMenuOnSelect={false}
-            options={friends?.map((f) => {
-              return {
-                label: `${f?.friend?.firstName} ${f?.friend?.lastName}`,
-                value: f?.friend?._id,
-              };
-            })}
-          ></Select>
+          <div className="form-group">
+            <h4 className="add-post-tag-others">Tag Other Buns!</h4>
+            <Select
+              isMulti
+              defaultValue={postToEdit?.tagged}
+              onChange={(options) => setPost({ ...post, tagged: options })}
+              closeMenuOnSelect={false}
+              options={friends?.map((f) => {
+                return {
+                  label: `${f?.firstName} ${f?.lastName}`,
+                  value: f?.friend?._id,
+                };
+              })}
+            ></Select>
+          </div>
+          <div className="form-group">
+            <p>Add Tags: (separated by space)</p>
+
+            <Input
+              value={post.tags?.join(" ")}
+              onChange={(e) =>
+                setPost({ ...post, tags: e.target.value.split(" ") })
+              }
+            ></Input>
+          </div>
           <SmallButton isactive={1} onClick={uploadPost}>
             {isEditMode ? "update" : "upload"}
           </SmallButton>

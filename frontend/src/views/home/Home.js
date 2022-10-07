@@ -34,7 +34,7 @@ export const Home = () => {
         show={showAddPostForm ? 1 : 0}
         closemodal={() => setShowAddPostForm(false)}
       >
-        {showAddPostForm && <AddPost />}
+        {showAddPostForm && <AddPost close={() => setShowAddPostForm(false)} />}
       </Modal>
       <div className="feed">
         {user && (

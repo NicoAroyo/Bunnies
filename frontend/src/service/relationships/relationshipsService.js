@@ -52,17 +52,17 @@ export class RelationshipsService {
       .catch(this.#failure);
   }
 
-  // async removeFriend({ receiver, senderId }) {
-  //   return fetch(`${API_URL}relationships/reject-friend-request/${senderId}`, {
-  //     method: "PATCH",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({ receiver }),
-  //   })
-  //     .then(this.#success)
-  //     .catch(this.#failure);
-  // }
+  async removeFriend({ id1, id2 }) {
+    return fetch(`${API_URL}relationships/remove-friend`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id1, id2 }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
 
   //friends, requestsReceived, requestsSent
   async getRelationships({ relationship, userId }) {
