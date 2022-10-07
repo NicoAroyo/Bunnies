@@ -1,17 +1,25 @@
 .allsend{
     display: flex;
-    margin-top: 30%;
+    margin-top: 500px;
 }
 
 .textMess{
     height: 50px;
-    width: 300px ;
+    width: 200px ;
     max-height: 50px;
     transition: max-height 1s ease;
 }
+.sticky-toolbar-container.show-toolbar .open-toolbar {
+    transform: translateY(-50%) translateX(100%);
+  }
+   
+  .sticky-toolbar-container.show-toolbar .sticky-toolbar {
+    transform: none;
+  }
 
 .btnSend {
     display: flex;
+    
 }
 
 .message{
@@ -19,7 +27,7 @@
 }
 
 .comboboxGroup{
-    width: 505px;
+    width: 385px;
     height: 6ch;
 }
 
