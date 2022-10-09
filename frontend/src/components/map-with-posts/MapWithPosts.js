@@ -13,6 +13,7 @@ import { Modal } from "../modal/Modal";
 import { AddPost } from "../add-post/AddPost";
 import { calculateDistance } from "../../utils/core";
 import { Input } from "../input/Input";
+import { Post } from "../post/Post";
 
 export const MapWithPosts = () => {
   const navigate = useNavigate();
@@ -89,6 +90,28 @@ export const MapWithPosts = () => {
     setFilteredPosts(x);
     console.log(x);
   };
+
+  const filterByAmountPosts = () => {
+    
+
+       if(filteredPosts.length >= 30){ //אם יש שלושים יציג את השלושים עם התמונות
+        
+        filteredPosts?.filter(post=>post).slice(0,100).map()
+       { filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
+          return post.location && <PostMarker key={post._id} post={post} />;})
+       }
+
+
+        if(filteredPosts.length >= 100){ //)(MarkerF) יציג את הכל עם נקודות ציון
+
+        }
+    }
+   
+   
+    if(filteredPosts.length <= 100){ 
+      filteredPosts?.filter(post=>post.likes).slice(0,100).map() //הפוסטים הגדולים
+    }
+  }
 
   return (
     <div>  
@@ -199,8 +222,10 @@ export const MapWithPosts = () => {
           Apply Filters
         </SmallButton>
       </div>
-</div></div>
-    </div></div>
+    </div>
+    </div>
+    </div>
+    </div>
     </div>
   );
 };
