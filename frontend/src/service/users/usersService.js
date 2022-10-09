@@ -16,6 +16,9 @@ export class UsersService {
       method: "PATCH",
       body: JSON.stringify(user),
       headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
         "Content-Type": "application/json",
       },
     })

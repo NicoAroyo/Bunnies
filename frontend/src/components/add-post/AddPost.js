@@ -60,27 +60,44 @@ export const AddPost = ({ postToEdit = {}, close }) => {
     setMarker(userLocation);
   };
 
+  const validatePost = () => {
+    if ((!post.files && !isEditMode) || !post.location) {
+      alert("Can't upload post without a location and image...");
+      return false;
+    }
+    return true;
+  };
+
   const uploadPost = async () => {
     try {
+      if (!validatePost()) return;
       const postService = new PostService();
-      if (isEditMode) {
-        console.log("NEW POST", postToEdit);
-        await postService.updatePost(
-          {
-            ...post,
-            userId: user._id,
-            publishedBy: `${user.firstName} ${user.lastName}`,
-          },
-          post._id
-        );
-      } else {
-        await postService.uploadPost({
+      await postService.uploadPost({
+        ...post,
+        userId: user._id,
+        publishedBy: `${user.firstName} ${user.lastName}`,
+      });
+
+      close();
+      alert("Post Updated!");
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updatePost = async () => {
+    try {
+      if (!validatePost()) return;
+      const postService = new PostService();
+      console.log("NEW POST", postToEdit);
+      await postService.updatePost(
+        {
           ...post,
           userId: user._id,
           publishedBy: `${user.firstName} ${user.lastName}`,
-        });
-      }
-      close();
+        },
+        post._id
+      );
       alert("Post Uploaded!");
     } catch (error) {
       console.error(error);
@@ -91,6 +108,7 @@ export const AddPost = ({ postToEdit = {}, close }) => {
     <>
       {user ? (
         <section className="new-post">
+          <h3>{isEditMode ? "Edit Post" : "Create Post"}</h3>
           <div className="new-post-content">
             <div className="new-post-form-group">
               <label>Post content</label>
@@ -166,7 +184,10 @@ export const AddPost = ({ postToEdit = {}, close }) => {
               }
             ></Input>
           </div>
-          <SmallButton isactive={1} onClick={uploadPost}>
+          <SmallButton
+            isactive={1}
+            onClick={() => (isEditMode ? updatePost() : uploadPost())}
+          >
             {isEditMode ? "update" : "upload"}
           </SmallButton>
           <SmallButton isactive={1} onClick={() => console.log(post)}>

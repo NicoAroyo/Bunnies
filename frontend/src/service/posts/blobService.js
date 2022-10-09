@@ -14,7 +14,6 @@ export class BlobService {
   }
 
   async deleteFile(fileName) {
-    console.log("FILE NAME", fileName);
     const options = { deleteSnapshots: "include" };
     const blockBlobClient = this.#containerClient.getBlockBlobClient(fileName);
     await blockBlobClient.deleteIfExists(options);

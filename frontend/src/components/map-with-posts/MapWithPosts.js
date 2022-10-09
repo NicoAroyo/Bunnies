@@ -77,6 +77,14 @@ export const MapWithPosts = () => {
     setFilteredPosts(fps);
   };
 
+  const filterByBuns = () => {
+    const x = filteredPosts.filter((post) =>
+      user.friends.some((f) => f === post.userId)
+    );
+    setFilteredPosts(x);
+    console.log(x);
+  };
+
   return (
     <div className="map-with-posts">
       <Modal
@@ -90,6 +98,9 @@ export const MapWithPosts = () => {
           Publish new post
         </SmallButton>
         <SmallButton onClick={() => navigate("/buns")}>Friends</SmallButton>
+        <SmallButton onClick={() => filterByBuns()}>
+          Show only your buns' posts
+        </SmallButton>
         <h2>Filter:</h2>
         <p>by date:</p>
         <div className="form-group">

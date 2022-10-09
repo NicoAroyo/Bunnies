@@ -5,6 +5,9 @@ export class RelationshipsService {
     return fetch(`${API_URL}relationships/send-friend-request/${receiverId}`, {
       method: "PATCH",
       headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ sender }),
@@ -19,6 +22,9 @@ export class RelationshipsService {
       {
         method: "PATCH",
         headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("access-token")
+          )}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ sender }),
@@ -32,6 +38,9 @@ export class RelationshipsService {
     return fetch(`${API_URL}relationships/accept-friend-request/${senderId}`, {
       method: "PATCH",
       headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ receiver }),
@@ -44,6 +53,9 @@ export class RelationshipsService {
     return fetch(`${API_URL}relationships/reject-friend-request/${senderId}`, {
       method: "PATCH",
       headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ receiver }),
@@ -56,6 +68,9 @@ export class RelationshipsService {
     return fetch(`${API_URL}relationships/remove-friend`, {
       method: "PATCH",
       headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({ id1, id2 }),
@@ -66,7 +81,16 @@ export class RelationshipsService {
 
   //friends, requestsReceived, requestsSent
   async getRelationships({ relationship, userId }) {
-    return fetch(`${API_URL}relationships/get-users/${userId}/${relationship}`)
+    return fetch(
+      `${API_URL}relationships/get-users/${userId}/${relationship}`,
+      {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(
+            localStorage.getItem("access-token")
+          )}`,
+        },
+      }
+    )
       .then(this.#success)
       .catch(this.#failure);
   }

@@ -49,6 +49,11 @@
       rgba(255, 255, 255, 0.03) 0px 1px 0px 0px inset;
     transition-duration: 0.1s;
   }
+  &:disabled {
+    background-color: gray;
+    color: white;
+    cursor: default;
+  }
 }
 
 .active {

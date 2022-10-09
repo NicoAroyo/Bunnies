@@ -25,9 +25,9 @@ export const Nav = () => {
 
   return (
     <div className="navbar" sticky="top">
-      <button onClick={() => navigate("/")} className="logo">
+      <div onClick={() => navigate("/")} className="logo">
         <img src={`${process.env.PUBLIC_URL}/images/logo.jpg`} />
-      </button>
+      </div>
       <ul>
         <li>
           <button onClick={() => navigate("buns")} className="link">
