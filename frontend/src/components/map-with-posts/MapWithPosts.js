@@ -142,9 +142,24 @@ export const MapWithPosts = () => {
                 scaledSize: new window.google.maps.Size(60, 60),
               }}
             ></MarkerF>
-            {filteredPosts?.map((post) => {
-              return post.location && <PostMarker key={post._id} post={post} />;
-            })}
+            if({filteredPosts.length >= 30})
+            {filteredPosts
+              ?.filter((post) => post)
+              .slice(0, 30)
+              .map((post) => {
+                return (
+                  post.location && <PostMarker key={post._id} post={post} />
+                );
+              })}
+            if({filteredPosts.length <= 100})
+            {filteredPosts
+              ?.filter((post) => post.like)
+              .slice(0, 100)
+              .map((post) => {
+                return (
+                  post.location && <PostMarker key={post._id} post={post} />
+                );
+              })}
           </GoogleMap>
         )}
       </div>
