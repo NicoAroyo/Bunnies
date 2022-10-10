@@ -8,6 +8,7 @@ import { currentUser, logout } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.scss";
 import { UserPic } from "../user-pic/UserPic";
+import { HiUserGroup } from "react-icons/hi";
 
 export const Nav = () => {
   const navigate = useNavigate();
@@ -42,6 +43,11 @@ export const Nav = () => {
         <li>
           <button onClick={() => navigate("/map")} className="link">
             <FaMap />
+          </button>
+        </li>
+        <li>
+          <button onClick={() => navigate("/groups")} className="link">
+            <HiUserGroup></HiUserGroup>
           </button>
         </li>
       </ul>

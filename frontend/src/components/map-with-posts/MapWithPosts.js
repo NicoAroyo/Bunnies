@@ -13,6 +13,7 @@ import { Modal } from "../modal/Modal";
 import { AddPost } from "../add-post/AddPost";
 import { calculateDistance } from "../../utils/core";
 import { Input } from "../input/Input";
+import { Post } from "../post/Post";
 
 export const MapWithPosts = () => {
   const navigate = useNavigate();
@@ -77,6 +78,11 @@ export const MapWithPosts = () => {
     setFilteredPosts(fps);
   };
 
+  const setingsClick =()=> {
+    var wrapper = document.getElementById('wrapper');
+    wrapper.classList.toggle('is-nav-open')
+  }
+
   const filterByBuns = () => {
     const x = filteredPosts.filter((post) =>
       user.friends.some((f) => f === post.userId)
@@ -85,8 +91,62 @@ export const MapWithPosts = () => {
     console.log(x);
   };
 
+  const filterByAmountPosts = () => {
+    
+
+       if(filteredPosts.length >= 30){ //אם יש שלושים יציג את השלושים עם התמונות
+        
+        filteredPosts?.filter(post=>post).slice(0,100).map()
+       { filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
+          return post.location && <PostMarker key={post._id} post={post} />;})
+       }
+
+
+        if(filteredPosts.length >= 100){ //)(MarkerF) יציג את הכל עם נקודות ציון
+
+        }
+    }
+   
+   
+    if(filteredPosts.length <= 100){ 
+      filteredPosts?.filter(post=>post.likes).slice(0,100).map() //הפוסטים הגדולים
+    }
+  }
+
   return (
-    <div className="map-with-posts">
+    <div>  
+    <div className="map">
+        {!isLoaded ? (
+          <Spinner />
+        ) : (
+          <GoogleMap
+            onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
+            mapContainerStyle={{
+              width: "100vw",
+              height: "91vh",
+            }}
+            center={userLocation}
+            zoom={10}
+          >
+            <MarkerF
+              position={userLocation}
+              icon={{
+                url: `${process.env.PUBLIC_URL}/images/you-are-here-icon.svg`,
+                scaledSize: new window.google.maps.Size(60, 60),
+              }}
+            ></MarkerF>
+            {filteredPosts?.map((post) => {
+              return post.location && <PostMarker key={post._id} post={post} />;
+            })}
+          </GoogleMap>
+        )}
+      </div>
+
+      <div id="wrapper" className="wrapper">
+<div  className="wrapper" >
+  <div className="nav">
+    <button className="nav__icon" type="menu-fold" onClick={() =>setingsClick()} >{"=>"}</button>
+  <div className="nav__body">
       <Modal
         show={isPublishNewPost ? 1 : 0}
         closemodal={() => setIsPublishNewPost(false)}
@@ -162,6 +222,7 @@ export const MapWithPosts = () => {
           Apply Filters
         </SmallButton>
       </div>
+<<<<<<< HEAD
 
       <div className="map">
         {!isLoaded ? (
@@ -190,6 +251,12 @@ export const MapWithPosts = () => {
           </GoogleMap>
         )}
       </div>
+=======
+    </div>
+    </div>
+    </div>
+    </div>
+>>>>>>> 029e657e6f8e6fb5279ce5660d25f8d2b8bbf568
     </div>
   );
 };
