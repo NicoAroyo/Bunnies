@@ -54,9 +54,10 @@ export const Buns = () => {
       const usersWithoutBlocked = users.filter(
         (x) =>
           !user.blocked.includes(
-            x._id.toString() && !user.blockedBy(x._id.toString())
+            x._id.toString() && !user.blockedBy.includes(x._id.toString())
           )
       );
+      console.log("no blocked", usersWithoutBlocked);
       console.log("ALL USERS FROM BUNS", users);
 
       setUsers(usersWithoutBlocked);
