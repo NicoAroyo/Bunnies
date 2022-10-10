@@ -20,8 +20,13 @@ export const Home = () => {
     try {
       const postService = new PostService();
       (async () => {
-        const data = await postService.getPosts();
-        setPosts(data);
+        const allPosts = await postService.getPosts();
+        const postsWithoutBlocked = allPosts.filter(
+          (x) =>
+            !user.blocked.includes(x.userId) &&
+            !user.blockedBy.includes(x.userId)
+        );
+        setPosts(postsWithoutBlocked);
       })();
     } catch (error) {
       console.error(error);

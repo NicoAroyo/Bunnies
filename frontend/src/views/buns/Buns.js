@@ -51,9 +51,15 @@ export const Buns = () => {
 
       const userService = new UsersService();
       const users = await userService.getUsers();
+      const usersWithoutBlocked = allUsers.filter(
+        (x) =>
+          !user.blocked.includes(
+            x._id.toString() && !user.blockedBy(x._id.toString())
+          )
+      );
       console.log("ALL USERS FROM BUNS", users);
 
-      setUsers(users);
+      setUsers(usersWithoutBlocked);
     })();
   }, [user]);
 
