@@ -90,11 +90,7 @@ export const MapWithPosts = () => {
     setFilteredPosts(x);
     console.log(x);
   };
-
-  const sortingOverHundred = () =>{
-    filteredPosts?.filter(post=>post.like).slice(0,100).map((post) => {
-      return post.location && <PostMarker key={post._id} post={post} />;})
-  }
+  
 
   return (
     <div>  
@@ -122,9 +118,9 @@ export const MapWithPosts = () => {
                 filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
                 return post.location && <PostMarker key={post._id} post={post} />;})
                   }
-                 if({filteredPosts.length <= 100}){
-                  filteredPosts?.filter(post=>post.like).slice(0,100).map((post) => {
-                    return post.location && <PostMarker key={post._id} post={post} />;})
+                  if({filteredPosts.length <= 100}){
+                filteredPosts?.slice(0,100).map((post) => {
+                return post.location && <PostMarker key={post._id} post={post} />;})
                   }
           </GoogleMap>
         )}
@@ -210,41 +206,10 @@ export const MapWithPosts = () => {
           Apply Filters
         </SmallButton>
       </div>
-<<<<<<< HEAD
-
-      <div className="map">
-        {!isLoaded ? (
-          <Spinner />
-        ) : (
-          <GoogleMap
-            // options={{ draggable: false }}
-            onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
-            mapContainerStyle={{
-              width: "100vw",
-              height: "100vh",
-            }}
-            center={userLocation}
-            zoom={10}
-          >
-            <MarkerF
-              position={userLocation}
-              icon={{
-                url: `${process.env.PUBLIC_URL}/images/you-are-here-icon.svg`,
-                scaledSize: new window.google.maps.Size(60, 60),
-              }}
-            ></MarkerF>
-            {filteredPosts?.map((post) => {
-              return post.location && <PostMarker key={post._id} post={post} />;
-            })}
-          </GoogleMap>
-        )}
-      </div>
-=======
     </div>
     </div>
     </div>
     </div>
->>>>>>> 029e657e6f8e6fb5279ce5660d25f8d2b8bbf568
     </div>
   );
 };
