@@ -6,14 +6,14 @@ import { PostService } from "../../service/posts/postService";
 import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
 import { PostMarker } from "../post-marker/PostMarker";
 import { Spinner } from "../spinner/Spinner";
-import { Button, SmallButton } from "../button/Button";
+import { SmallButton } from "../button/Button";
 import { useNavigate } from "react-router-dom";
 import "./MapWithPosts.scss";
 import { Modal } from "../modal/Modal";
 import { AddPost } from "../add-post/AddPost";
 import { calculateDistance } from "../../utils/core";
 import { Input } from "../input/Input";
-import { Post } from "../post/Post";
+import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
 
 export const MapWithPosts = () => {
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ export const MapWithPosts = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
   });
+  const [isSettingsClicked, setIsSettingsClicked] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
@@ -78,44 +79,50 @@ export const MapWithPosts = () => {
     setFilteredPosts(fps);
   };
 
-  const setingsClick =()=> {
-    var wrapper = document.getElementById('wrapper');
-    wrapper.classList.toggle('is-nav-open')
-  }
+  const settingsClicked = () => {
+    setIsSettingsClicked(!isSettingsClicked);
+  };
 
   const filterByBuns = () => {
-    const x = filteredPosts.filter((post) =>
+    const filtered = filteredPosts.filter((post) =>
       user.friends.some((f) => f === post.userId)
     );
-    setFilteredPosts(x);
-    console.log(x);
+    setFilteredPosts(filtered);
   };
 
   const filterByAmountPosts = () => {
-    
+    if (filteredPosts.length >= 30) {
+      //אם יש שלושים יציג את השלושים עם התמונות
 
-       if(filteredPosts.length >= 30){ //אם יש שלושים יציג את השלושים עם התמונות
-        
-        filteredPosts?.filter(post=>post).slice(0,100).map()
-       { filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
-          return post.location && <PostMarker key={post._id} post={post} />;})
-       }
+      filteredPosts
+        ?.filter((post) => post)
+        .slice(0, 100)
+        .map();
+      {
+        filteredPosts
+          ?.filter((post) => post)
+          .slice(0, 30)
+          .map((post) => {
+            return post.location && <PostMarker key={post._id} post={post} />;
+          });
+      }
 
-
-        if(filteredPosts.length >= 100){ //)(MarkerF) יציג את הכל עם נקודות ציון
-
-        }
+      if (filteredPosts.length >= 100) {
+        //)(MarkerF) יציג את הכל עם נקודות ציון
+      }
     }
-   
-   
-    if(filteredPosts.length <= 100){ 
-      filteredPosts?.filter(post=>post.likes).slice(0,100).map() //הפוסטים הגדולים
+
+    if (filteredPosts.length <= 100) {
+      filteredPosts
+        ?.filter((post) => post.likes)
+        .slice(0, 100)
+        .map(); //הפוסטים הגדולים
     }
-  }
+  };
 
   return (
-    <div>  
-    <div className="map">
+    <div>
+      <div className="map">
         {!isLoaded ? (
           <Spinner />
         ) : (
@@ -142,121 +149,115 @@ export const MapWithPosts = () => {
         )}
       </div>
 
-      <div id="wrapper" className="wrapper">
-<div  className="wrapper" >
-  <div className="nav">
-    <button className="nav__icon" type="menu-fold" onClick={() =>setingsClick()} >{"=>"}</button>
-  <div className="nav__body">
-      <Modal
-        show={isPublishNewPost ? 1 : 0}
-        closemodal={() => setIsPublishNewPost(false)}
-      >
-        <AddPost close={() => setIsPublishNewPost(false)}></AddPost>
-      </Modal>
-      <div className="map-menu">
-        <SmallButton onClick={() => setIsPublishNewPost(true)}>
-          Publish new post
-        </SmallButton>
-        <SmallButton onClick={() => navigate("/buns")}>Friends</SmallButton>
-        <SmallButton onClick={() => filterByBuns()}>
-          Show only your buns' posts
-        </SmallButton>
-        <h2>Filter:</h2>
-        <p>by date:</p>
-        <div className="form-group">
-          <label>From</label>
-          <Input
-            type="date"
-            onChange={(e) =>
-              setFilters({ ...filters, dateFrom: e.target.value })
-            }
-          ></Input>
-        </div>
+      <div className={isSettingsClicked ? "wrapper" : "wrapper is-nav-open"}>
+        <div className="wrapper">
+          <div className="nav">
+            <button
+              className="nav__icon"
+              type="menu-fold"
+              onClick={() => settingsClicked()}
+            >
+              {isSettingsClicked ? (
+                <MdArrowForwardIos />
+              ) : (
+                <MdArrowBackIosNew />
+              )}
+            </button>
+            <div className="nav__body">
+              <Modal
+                show={isPublishNewPost ? 1 : 0}
+                closemodal={() => setIsPublishNewPost(false)}
+              >
+                <AddPost close={() => setIsPublishNewPost(false)}></AddPost>
+              </Modal>
+              <div className="map-menu">
+                <SmallButton onClick={() => setIsPublishNewPost(true)}>
+                  Publish new post
+                </SmallButton>
+                <SmallButton onClick={() => navigate("/buns")}>
+                  Friends
+                </SmallButton>
+                <SmallButton onClick={() => filterByBuns()}>
+                  Show only your buns' posts
+                </SmallButton>
+                <h2>Filter:</h2>
+                <p>by date:</p>
+                <div className="form-group">
+                  <label>From</label>
+                  <Input
+                    type="date"
+                    onChange={(e) =>
+                      setFilters({ ...filters, dateFrom: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <label>To</label>
-          <Input
-            type="date"
-            onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <label>To</label>
+                  <Input
+                    type="date"
+                    onChange={(e) =>
+                      setFilters({ ...filters, dateTo: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By Publisher name:</p>
-          <Input
-            placeholder={"name"}
-            onChange={(e) =>
-              setFilters({ ...filters, publisher: e.target.value })
-            }
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <p>By Publisher name:</p>
+                  <Input
+                    placeholder={"name"}
+                    onChange={(e) =>
+                      setFilters({ ...filters, publisher: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By Radius from your location: (in km)</p>
-          <Input
-            type={"number"}
-            onChange={(e) => setFilters({ ...filters, radius: e.target.value })}
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <p>By Radius from your location: (in km)</p>
+                  <Input
+                    type={"number"}
+                    onChange={(e) =>
+                      setFilters({ ...filters, radius: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By tagged users (split by ",")</p>
-          <Input
-            placeholder={"name"}
-            onChange={(e) =>
-              setFilters({ ...filters, tagged: e.target.value.split(",") })
-            }
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <p>By tagged users (split by ",")</p>
+                  <Input
+                    placeholder={"name"}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        tagged: e.target.value.split(","),
+                      })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By post tags (split by ",")</p>
-          <Input
-            placeholder={"name"}
-            onChange={(e) =>
-              setFilters({ ...filters, tags: e.target.value.split(",") })
-            }
-          ></Input>
+                <div className="form-group">
+                  <p>By post tags (split by ",")</p>
+                  <Input
+                    placeholder={"name"}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        tags: e.target.value.split(","),
+                      })
+                    }
+                  ></Input>
+                </div>
+                <SmallButton isactive={1} onClick={applyFilters}>
+                  Apply Filters
+                </SmallButton>
+                <SmallButton onClick={() => setFilteredPosts(posts)}>
+                  reset filters
+                </SmallButton>
+              </div>
+            </div>
+          </div>
         </div>
-        <SmallButton isactive={1} onClick={applyFilters}>
-          Apply Filters
-        </SmallButton>
       </div>
-<<<<<<< HEAD
-
-      <div className="map">
-        {!isLoaded ? (
-          <Spinner />
-        ) : (
-          <GoogleMap
-            // options={{ draggable: false }}
-            onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
-            mapContainerStyle={{
-              width: "100vw",
-              height: "100vh",
-            }}
-            center={userLocation}
-            zoom={10}
-          >
-            <MarkerF
-              position={userLocation}
-              icon={{
-                url: `${process.env.PUBLIC_URL}/images/you-are-here-icon.svg`,
-                scaledSize: new window.google.maps.Size(60, 60),
-              }}
-            ></MarkerF>
-            {filteredPosts?.map((post) => {
-              return post.location && <PostMarker key={post._id} post={post} />;
-            })}
-          </GoogleMap>
-        )}
-      </div>
-=======
-    </div>
-    </div>
-    </div>
-    </div>
->>>>>>> 029e657e6f8e6fb5279ce5660d25f8d2b8bbf568
     </div>
   );
 };
