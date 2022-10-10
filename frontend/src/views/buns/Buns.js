@@ -114,9 +114,9 @@ export const Buns = () => {
   const renderDiscover = () => {
     return users?.map((item) => {
       return (
-        !item.friends?.some((f) => f !== item?._id) &&
-        !item.requestsReceived.some((r) => r !== item?._id) &&
-        !item.requestsSent.some((r) => r !== item?._id) &&
+        // !item.friends?.some((f) => f !== item?._id) &&
+        // !item.requestsReceived.some((r) => r !== item?._id) &&
+        // !item.requestsSent.some((r) => r !== item?._id) &&
         !item.item?._id != user?._id && (
           <UserCard user={item}>
             <SmallButton isactive={1} onClick={() => sendFriendRequest(item)}>

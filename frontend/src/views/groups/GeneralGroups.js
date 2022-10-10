@@ -1,0 +1,183 @@
+import React from "react";
+import { GroupsService } from "../../service/groups/groupsService";
+import { useEffect } from "react";
+import { useState } from "react";
+import { useSelector } from "react-redux";
+import { currentUser } from "../../redux/features/userSlice";
+import { Button, SmallButton } from "../../components/button/Button";
+import { Navigate, useNavigate } from "react-router-dom";
+import { TextArea } from "../../components/input/Input";
+
+const service = new GroupsService();
+
+export const GeneralGroups = () => {
+  const user = useSelector(currentUser);
+  const [groups, setGroups] = useState([]);
+  const [joined, setJoined] = useState([]);
+  const [requested, setRequested] = useState([]);
+  const [content, setContent] = useState("groups");
+  const [newGroup, setNewGroup] = useState({});
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      const allGroups = await service.getPublicGroups();
+      const requestedGroups = allGroups.filter((x) =>
+        x.requests.includes(user._id.toString())
+      );
+      console.log("REQ", requestedGroups);
+      const joinedGroups = allGroups.filter((x) =>
+        x.memebers.includes(user._id.toString())
+      );
+      console.log("JOINED", joinedGroups);
+      const publicGroups = allGroups.filter(
+        (x) =>
+          !x.memebers.includes(user._id.toString()) &&
+          !x.requests.includes(user._id.toString())
+      );
+      console.log("G", publicGroups);
+      setGroups(publicGroups);
+      setJoined(joinedGroups);
+      setRequested(requestedGroups);
+    })();
+  }, []);
+
+  const requestToJoin = async (group) => {
+    const response = await service.requestToJoin({
+      groupId: group._id,
+      sender: user,
+    });
+    const g = groups.filter((x) => x._id.toString() !== group._id.toString());
+    const r = [...requested, group];
+    setGroups(g);
+    setRequested(r);
+  };
+
+  const leaveGroup = async (group) => {
+    const response = await service.leaveGroup({
+      groupId: group._id,
+      sender: user,
+    });
+    setJoined(joined.filter((x) => x._id.toString() !== group._id.toString()));
+    setGroups(groups.push(group));
+  };
+
+  const cancelRequest = async (group) => {
+    const response = await service.cancelRequest({
+      groupId: group._id,
+      sender: user,
+    });
+    setRequested(
+      joined.filter((x) => x._id.toString() !== group._id.toString())
+    );
+    setGroups(groups.push(group));
+  };
+
+  const createGroup = async () => {
+    const group = await service.postAsync({
+      name: newGroup.name,
+      creator: user._id,
+      memebers: [user._id],
+      admins: [user._id],
+    });
+    setJoined(joined.push(group));
+  };
+
+  const renderUnjoinedGroups = () => {
+    return (
+      <div>
+        {groups?.map((group) => {
+          return (
+            <div>
+              <div>{group.name}</div>
+              <SmallButton onClick={() => requestToJoin(group)}>
+                Join
+              </SmallButton>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderJoinedGroups = () => {
+    return (
+      <div>
+        {joined?.map((group) => {
+          return (
+            <div>
+              <div>{group.name}</div>
+              <SmallButton onClick={() => leaveGroup(group)}>Leave</SmallButton>
+              <SmallButton onClick={() => navigate()}>View</SmallButton>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderRequestedGroups = () => {
+    return (
+      <div>
+        {requested?.map((group) => {
+          return (
+            <div>
+              <div>{group.name}</div>
+              <SmallButton onClick={() => cancelRequest(group)}>
+                Cancel request
+              </SmallButton>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
+  const renderMakeGroup = () => {
+    return (
+      <div>
+        <label>Group name</label>
+        <TextArea
+          onChange={(e) => setNewGroup({ ...newGroup, name: e.target.value })}
+        ></TextArea>
+        <SmallButton onClick={() => createGroup()}></SmallButton>
+      </div>
+    );
+  };
+
+  return (
+    <div>
+      <div>
+        <div onClick={() => setContent("newGroup")}>
+          <p>Make a group</p>
+        </div>
+        <div onClick={() => setContent("outgoing")}>
+          <p>Outgoing Requests</p>
+        </div>
+        <div onClick={() => setContent("groups")}>
+          <p>Groups</p>
+        </div>
+        <div onClick={() => setContent("discover")}>
+          <p>Discover</p>
+        </div>
+      </div>
+      <main className="content">
+        {(() => {
+          switch (content) {
+            case "groups":
+              return renderJoinedGroups();
+
+            case "discover":
+              return renderUnjoinedGroups();
+
+            case "outgoing":
+              return renderRequestedGroups();
+
+            case "newGroup":
+              return renderMakeGroup();
+          }
+        })()}
+      </main>
+    </div>
+  );
+};
