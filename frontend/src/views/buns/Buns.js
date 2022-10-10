@@ -126,15 +126,9 @@ export const Buns = () => {
     return users?.map((item) => {
       return (
         // !item.friends?.some((f) => f !== item?._id) &&
-<<<<<<< HEAD
-        // !item.requestsReceived.some((r) => r !== item?._id) &&
-        // !item.requestsSent.some((r) => r !== item?._id) &&
-        !item.item?._id != user?._id && (
-=======
         !item.requestsReceived.some((r) => r !== item?._id) &&
         !item.requestsSent.some((r) => r !== item?._id) &&
         !item?._id != user?._id && (
->>>>>>> 90e5e883d210bfffe0b203df480a293e9591ea5b
           <UserCard user={item}>
             <SmallButton isactive={1} onClick={() => sendFriendRequest(item)}>
               Add Friend
