@@ -15,32 +15,36 @@ export const Chats = () => {
   const userState = useSelector(currentUser);
   const [unchangedUser, setUnchangedUser] = useState(useSelector(currentUser));
   const [message, setMessage] = useState("");
-
   const [messages, setMessages] = useState([]);
-  const [rsIds, setRsIds] = useState([]);
   const [friends, setFriends] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [groups, setGroups] = useState([]);
+  const [groupOrFriend, setGroupOrFriend] = useState([]);
+  const [group, setGroup] = useState([]);
 
-  //const client = new W3CWebSocket('ws://127.0.0.1:8000');
+  const client = new W3CWebSocket('ws://127.0.0.1:8000');
+
 
   useEffect(() => {
     setUser(userState);
     setUnchangedUser(userState);
   }, [userState]);
-
-
+  
 
   const addMassage = (value) => {
-  //  client.send(JSON.stringify({
-    //  type: "message",
-    //  msg: value,
-    //  user: this.state.userName
-   // }));
+     client.send(JSON.stringify({
+      type: "message",
+      msg: value,
+      user: groupOrFriend
+    }));
+
+
     setMessages([...messages,value ]);
     setMessage("");
   };
 
-  const handleChange = () => {};
+  const handleChange = (event) => {
+  groupOrFriend([...event])
+  }
 
   return (
     <div>
@@ -74,9 +78,12 @@ export const Chats = () => {
       </div>
       <div className="groups">
         <select onChange={() => handleChange()} className="comboboxGroup">
-          <option>group</option>
-          {rsIds.map((friend) => (
-            <option>{friend}</option>
+          <option>group or friend</option>
+          {friends.map((friend) => (
+            <option key={friend._id} value={friend._id} >{friend}</option>
+          ))}
+          {groups.map((group) => (
+            <option key={group._id} value={group._id}>{group}</option>
           ))}
         </select>
       </div>

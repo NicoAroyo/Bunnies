@@ -91,26 +91,9 @@ export const MapWithPosts = () => {
     console.log(x);
   };
 
-  const filterByAmountPosts = () => {
-    
-
-       if(filteredPosts.length >= 30){ //אם יש שלושים יציג את השלושים עם התמונות
-        
-        filteredPosts?.filter(post=>post).slice(0,100).map()
-       { filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
-          return post.location && <PostMarker key={post._id} post={post} />;})
-       }
-
-
-        if(filteredPosts.length >= 100){ //)(MarkerF) יציג את הכל עם נקודות ציון
-
-        }
-    }
-   
-   
-    if(filteredPosts.length <= 100){ 
-      filteredPosts?.filter(post=>post.likes).slice(0,100).map() //הפוסטים הגדולים
-    }
+  const sortingOverHundred = () =>{
+    filteredPosts?.filter(post=>post.like).slice(0,100).map((post) => {
+      return post.location && <PostMarker key={post._id} post={post} />;})
   }
 
   return (
@@ -135,9 +118,14 @@ export const MapWithPosts = () => {
                 scaledSize: new window.google.maps.Size(60, 60),
               }}
             ></MarkerF>
-            {filteredPosts?.map((post) => {
-              return post.location && <PostMarker key={post._id} post={post} />;
-            })}
+                if({filteredPosts.length >= 30}){
+                filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
+                return post.location && <PostMarker key={post._id} post={post} />;})
+                  }
+                 if({filteredPosts.length <= 100}){
+                  filteredPosts?.filter(post=>post.like).slice(0,100).map((post) => {
+                    return post.location && <PostMarker key={post._id} post={post} />;})
+                  }
           </GoogleMap>
         )}
       </div>
