@@ -50,13 +50,37 @@ export class AuthenticationService {
       .catch(this.#failure);
   }
 
+  async sendResetPasswordLink(email) {
+    return fetch(`${AUTH_URL}forgot-password`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async resetPassword({ userId, token, password1, password2 }) {
+    return fetch(`${AUTH_URL}reset-password/${userId}/${token}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ password1, password2 }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
   async #success(response) {
     const data = await response.json();
     return data;
   }
 
   #failure(response) {
-    const message = `An error has occured: ${response.status}`;
+    const message = `An error has occured: ${response}`;
     throw new Error(message);
   }
 }

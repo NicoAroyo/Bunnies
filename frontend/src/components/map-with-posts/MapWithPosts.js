@@ -168,6 +168,7 @@ export const MapWithPosts = () => {
           <Spinner />
         ) : (
           <GoogleMap
+            // options={{ draggable: false }}
             onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
             mapContainerStyle={{
               width: "100vw",

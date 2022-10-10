@@ -16,6 +16,8 @@ import { Requests } from "./views/requests/Requests";
 import { useDispatch } from "react-redux";
 import { AuthenticationService } from "./service/auth/authService";
 import { login } from "./redux/features/userSlice";
+import { ForgotPassword } from "./views/login/ForgotPassword";
+import { ResetPassword } from "./views/login/ResetPassword";
 
 export const App = () => {
   ///
@@ -40,6 +42,11 @@ export const App = () => {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+        <Route
+          path="/reset-password/:userId/:token"
+          element={<ResetPassword />}
+        ></Route>
         <Route path="/buns" element={<Buns />}></Route>
         <Route path="/blockedBuns" element={<BlockedBuns />}></Route>
         <Route path="/map" element={<MapWithPosts />}></Route>

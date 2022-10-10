@@ -7,7 +7,7 @@ import FacebookLogin from "react-facebook-login";
 import { AuthenticationService } from "../../service/auth/authService";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, login, logout } from "../../redux/features/userSlice";
-import { Button } from "../../components/button/Button";
+import { Button, SmallButton } from "../../components/button/Button";
 import { Nav } from "../../components/navbar/Navbar";
 
 export const Login = () => {
@@ -69,6 +69,9 @@ export const Login = () => {
             <button className="btn-login" onClick={() => navigate("/sign-up")}>
               don't have an account?? Sign Up
             </button>
+            <SmallButton onClick={() => navigate("/forgot-password")}>
+              forgot password?
+            </SmallButton>
           </div>
         </div>
       </div>

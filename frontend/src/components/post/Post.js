@@ -159,18 +159,24 @@ export const Post = ({ post }) => {
         <img className="post-image" ref={imageRef} src={post?.imageUrl} />
       )}
       <div className="post-footer">
-        <LikeButton
-          isLiked={post.likes?.some((l) => l.likedBy === user?._id)}
-          like={() => likePost()}
-          dislike={() => dislikePost()}
-        />
-        <FaRegComment
-          onClick={() => setOpen(!open)}
-          style={{ cursor: "pointer" }}
-        />
-        {post.location && (
-          <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
-        )}
+        <div className="post-footer-buttons">
+          <LikeButton
+            isLiked={post.likes?.some((l) => l.likedBy === user?._id)}
+            like={() => likePost()}
+            dislike={() => dislikePost()}
+          />
+          <FaRegComment
+            onClick={() => setOpen(!open)}
+            style={{ cursor: "pointer" }}
+          />
+          {post.location && (
+            <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
+          )}
+        </div>
+        <div className="post-footer-text">
+          <p>{post?.likes.length} likes</p>
+          <p>{post?.comments.length} comments</p>
+        </div>
       </div>
       <div className="comments">
         {open && (

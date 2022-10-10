@@ -94,8 +94,18 @@
 
   .post-footer {
     display: flex;
-    align-items: baseline;
-    gap: 5px;
+    justify-content: space-between;
+
+    .post-footer-buttons {
+      display: flex;
+      align-items: baseline;
+      gap: 5px;
+    }
+    .post-footer-text {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
 
     svg {
       padding: 5px 0 0 5px;
