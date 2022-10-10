@@ -14,6 +14,7 @@ import { SmallButton } from "../../components/button/Button";
 import { formatDateTime } from "../../utils/core";
 import { FaBaby, FaGraduationCap } from "react-icons/fa";
 import { MdOutlineWork } from "react-icons/md";
+import { UserCard, UserCardSmall } from "../../components/user-card/UserCard";
 
 export const Profile = () => {
   const { id } = useParams();
@@ -30,6 +31,49 @@ export const Profile = () => {
       setProfile(profile);
     })();
   }, [id]);
+
+  const renderPosts = () => {
+    return profile.posts?.length === 0 ? (
+      <h3>No Posts to display</h3>
+    ) : (
+      <div className="profile-posts">
+        {profile?.posts?.map((post) => (
+          <Post key={post._id} post={post} />
+        ))}
+      </div>
+    );
+  };
+
+  const renderFriends = () => {
+    return profile.friends?.length === 0 ? (
+      <h3>User has no friends</h3>
+    ) : (
+      <div className="profile-friends">
+        {profile?.friends?.map((friend) => (
+          <UserCard key={friend._id} user={friend}>
+            <SmallButton
+              disabled={
+                activeUser.friends.some((f) => f === friend._id) ||
+                activeUser.requestsSent.some((r) => r === friend._id) ||
+                friend._id === activeUser._id
+              }
+              isactive={1}
+            >
+              Add Friend
+            </SmallButton>
+          </UserCard>
+        ))}
+      </div>
+    );
+  };
+
+  const sendFriendRequest = async () => {
+    const service = new RelationshipsService();
+    await service.sendFriendRequest({
+      receiverId: profile.user._id,
+      sender: activeUser,
+    });
+  };
 
   return (
     <>
@@ -51,15 +95,23 @@ export const Profile = () => {
                 </SmallButton>
               ) : (
                 <div className="button-container">
-                  <SmallButton>add friend</SmallButton>
-                  <SmallButton>message</SmallButton>
+                  <SmallButton
+                    disabled={
+                      activeUser?.friends.some((f) => f === id) ||
+                      activeUser?.requestsSent.some((r) => r === id)
+                    }
+                    onClick={() => sendFriendRequest()}
+                  >
+                    add friend
+                  </SmallButton>
+                  {/* <SmallButton>message</SmallButton> */}
                 </div>
               )}
             </div>
 
             <div className="profile-header-bottom">
-              <h4>100 posts</h4>
-              <h4>20 friends</h4>
+              <h4>{profile.posts.length} posts</h4>
+              <h4>{profile.friends.length} friends</h4>
             </div>
             <p className="profile-bio">{profile?.user?.bio}</p>
           </div>
@@ -112,18 +164,10 @@ export const Profile = () => {
           {(() => {
             switch (content) {
               case "posts":
-                return profile.posts?.length === 0 ? (
-                  <h3>No Posts to display</h3>
-                ) : (
-                  <div className="profile-posts">
-                    {profile?.posts?.map((post) => (
-                      <Post key={post._id} post={post} />
-                    ))}
-                  </div>
-                );
+                return renderPosts();
 
               case "friends":
-                return <div>FRIENDS</div>;
+                return renderFriends();
 
               case "groups":
                 return <div>GROUPS</div>;

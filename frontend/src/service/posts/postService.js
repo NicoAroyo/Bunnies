@@ -30,6 +30,11 @@ export class PostService {
       await this.#blobService.deleteFile(post.fileName);
     }
     return fetch(`${API_URL}posts/${post._id}`, {
+      headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
+      },
       method: "DELETE",
     })
       .then(this.#success)
@@ -41,16 +46,20 @@ export class PostService {
   }
 
   async getPostsByUser(id) {
-    return fetch(`${API_URL}posts/getPostsByUser/${id}`)
+    return fetch(`${API_URL}posts/get-posts-by-user/${id}`)
       .then(this.#success)
       .catch(this.#failure);
   }
 
   async updatePost(post, postId) {
-    console.log("FROM UPDATE POST", post);
     return fetch(`${API_URL}posts/${postId}`, {
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        Authorization: `Bearer ${JSON.parse(
+          localStorage.getItem("access-token")
+        )}`,
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(post),
     })
       .then(this.#success)

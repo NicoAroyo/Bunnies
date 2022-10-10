@@ -2,14 +2,13 @@
 
 .navbar {
   display: flex;
+  overflow: hidden;
   justify-content: space-between;
   align-items: center;
   box-sizing: border-box;
-  margin: 0%;
   height: 10vh;
   color: white;
   background-color: #f9cdff;
-  display: flex;
   position: sticky;
   gap: 2rem;
   padding: 1rem;
@@ -30,15 +29,16 @@
 }
 
 .logo {
+  cursor: pointer;
   img {
     width: 80px;
     object-fit: contain;
     padding-top: 5px;
   }
 }
-.link{
+.link {
   background-color: #f9cdff;
-  color : white;
+  color: white;
   text-decoration: none;
   border-color: #f9cdff;
   border-radius: 12px;

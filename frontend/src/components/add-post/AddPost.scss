@@ -3,6 +3,10 @@
   flex-direction: column;
   padding: 1rem;
 
+  h3 {
+    text-align: center;
+  }
+
   .new-post-content {
     display: flex;
     justify-content: space-between;
@@ -21,6 +25,17 @@
 
   input[type="file"] {
     visibility: hidden;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    input {
+      width: 97%;
+    }
   }
 
   .button-container {
