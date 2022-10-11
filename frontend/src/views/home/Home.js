@@ -1,12 +1,11 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { AddPost } from "../../components/add-post/AddPost";
-import { Button, SmallButton } from "../../components/button/Button";
 import { Input } from "../../components/input/Input";
 import { Modal } from "../../components/modal/Modal";
 import { Post } from "../../components/post/Post";
 import { UserPic } from "../../components/user-pic/UserPic";
-import { currentUser, login } from "../../redux/features/userSlice";
+import { currentUser } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
 import "./Home.scss";
 
@@ -14,7 +13,7 @@ export const Home = () => {
   const user = useSelector(currentUser);
   const [showAddPostForm, setShowAddPostForm] = useState(false);
   const [posts, setPosts] = useState([]);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     try {

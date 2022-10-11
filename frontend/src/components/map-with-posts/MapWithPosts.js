@@ -8,12 +8,12 @@ import { PostMarker } from "../post-marker/PostMarker";
 import { Spinner } from "../spinner/Spinner";
 import { SmallButton } from "../button/Button";
 import { useNavigate } from "react-router-dom";
-import "./MapWithPosts.scss";
 import { Modal } from "../modal/Modal";
 import { AddPost } from "../add-post/AddPost";
 import { calculateDistance } from "../../utils/core";
 import { Input } from "../input/Input";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
+import "./MapWithPosts.scss";
 
 export const MapWithPosts = () => {
   const navigate = useNavigate();

@@ -16,37 +16,39 @@ export const AddPost = ({ postToEdit = {}, close }) => {
   const [post, setPost] = useState(postToEdit);
   const [marker, setMarker] = useState({});
   const [userLocation, setUserLocation] = useState({});
-  const inputFileRef = useRef(null);
   const [openMap, setOpenMap] = useState(false);
   const [friends, setFriends] = useState([]);
-  const [existingPost, setExistingPost] = useState({});
   const [isEditMode, setIsEditMode] = useState(false);
-  useJsApiLoader({ googleMapsApiKey: GOOGLE_MAPS_API_KEY });
+  const inputFileRef = useRef(null);
   const user = useSelector(currentUser);
+  useJsApiLoader({ googleMapsApiKey: GOOGLE_MAPS_API_KEY });
 
   useEffect(() => {
+    initLocation();
+
+    if (Object.keys(postToEdit).length !== 0) {
+      setIsEditMode(true);
+      setPost(postToEdit);
+      setMarker(postToEdit?.location ?? {});
+    }
+
+    const service = new RelationshipsService();
+    (async () => {
+      const userFriends = await service.getRelationships({
+        userId: user._id,
+        relationship: "friends",
+      });
+      setFriends(userFriends);
+    })();
+  }, []);
+
+  const initLocation = () => {
     navigator.geolocation.getCurrentPosition((response) => {
       const lat = response.coords.latitude;
       const lng = response.coords.longitude;
       setUserLocation({ lat, lng });
-
-      if (Object.keys(postToEdit).length !== 0) {
-        setIsEditMode(true);
-        setExistingPost(existingPost);
-        setPost(postToEdit);
-        setMarker(postToEdit?.location ?? {});
-      }
-
-      const service = new RelationshipsService();
-      (async () => {
-        const userFriends = await service.getRelationships({
-          userId: user._id,
-          relationship: "friends",
-        });
-        setFriends(userFriends);
-      })();
     });
-  }, []);
+  };
 
   const selectLocation = (e) => {
     const lng = e.latLng.lng();
@@ -70,14 +72,15 @@ export const AddPost = ({ postToEdit = {}, close }) => {
 
   const uploadPost = async () => {
     try {
-      if (!validatePost()) return;
+      if (!validatePost()) {
+        return;
+      }
       const postService = new PostService();
       await postService.uploadPost({
         ...post,
         userId: user._id,
         publishedBy: `${user.firstName} ${user.lastName}`,
       });
-
       close();
       alert("Post Updated!");
     } catch (error) {
@@ -98,6 +101,7 @@ export const AddPost = ({ postToEdit = {}, close }) => {
         },
         post._id
       );
+      close();
       alert("Post Uploaded!");
     } catch (error) {
       console.error(error);

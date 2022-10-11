@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SmallButton } from "../../components/button/Button";
 import { Input } from "../../components/input/Input";
 import { AuthenticationService } from "../../service/auth/authService";
@@ -8,8 +8,8 @@ import "./Login.scss";
 export const ResetPassword = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const navigate = useNavigate();
   const { userId, token } = useParams();
+  const navigate = useNavigate();
 
   const submit = async () => {
     if (password !== confirmPassword) {

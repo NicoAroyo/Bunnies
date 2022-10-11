@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { SmallButton } from "../../components/button/Button";
 import { Input } from "../../components/input/Input";
 import { AuthenticationService } from "../../service/auth/authService";

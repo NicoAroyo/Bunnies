@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Login.scss";
-import { gapi } from "gapi-script";
-import { GoogleLogin, GoogleLogout } from "react-google-login";
-import FacebookLogin from "react-facebook-login";
 import { AuthenticationService } from "../../service/auth/authService";
-import { useDispatch, useSelector } from "react-redux";
-import { currentUser, login, logout } from "../../redux/features/userSlice";
-import { Button, SmallButton } from "../../components/button/Button";
-import { Nav } from "../../components/navbar/Navbar";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/features/userSlice";
+import { SmallButton } from "../../components/button/Button";
+import "./Login.scss";
 
 export const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const dispatch = useDispatch();
 
   const submitLogin = async () => {
-    const authenticationService = new AuthenticationService();
+    const authService = new AuthenticationService();
     try {
-      const response = await authenticationService.login({ email, password });
-      console.log(response);
+      const response = await authService.login({ email, password });
+
       if (response.ok) {
         localStorage.setItem(
           "access-token",
