@@ -25,7 +25,6 @@ export const AddPost = ({ postToEdit = {}, close }) => {
 
   useEffect(() => {
     initLocation();
-
     if (Object.keys(postToEdit).length !== 0) {
       setIsEditMode(true);
       setPost(postToEdit);
@@ -40,7 +39,7 @@ export const AddPost = ({ postToEdit = {}, close }) => {
       });
       setFriends(userFriends);
     })();
-  }, []);
+  }, [user]);
 
   const initLocation = () => {
     navigator.geolocation.getCurrentPosition((response) => {

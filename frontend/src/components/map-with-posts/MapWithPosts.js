@@ -33,12 +33,10 @@ export const MapWithPosts = () => {
       const lat = response.coords.latitude;
       const lng = response.coords.longitude;
       setUserLocation({ lat, lng });
-      console.log({ lat, lng });
     });
     (async () => {
       const postService = new PostService();
       const data = await postService.getPosts();
-      console.log(data);
       setPosts(data);
       setFilteredPosts(data);
     })();
@@ -130,7 +128,7 @@ export const MapWithPosts = () => {
             onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
             mapContainerStyle={{
               width: "100vw",
-              height: "91vh",
+              height: "90vh",
             }}
             center={userLocation}
             zoom={10}

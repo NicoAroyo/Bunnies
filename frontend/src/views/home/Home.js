@@ -22,8 +22,8 @@ export const Home = () => {
         const allPosts = await postService.getPosts();
         const postsWithoutBlocked = allPosts.filter(
           (x) =>
-            !user.blocked.includes(x.userId) &&
-            !user.blockedBy.includes(x.userId)
+            !user?.blocked.includes(x.userId) &&
+            !user?.blockedBy.includes(x.userId)
         );
         setPosts(postsWithoutBlocked);
       })();
@@ -38,7 +38,9 @@ export const Home = () => {
         show={showAddPostForm ? 1 : 0}
         closemodal={() => setShowAddPostForm(false)}
       >
-        {showAddPostForm && <AddPost close={() => setShowAddPostForm(false)} />}
+        {showAddPostForm && user && (
+          <AddPost close={() => setShowAddPostForm(false)} />
+        )}
       </Modal>
       <div className="feed">
         {user && (
@@ -54,7 +56,7 @@ export const Home = () => {
           </div>
         )}
         {posts?.map((post) => {
-          return <Post key={post._id} post={post} />;
+          return <Post key={post?._id} post={post} />;
         })}
       </div>
     </main>

@@ -24,14 +24,11 @@ export const Buns = () => {
 
   useEffect(() => {
     (async () => {
-      console.log("USER FROM BUNS", user);
-
       const service = new RelationshipsService();
       const friends = await service.getRelationships({
         userId: user._id,
         relationship: "friends",
       });
-      console.log("FRIENDS FROM BUNS", friends);
       setFriends(friends);
 
       const sent = await service.getRelationships({
@@ -45,7 +42,6 @@ export const Buns = () => {
         relationship: "requestsReceived",
       });
       setReceivedRequests(received);
-      console.log("RECEIVED FRIEND REQUESTS", received);
 
       const userService = new UsersService();
       const users = await userService.getUsers();
