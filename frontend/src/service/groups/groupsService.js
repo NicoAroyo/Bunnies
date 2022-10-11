@@ -2,9 +2,22 @@ import { API_URL } from "../../utils/constants";
 
 export class GroupsService {
   async getPublicGroups() {
-    return fetch(`${API_URL}groups`).then(this.#success).catch(this.#failure);
+    return fetch(`${API_URL}groups/getPublic`)
+      .then(this.#success)
+      .catch(this.#failure);
   }
 
+  async getByIdAsync(id) {
+    return fetch(`${API_URL}groups/getById/${id}`)
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async getAllInformation(id) {
+    return fetch(`${API_URL}groups/getAllInformation/${id}`)
+      .then(this.#success)
+      .catch(this.#failure);
+  }
   async requestToJoin({ groupId, sender }) {
     return fetch(`${API_URL}groups/requestToJoin/${groupId}`, {
       method: "PATCH",
@@ -19,6 +32,18 @@ export class GroupsService {
 
   async cancelRequest({ groupId, sender }) {
     return fetch(`${API_URL}groups/cancelRequest/${groupId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sender }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async keaveGroup({ groupId, sender }) {
+    return fetch(`${API_URL}groups/leaveGroup/${groupId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",

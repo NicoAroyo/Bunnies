@@ -7,6 +7,7 @@ import { currentUser } from "../../redux/features/userSlice";
 import { Button, SmallButton } from "../../components/button/Button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { TextArea } from "../../components/input/Input";
+import { Input } from "../../components/input/Input";
 
 const service = new GroupsService();
 
@@ -81,6 +82,7 @@ export const GeneralGroups = () => {
       admins: [user._id],
     });
     setJoined(joined.push(group));
+    setContent("groups");
   };
 
   const renderUnjoinedGroups = () => {
@@ -108,7 +110,9 @@ export const GeneralGroups = () => {
             <div>
               <div>{group.name}</div>
               <SmallButton onClick={() => leaveGroup(group)}>Leave</SmallButton>
-              <SmallButton onClick={() => navigate()}>View</SmallButton>
+              <SmallButton onClick={() => navigate(`/groups/${group._id}`)}>
+                View
+              </SmallButton>
             </div>
           );
         })}

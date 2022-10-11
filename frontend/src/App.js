@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { AuthenticationService } from "./service/auth/authService";
 import { login } from "./redux/features/userSlice";
 import { GeneralGroups } from "./views/groups/GeneralGroups";
+import { Group } from "./views/groups/Group";
 
 export const App = () => {
   ///
@@ -49,9 +50,8 @@ export const App = () => {
         <Route path="/edit-profile" element={<EditProfile />}></Route>
         <Route path="/chats" element={<Chats />}></Route>
         <Route path="/requests" element={<Requests />}></Route>
-        <Route path="/groups" element={<GeneralGroups />}>
-          {" "}
-        </Route>
+        <Route path="/groups" element={<GeneralGroups />}></Route>
+        <Route path="/groups/:groupId" element={<Group />}></Route>
       </Routes>
     </>
   );
