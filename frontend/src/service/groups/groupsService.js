@@ -42,7 +42,54 @@ export class GroupsService {
       .catch(this.#failure);
   }
 
-  async keaveGroup({ groupId, sender }) {
+  async acceptRequest({ groupId, sender }) {
+    return fetch(`${API_URL}groups/acceptJoinRequest/${groupId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sender }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async makeAdmin({ groupId, sender }) {
+    return fetch(`${API_URL}groups/makeAdmin/${groupId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sender }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async removeAdmin({ groupId, sender }) {
+    return fetch(`${API_URL}groups/removeAdmin/${groupId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ sender }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+  async addPost({ groupId, post }) {
+    return fetch(`${API_URL}groups/addPost/${groupId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ post }),
+    })
+      .then(this.#success)
+      .catch(this.#failure);
+  }
+
+  async leaveGroup({ groupId, sender }) {
     return fetch(`${API_URL}groups/leaveGroup/${groupId}`, {
       method: "PATCH",
       headers: {
