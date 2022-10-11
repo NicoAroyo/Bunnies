@@ -1,18 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
-import { UserCard } from "../../components/user-card/UserCard";
-import { SmallButton } from "../../components/button/Button";
 import { GroupsService } from "../../service/groups/groupsService";
 import { PostService } from "../../service/posts/postService";
 import { UsersService } from "../../service/users/usersService";
 import { useParams } from "react-router-dom";
-import { TextArea } from "../../components/input/Input";
-import { request } from "websocket";
 import { Post } from "../../components/post/Post";
 import { Input } from "../../components/input/Input";
 import { UserPic } from "../../components/user-pic/UserPic";
 import { Modal } from "../../components/modal/Modal";
+import { AddPost } from "../../components/add-post/AddPost";
+import "./Groups.scss";
 
 const groupService = new GroupsService();
 const postService = new PostService();
@@ -89,14 +87,14 @@ export const Group = () => {
                 {isAdmin && (
                   <div>
                     <div>
-                      <SmallButton onClick={() => kickMember(member)}>
+                      {/* <SmallButton onClick={() => kickMember(member)}>
                         Kick
-                      </SmallButton>
+                      </SmallButton> */}
                     </div>
                     <div>
-                      <SmallButton onClick={() => makeAdmin(member)}>
+                      {/* <SmallButton onClick={() => makeAdmin(member)}>
                         Make Admin
-                      </SmallButton>
+                      </SmallButton> */}
                     </div>
                   </div>
                 )}
@@ -120,9 +118,9 @@ export const Group = () => {
                   <div>
                     {admin.firstName} {admin.lastName}
                   </div>
-                  <SmallButton onClick={() => removeAdmin(admin)}>
+                  {/* <SmallButton onClick={() => removeAdmin(admin)}>
                     you aint no admin now
-                  </SmallButton>
+                  </SmallButton> */}
                 </div>
               );
             })}
@@ -133,12 +131,12 @@ export const Group = () => {
                   <div>
                     {request.firstName} {request.lastName}
                   </div>
-                  <SmallButton onClick={() => acceptRequest(request)}>
+                  {/* <SmallButton onClick={() => acceptRequest(request)}>
                     Accept
                   </SmallButton>
                   <SmallButton onClick={() => rejectRequest(request)}>
                     Reject
-                  </SmallButton>
+                  </SmallButton> */}
                 </div>
               );
             })}
@@ -153,7 +151,7 @@ export const Group = () => {
       <div onClick={() => setContent("posts")}>posts</div>
       <div onClick={() => setContent("memebers")}>memebers</div>
       {isAdmin && <div onClick={() => setContent("admin")}>admin controls</div>}
-      <main className="content">
+      <main className="group-content">
         {(() => {
           switch (content) {
             case "posts":

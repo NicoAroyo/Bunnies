@@ -50,8 +50,6 @@ export const MapWithPosts = () => {
   };
 
   const applyFilters = () => {
-    console.log("FILTERS", filters);
-
     const { dateFrom, dateTo, tags, tagged, radius, publisher } = filters;
     let fps = posts;
     if (dateFrom) fps = fps.filter((p) => p.date >= dateFrom);
@@ -79,13 +77,7 @@ export const MapWithPosts = () => {
         p?.publishedBy?.toLowerCase().includes(publisher)
       );
 
-    console.log(fps);
-
     setFilteredPosts(fps);
-  };
-
-  const settingsClicked = () => {
-    setIsSettingsClicked(!isSettingsClicked);
   };
 
   return (
@@ -110,14 +102,19 @@ export const MapWithPosts = () => {
                 scaledSize: new window.google.maps.Size(60, 60),
               }}
             ></MarkerF>
-                if({filteredPosts.length >= 30}){
-                filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
-                return post.location && <PostMarker key={post._id} post={post} />;})
-                  }
-                  if({filteredPosts.length <= 100}){
-                filteredPosts?.slice(0,100).map((post) => {
-                return post.location && <PostMarker key={post._id} post={post} />;})
-                  }
+            if({filteredPosts.length >= 30})
+            {filteredPosts
+              ?.filter((post) => post)
+              .slice(0, 30)
+              .map((post) => {
+                return (
+                  post.location && <PostMarker key={post._id} post={post} />
+                );
+              })}
+            if({filteredPosts.length <= 100})
+            {filteredPosts?.slice(0, 100).map((post) => {
+              return post.location && <PostMarker key={post._id} post={post} />;
+            })}
           </GoogleMap>
         )}
       </div>
@@ -128,7 +125,7 @@ export const MapWithPosts = () => {
             <button
               className="nav__icon"
               type="menu-fold"
-              onClick={() => settingsClicked()}
+              onClick={() => setIsSettingsClicked(!isSettingsClicked)}
             >
               {isSettingsClicked ? (
                 <MdArrowForwardIos />
@@ -158,6 +155,7 @@ export const MapWithPosts = () => {
                 <div className="form-group">
                   <label>From</label>
                   <Input
+                    value={filters?.dateFrom || ""}
                     type="date"
                     onChange={(e) =>
                       setFilters({ ...filters, dateFrom: e.target.value })
@@ -168,6 +166,7 @@ export const MapWithPosts = () => {
                 <div className="form-group">
                   <label>To</label>
                   <Input
+                    value={filters?.dateTo || ""}
                     type="date"
                     onChange={(e) =>
                       setFilters({ ...filters, dateTo: e.target.value })
@@ -178,6 +177,7 @@ export const MapWithPosts = () => {
                 <div className="form-group">
                   <p>By Publisher name:</p>
                   <Input
+                    value={filters?.publisher || ""}
                     placeholder={"name"}
                     onChange={(e) =>
                       setFilters({ ...filters, publisher: e.target.value })
@@ -188,6 +188,7 @@ export const MapWithPosts = () => {
                 <div className="form-group">
                   <p>By Radius from your location: (in km)</p>
                   <Input
+                    value={filters?.radius || ""}
                     type={"number"}
                     onChange={(e) =>
                       setFilters({ ...filters, radius: e.target.value })
@@ -198,6 +199,7 @@ export const MapWithPosts = () => {
                 <div className="form-group">
                   <p>By tagged users (split by ",")</p>
                   <Input
+                    value={filters?.tagged?.join(",") || ""}
                     placeholder={"name"}
                     onChange={(e) =>
                       setFilters({
@@ -211,6 +213,7 @@ export const MapWithPosts = () => {
                 <div className="form-group">
                   <p>By post tags (split by ",")</p>
                   <Input
+                    value={filters?.tags?.join(",") || ""}
                     placeholder={"name"}
                     onChange={(e) =>
                       setFilters({
@@ -223,7 +226,12 @@ export const MapWithPosts = () => {
                 <SmallButton isactive={1} onClick={applyFilters}>
                   Apply Filters
                 </SmallButton>
-                <SmallButton onClick={() => setFilteredPosts(posts)}>
+                <SmallButton
+                  onClick={() => {
+                    setFilteredPosts(posts);
+                    setFilters({});
+                  }}
+                >
                   reset filters
                 </SmallButton>
               </div>
