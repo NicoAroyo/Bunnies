@@ -7,6 +7,7 @@ import { currentUser } from "../../redux/features/userSlice";
 import { Button, SmallButton } from "../../components/button/Button";
 import { Navigate, useNavigate } from "react-router-dom";
 import { TextArea } from "../../components/input/Input";
+import "./Groups.scss";
 
 const service = new GroupsService();
 
@@ -140,24 +141,36 @@ export const GeneralGroups = () => {
         <TextArea
           onChange={(e) => setNewGroup({ ...newGroup, name: e.target.value })}
         ></TextArea>
-        <SmallButton onClick={() => createGroup()}></SmallButton>
+        <SmallButton onClick={() => createGroup()}>Create!</SmallButton>
       </div>
     );
   };
 
   return (
-    <div>
-      <div>
-        <div onClick={() => setContent("newGroup")}>
+    <div className="groups">
+      <div className="side-menu">
+        <div
+          className={`${content === "newGroup" && "active"} menu-option`}
+          onClick={() => setContent("newGroup")}
+        >
           <p>Make a group</p>
         </div>
-        <div onClick={() => setContent("outgoing")}>
+        <div
+          className={`${content === "outgoing" && "active"} menu-option`}
+          onClick={() => setContent("outgoing")}
+        >
           <p>Outgoing Requests</p>
         </div>
-        <div onClick={() => setContent("groups")}>
+        <div
+          className={`${content === "groups" && "active"} menu-option`}
+          onClick={() => setContent("groups")}
+        >
           <p>Groups</p>
         </div>
-        <div onClick={() => setContent("discover")}>
+        <div
+          className={`${content === "discover" && "active"} menu-option`}
+          onClick={() => setContent("discover")}
+        >
           <p>Discover</p>
         </div>
       </div>

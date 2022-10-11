@@ -7,6 +7,7 @@ import { GroupsService } from "../../service/groups/groupsService";
 import { PostService } from "../../service/posts/postService";
 import { UsersService } from "../../service/users/usersService";
 import { useParams } from "react-router-dom";
+import "./Groups.scss";
 
 const groupService = new GroupsService();
 const postService = new PostService();
