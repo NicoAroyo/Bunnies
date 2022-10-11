@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { currentUser } from "../../redux/features/userSlice";
+import { currentUser, login } from "../../redux/features/userSlice";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
 import { UsersService } from "../../service/users/usersService";
 import { UserCard } from "../../components/user-card/UserCard";
@@ -9,8 +8,8 @@ import { FaUserFriends } from "react-icons/fa";
 import { MdOutlineTravelExplore } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { RiUserReceivedFill } from "react-icons/ri";
-import "./Buns.scss";
 import { SmallButton } from "../../components/button/Button";
+import "./Buns.scss";
 
 const relationshipsService = new RelationshipsService();
 
@@ -21,19 +20,15 @@ export const Buns = () => {
   const [sentRequests, setSentRequests] = useState([]);
   const [receivedRequests, setReceivedRequests] = useState([]);
   const [content, setContent] = useState("friends");
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     (async () => {
-      console.log("USER FROM BUNS", user);
-
       const service = new RelationshipsService();
       const friends = await service.getRelationships({
         userId: user._id,
         relationship: "friends",
       });
-      console.log("FRIENDS FROM BUNS", friends);
       setFriends(friends);
 
       const sent = await service.getRelationships({
@@ -47,7 +42,6 @@ export const Buns = () => {
         relationship: "requestsReceived",
       });
       setReceivedRequests(received);
-      console.log("RECEIVED FRIEND REQUESTS", received);
 
       const userService = new UsersService();
       const users = await userService.getUsers();
@@ -69,7 +63,8 @@ export const Buns = () => {
       id1: removedFriend._id,
       id2: user._id,
     });
-    setFriends(friends.filter((f) => f._id !== removedFriend._id));
+    dispatch(login(response.user));
+    // setFriends(friends.filter((f) => f._id !== removedFriend._id));
     setUsers([...users, removedFriend]);
   };
 
@@ -78,7 +73,8 @@ export const Buns = () => {
       receiverId: requestReceiver._id,
       sender: user,
     });
-    setUsers(users.filter((user) => user._id !== requestReceiver._id));
+    dispatch(login(response.user));
+    // setUsers(users.filter((user) => user._id !== requestReceiver._id));
     setSentRequests([...sentRequests, requestReceiver]);
   };
 
@@ -88,8 +84,9 @@ export const Buns = () => {
       senderId: sender._id,
     });
     console.log("AFTER ACCEPTING", response);
-    setFriends([...friends, sender]);
-    setReceivedRequests(receivedRequests.filter((r) => r._id !== sender._id));
+    dispatch(login(response.user));
+    // setFriends([...friends, sender]);
+    // setReceivedRequests(receivedRequests.filter((r) => r._id !== sender._id));
   };
 
   const rejectFriendRequest = async (sender) => {
@@ -97,18 +94,18 @@ export const Buns = () => {
       receiver: user,
       senderId: sender._id,
     });
-    console.log("AFTER REJECTING", response);
-    setReceivedRequests(receivedRequests.filter((r) => r._id !== sender._id));
+    dispatch(login(response.user));
+    // setReceivedRequests(receivedRequests.filter((r) => r._id !== sender._id));
   };
 
   const withdrawFriendRequest = async (receiver) => {
-    const x = await relationshipsService.withdrawFriendRequest({
+    const response = await relationshipsService.withdrawFriendRequest({
       receiverId: receiver._id,
       sender: user,
     });
-    setUsers([...users, receiver]);
-    setSentRequests(sentRequests.filter((s) => s._id !== receiver._id));
-    console.log("AFTER WITHDRAWING", x);
+    dispatch(login(response.user));
+    // setUsers([...users, receiver]);
+    // setSentRequests(sentRequests.filter((s) => s._id !== receiver._id));
   };
 
   const renderFriends = () => {
@@ -126,10 +123,10 @@ export const Buns = () => {
   const renderDiscover = () => {
     return users?.map((item) => {
       return (
-        // !item.friends?.some((f) => f !== item?._id) &&
-        !item.requestsReceived.some((r) => r !== item?._id) &&
-        !item.requestsSent.some((r) => r !== item?._id) &&
-        !item?._id != user?._id && (
+        !user?.friends?.some((f) => f === item?._id) &&
+        !user?.requestsReceived.some((r) => r === item?._id) &&
+        !user?.requestsSent.some((r) => r === item?._id) &&
+        item?._id !== user?._id && (
           <UserCard user={item}>
             <SmallButton isactive={1} onClick={() => sendFriendRequest(item)}>
               Add Friend

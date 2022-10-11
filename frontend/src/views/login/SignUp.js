@@ -1,15 +1,13 @@
 import { gapi } from "gapi-script";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactFacebookLogin from "react-facebook-login";
-import GoogleLogin, { GoogleLogout } from "react-google-login";
+import GoogleLogin from "react-google-login";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../redux/features/userSlice";
 import { AuthenticationService } from "../../service/auth/authService";
+import { GOOGLE_LOGIN_CLIENT_ID } from "../../utils/constants";
 import "./Login.scss";
-
-const clientId =
-  "521406177183-eo7jvfk1egu776rc7vdd76eo34rkqs0g.apps.googleusercontent.com";
 
 export const SignUp = () => {
   const [newUser, setNewUser] = useState({});
@@ -20,7 +18,7 @@ export const SignUp = () => {
   useEffect(() => {
     const initClient = () => {
       gapi.client.init({
-        clientId: clientId,
+        clientId: GOOGLE_LOGIN_CLIENT_ID,
         scope: "",
       });
     };
@@ -38,14 +36,12 @@ export const SignUp = () => {
       lastName: familyName,
     };
     const res = await authService.socialLogin(googleUserCredentials);
-    console.log("FROM GOOGLE LOGIN", res);
     dispatch(login({ ...res.user }));
     localStorage.setItem("access-token", JSON.stringify(res.accessToken));
     navigate("/");
   };
 
   const loginFacebook = async (response) => {
-    // console.log(response);
     const authService = new AuthenticationService();
     const facebookUserCredentials = {
       email: response.email,
@@ -54,13 +50,12 @@ export const SignUp = () => {
       imageUrl: response.picture.url,
     };
     const res = await authService.socialLogin(facebookUserCredentials);
-    console.log("FROM FACEBOOK LOGIN", res);
     dispatch(login({ ...res.user }));
     localStorage.setItem("access-token", JSON.stringify(res.accessToken));
     navigate("/");
   };
 
-  const signup = async () => {
+  const validate = () => {
     if (
       !newUser.firstName ||
       !newUser.lastName ||
@@ -70,24 +65,31 @@ export const SignUp = () => {
       newUser.password !== newUser.confirmPassword
     ) {
       alert("Invalid Inputs");
-    } else {
-      try {
-        const authService = new AuthenticationService();
-        delete newUser.confirmPassword;
-        const response = await authService.signUp({ ...newUser });
-        if (response.ok && response.user) {
-          localStorage.setItem(
-            "access-token",
-            JSON.stringify(response.accessToken)
-          );
-          dispatch(login({ ...response.user }));
-          navigate("/");
-        } else {
-          throw new Error(response.message);
-        }
-      } catch (error) {
-        alert(error);
+      return false;
+    }
+    return true;
+  };
+
+  const signUp = async () => {
+    if (!validate()) {
+      return;
+    }
+    try {
+      const authService = new AuthenticationService();
+      delete newUser.confirmPassword;
+      const response = await authService.signUp({ ...newUser });
+      if (response.ok && response.user) {
+        localStorage.setItem(
+          "access-token",
+          JSON.stringify(response.accessToken)
+        );
+        dispatch(login({ ...response.user }));
+        navigate("/");
+      } else {
+        throw new Error(response.message);
       }
+    } catch (error) {
+      alert(error);
     }
   };
 
@@ -156,18 +158,17 @@ export const SignUp = () => {
             ></input>
           </div>
 
-          <button className="btn-login btn-signup" onClick={signup}>
+          <button className="btn-login btn-signup" onClick={signUp}>
             Sign Me Up!
           </button>
 
           <div className="sign-in-button-container">
             <GoogleLogin
-              clientId={clientId}
+              clientId={GOOGLE_LOGIN_CLIENT_ID}
               buttonText="Sign in with Google"
               onSuccess={loginGoogle}
               onFailure={(err) => console.err(err)}
               cookiePolicy={"single_host_origin"}
-              // isSignedIn={true}
             />
             <ReactFacebookLogin
               appId="604669111136315"

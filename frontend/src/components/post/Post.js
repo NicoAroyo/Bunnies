@@ -3,7 +3,6 @@ import { GenericService } from "../../service/genericService";
 import { formatDateTime } from "../../utils/core";
 import { UserPic } from "../user-pic/UserPic";
 import { FaEdit, FaMap, FaRegComment, FaTrash } from "react-icons/fa";
-import "./Post.scss";
 import { LikeButton } from "../like-button/LikeButton";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
@@ -16,6 +15,7 @@ import { SmallButton } from "../button/Button";
 import { AddPost } from "../add-post/AddPost";
 import { PostMarker } from "../post-marker/PostMarker";
 import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
+import "./Post.scss";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();
@@ -159,18 +159,24 @@ export const Post = ({ post }) => {
         <img className="post-image" ref={imageRef} src={post?.imageUrl} />
       )}
       <div className="post-footer">
-        <LikeButton
-          isLiked={post.likes?.some((l) => l.likedBy === user?._id)}
-          like={() => likePost()}
-          dislike={() => dislikePost()}
-        />
-        <FaRegComment
-          onClick={() => setOpen(!open)}
-          style={{ cursor: "pointer" }}
-        />
-        {post.location && (
-          <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
-        )}
+        <div className="post-footer-buttons">
+          <LikeButton
+            isLiked={post.likes?.some((l) => l.likedBy === user?._id)}
+            like={() => likePost()}
+            dislike={() => dislikePost()}
+          />
+          <FaRegComment
+            onClick={() => setOpen(!open)}
+            style={{ cursor: "pointer" }}
+          />
+          {post.location && (
+            <FaMap style={{ cursor: "pointer" }} onClick={() => setMap(!map)} />
+          )}
+        </div>
+        <div className="post-footer-text">
+          <p>{post?.likes.length} likes</p>
+          <p>{post?.comments.length} comments</p>
+        </div>
       </div>
       <div className="comments">
         {open && (

@@ -16,6 +16,8 @@ import { Requests } from "./views/requests/Requests";
 import { useDispatch } from "react-redux";
 import { AuthenticationService } from "./service/auth/authService";
 import { login } from "./redux/features/userSlice";
+import { ForgotPassword } from "./views/login/ForgotPassword";
+import { ResetPassword } from "./views/login/ResetPassword";
 import { GeneralGroups } from "./views/groups/GeneralGroups";
 import { Group } from "./views/groups/Group";
 
@@ -42,6 +44,11 @@ export const App = () => {
         <Route path="/" element={<Home />}></Route>
         <Route path="/login" element={<Login />}></Route>
         <Route path="/sign-up" element={<SignUp />}></Route>
+        <Route path="/forgot-password" element={<ForgotPassword />}></Route>
+        <Route
+          path="/reset-password/:userId/:token"
+          element={<ResetPassword />}
+        ></Route>
         <Route path="/buns" element={<Buns />}></Route>
         <Route path="/blockedBuns" element={<BlockedBuns />}></Route>
         <Route path="/map" element={<MapWithPosts />}></Route>
@@ -51,7 +58,10 @@ export const App = () => {
         <Route path="/chats" element={<Chats />}></Route>
         <Route path="/requests" element={<Requests />}></Route>
         <Route path="/groups" element={<GeneralGroups />}></Route>
+<<<<<<< HEAD
         <Route path="/groups/:groupId" element={<Group />}></Route>
+=======
+>>>>>>> 56c8eb16ec5051410400e8200da6e6cd786c5d73
       </Routes>
     </>
   );

@@ -6,14 +6,14 @@ import { PostService } from "../../service/posts/postService";
 import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
 import { PostMarker } from "../post-marker/PostMarker";
 import { Spinner } from "../spinner/Spinner";
-import { Button, SmallButton } from "../button/Button";
+import { SmallButton } from "../button/Button";
 import { useNavigate } from "react-router-dom";
-import "./MapWithPosts.scss";
 import { Modal } from "../modal/Modal";
 import { AddPost } from "../add-post/AddPost";
 import { calculateDistance } from "../../utils/core";
 import { Input } from "../input/Input";
-import { Post } from "../post/Post";
+import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
+import "./MapWithPosts.scss";
 
 export const MapWithPosts = () => {
   const navigate = useNavigate();
@@ -26,22 +26,28 @@ export const MapWithPosts = () => {
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: GOOGLE_MAPS_API_KEY,
   });
+  const [isSettingsClicked, setIsSettingsClicked] = useState(false);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((response) => {
       const lat = response.coords.latitude;
       const lng = response.coords.longitude;
       setUserLocation({ lat, lng });
-      console.log({ lat, lng });
     });
     (async () => {
       const postService = new PostService();
       const data = await postService.getPosts();
-      console.log(data);
       setPosts(data);
       setFilteredPosts(data);
     })();
   }, []);
+
+  const filterByBuns = () => {
+    const filtered = filteredPosts.filter((post) =>
+      user.friends.some((f) => f === post.userId)
+    );
+    setFilteredPosts(filtered);
+  };
 
   const applyFilters = () => {
     console.log("FILTERS", filters);
@@ -78,44 +84,13 @@ export const MapWithPosts = () => {
     setFilteredPosts(fps);
   };
 
-  const setingsClick =()=> {
-    var wrapper = document.getElementById('wrapper');
-    wrapper.classList.toggle('is-nav-open')
-  }
-
-  const filterByBuns = () => {
-    const x = filteredPosts.filter((post) =>
-      user.friends.some((f) => f === post.userId)
-    );
-    setFilteredPosts(x);
-    console.log(x);
+  const settingsClicked = () => {
+    setIsSettingsClicked(!isSettingsClicked);
   };
 
-  const filterByAmountPosts = () => {
-    
-
-       if(filteredPosts.length >= 30){ //אם יש שלושים יציג את השלושים עם התמונות
-        
-        filteredPosts?.filter(post=>post).slice(0,100).map()
-       { filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
-          return post.location && <PostMarker key={post._id} post={post} />;})
-       }
-
-
-        if(filteredPosts.length >= 100){ //)(MarkerF) יציג את הכל עם נקודות ציון
-
-        }
-    }
-   
-   
-    if(filteredPosts.length <= 100){ 
-      filteredPosts?.filter(post=>post.likes).slice(0,100).map() //הפוסטים הגדולים
-    }
-  }
-
   return (
-    <div>  
-    <div className="map">
+    <div>
+      <div className="map">
         {!isLoaded ? (
           <Spinner />
         ) : (
@@ -123,7 +98,7 @@ export const MapWithPosts = () => {
             onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
             mapContainerStyle={{
               width: "100vw",
-              height: "91vh",
+              height: "90vh",
             }}
             center={userLocation}
             zoom={10}
@@ -135,97 +110,127 @@ export const MapWithPosts = () => {
                 scaledSize: new window.google.maps.Size(60, 60),
               }}
             ></MarkerF>
-            {filteredPosts?.map((post) => {
-              return post.location && <PostMarker key={post._id} post={post} />;
-            })}
+                if({filteredPosts.length >= 30}){
+                filteredPosts?.filter(post=>post).slice(0,30).map((post) => {
+                return post.location && <PostMarker key={post._id} post={post} />;})
+                  }
+                  if({filteredPosts.length <= 100}){
+                filteredPosts?.slice(0,100).map((post) => {
+                return post.location && <PostMarker key={post._id} post={post} />;})
+                  }
           </GoogleMap>
         )}
       </div>
 
-      <div id="wrapper" className="wrapper">
-<div  className="wrapper" >
-  <div className="nav">
-    <button className="nav__icon" type="menu-fold" onClick={() =>setingsClick()} >{"=>"}</button>
-  <div className="nav__body">
-      <Modal
-        show={isPublishNewPost ? 1 : 0}
-        closemodal={() => setIsPublishNewPost(false)}
-      >
-        <AddPost close={() => setIsPublishNewPost(false)}></AddPost>
-      </Modal>
-      <div className="map-menu">
-        <SmallButton onClick={() => setIsPublishNewPost(true)}>
-          Publish new post
-        </SmallButton>
-        <SmallButton onClick={() => navigate("/buns")}>Friends</SmallButton>
-        <SmallButton onClick={() => filterByBuns()}>
-          Show only your buns' posts
-        </SmallButton>
-        <h2>Filter:</h2>
-        <p>by date:</p>
-        <div className="form-group">
-          <label>From</label>
-          <Input
-            type="date"
-            onChange={(e) =>
-              setFilters({ ...filters, dateFrom: e.target.value })
-            }
-          ></Input>
-        </div>
+      <div className={isSettingsClicked ? "wrapper" : "wrapper is-nav-open"}>
+        <div className="wrapper">
+          <div className="nav">
+            <button
+              className="nav__icon"
+              type="menu-fold"
+              onClick={() => settingsClicked()}
+            >
+              {isSettingsClicked ? (
+                <MdArrowForwardIos />
+              ) : (
+                <MdArrowBackIosNew />
+              )}
+            </button>
+            <div className="nav__body">
+              <Modal
+                show={isPublishNewPost ? 1 : 0}
+                closemodal={() => setIsPublishNewPost(false)}
+              >
+                <AddPost close={() => setIsPublishNewPost(false)}></AddPost>
+              </Modal>
+              <div className="map-menu">
+                <SmallButton onClick={() => setIsPublishNewPost(true)}>
+                  Publish new post
+                </SmallButton>
+                <SmallButton onClick={() => navigate("/buns")}>
+                  Friends
+                </SmallButton>
+                <SmallButton onClick={() => filterByBuns()}>
+                  Show only your buns' posts
+                </SmallButton>
+                <h2>Filter:</h2>
+                <p>by date:</p>
+                <div className="form-group">
+                  <label>From</label>
+                  <Input
+                    type="date"
+                    onChange={(e) =>
+                      setFilters({ ...filters, dateFrom: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <label>To</label>
-          <Input
-            type="date"
-            onChange={(e) => setFilters({ ...filters, dateTo: e.target.value })}
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <label>To</label>
+                  <Input
+                    type="date"
+                    onChange={(e) =>
+                      setFilters({ ...filters, dateTo: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By Publisher name:</p>
-          <Input
-            placeholder={"name"}
-            onChange={(e) =>
-              setFilters({ ...filters, publisher: e.target.value })
-            }
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <p>By Publisher name:</p>
+                  <Input
+                    placeholder={"name"}
+                    onChange={(e) =>
+                      setFilters({ ...filters, publisher: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By Radius from your location: (in km)</p>
-          <Input
-            type={"number"}
-            onChange={(e) => setFilters({ ...filters, radius: e.target.value })}
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <p>By Radius from your location: (in km)</p>
+                  <Input
+                    type={"number"}
+                    onChange={(e) =>
+                      setFilters({ ...filters, radius: e.target.value })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By tagged users (split by ",")</p>
-          <Input
-            placeholder={"name"}
-            onChange={(e) =>
-              setFilters({ ...filters, tagged: e.target.value.split(",") })
-            }
-          ></Input>
-        </div>
+                <div className="form-group">
+                  <p>By tagged users (split by ",")</p>
+                  <Input
+                    placeholder={"name"}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        tagged: e.target.value.split(","),
+                      })
+                    }
+                  ></Input>
+                </div>
 
-        <div className="form-group">
-          <p>By post tags (split by ",")</p>
-          <Input
-            placeholder={"name"}
-            onChange={(e) =>
-              setFilters({ ...filters, tags: e.target.value.split(",") })
-            }
-          ></Input>
+                <div className="form-group">
+                  <p>By post tags (split by ",")</p>
+                  <Input
+                    placeholder={"name"}
+                    onChange={(e) =>
+                      setFilters({
+                        ...filters,
+                        tags: e.target.value.split(","),
+                      })
+                    }
+                  ></Input>
+                </div>
+                <SmallButton isactive={1} onClick={applyFilters}>
+                  Apply Filters
+                </SmallButton>
+                <SmallButton onClick={() => setFilteredPosts(posts)}>
+                  reset filters
+                </SmallButton>
+              </div>
+            </div>
+          </div>
         </div>
-        <SmallButton isactive={1} onClick={applyFilters}>
-          Apply Filters
-        </SmallButton>
       </div>
-    </div>
-    </div>
-    </div>
-    </div>
     </div>
   );
 };

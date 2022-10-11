@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    margin-top: 5px;
   }
 
   .signup-name {
@@ -64,6 +65,7 @@
     border-radius: 4px;
     outline: none;
     transition: all 0.2s ease;
+    margin-bottom: 5px;
     &:hover {
       background: #404040;
     }

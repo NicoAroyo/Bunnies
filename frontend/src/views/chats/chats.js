@@ -8,6 +8,7 @@ import { UsersService } from "../../service/users/usersService";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
 import { UserPic } from "../../components/user-pic/UserPic";
 import { currentUser, login } from "../../redux/features/userSlice";
+// import { messageService } from "../../service/message";
 
 
 export const Chats = () => {
@@ -15,35 +16,68 @@ export const Chats = () => {
   const userState = useSelector(currentUser);
   const [unchangedUser, setUnchangedUser] = useState(useSelector(currentUser));
   const [message, setMessage] = useState("");
-
   const [messages, setMessages] = useState([]);
-  const [rsIds, setRsIds] = useState([]);
-  const [friends, setFriends] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [friend, setFriends] = useState(["Tsvika Bekker","Nico Aroyo"]);
+  const [groups, setGroups] = useState([]);
+  const [groupOrFriend, setGroupOrFriend] = useState([]);
+  const [group, setGroup] = useState([]);
 
-  //const client = new W3CWebSocket('ws://127.0.0.1:8000');
+  const client = new W3CWebSocket('ws://127.0.0.1:8000');
 
+  useEffect(()=>{
+    client.onopen = () => {
+      console.log('WebSocket Client Connected');
+    };
+    client.onmessage = (message) => {
+      const dataFromServer = JSON.parse(message.data);
+      console.log('got reply! ', dataFromServer);
+      if (dataFromServer.type === "message") {
+        this.setState((state) =>
+          ({
+            messages: [...state.messages,
+            {
+              msg: dataFromServer.msg,
+              user: dataFromServer.user
+            }]
+          })
+        );
+      }
+    };
+  })
   useEffect(() => {
     setUser(userState);
     setUnchangedUser(userState);
   }, [userState]);
-
-
+  
 
   const addMassage = (value) => {
-  //  client.send(JSON.stringify({
-    //  type: "message",
-    //  msg: value,
-    //  user: this.state.userName
-   // }));
+   // const message = new messageService();
+   // message.post(
+   //   userId:userState._id,
+   //   textMessages:value,
+   //   timePosting:data.new
+   //   frand:groupOrFriend
+   // );
+     client.send(JSON.stringify({
+      type: "message",
+      msg: value,
+      frend: groupOrFriend
+    }));
+
+
     setMessages([...messages,value ]);
     setMessage("");
   };
 
-  const handleChange = () => {};
+  const handleChange = (value) => {
+    setGroupOrFriend(value[0])
+  }
 
   return (
     <div>
+      <div>
+        to:{groupOrFriend}
+      </div>
       <div className="viewMessage">
         <h1>
           {messages.map((message) => (
@@ -73,10 +107,10 @@ export const Chats = () => {
         </div>
       </div>
       <div className="groups">
-        <select onChange={() => handleChange()} className="comboboxGroup">
-          <option>group</option>
-          {rsIds.map((friend) => (
-            <option>{friend}</option>
+        <select onChange={() => handleChange(friend)} className="comboboxGroup">
+          <option>group or friend</option>
+          {friend?.map((friend) => (
+            <option key={friend} value={friend}>{friend}</option>
           ))}
         </select>
       </div>
