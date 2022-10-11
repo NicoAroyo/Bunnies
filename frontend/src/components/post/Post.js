@@ -3,7 +3,6 @@ import { GenericService } from "../../service/genericService";
 import { formatDateTime } from "../../utils/core";
 import { UserPic } from "../user-pic/UserPic";
 import { FaEdit, FaMap, FaRegComment, FaTrash } from "react-icons/fa";
-import "./Post.scss";
 import { LikeButton } from "../like-button/LikeButton";
 import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
@@ -16,6 +15,7 @@ import { SmallButton } from "../button/Button";
 import { AddPost } from "../add-post/AddPost";
 import { PostMarker } from "../post-marker/PostMarker";
 import { GOOGLE_MAPS_API_KEY } from "../../utils/constants";
+import "./Post.scss";
 
 export const Post = ({ post }) => {
   const navigate = useNavigate();

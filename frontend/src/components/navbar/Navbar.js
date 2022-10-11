@@ -6,9 +6,9 @@ import { SmallButton } from "../button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout } from "../../redux/features/userSlice";
 import { useNavigate } from "react-router-dom";
-import "./Navbar.scss";
 import { UserPic } from "../user-pic/UserPic";
 import { HiUserGroup } from "react-icons/hi";
+import "./Navbar.scss";
 
 export const Nav = () => {
   const navigate = useNavigate();

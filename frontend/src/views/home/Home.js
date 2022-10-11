@@ -1,12 +1,11 @@
-import React, { useEffect, useReducer, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { AddPost } from "../../components/add-post/AddPost";
-import { Button, SmallButton } from "../../components/button/Button";
 import { Input } from "../../components/input/Input";
 import { Modal } from "../../components/modal/Modal";
 import { Post } from "../../components/post/Post";
 import { UserPic } from "../../components/user-pic/UserPic";
-import { currentUser, login } from "../../redux/features/userSlice";
+import { currentUser } from "../../redux/features/userSlice";
 import { PostService } from "../../service/posts/postService";
 import "./Home.scss";
 
@@ -14,7 +13,7 @@ export const Home = () => {
   const user = useSelector(currentUser);
   const [showAddPostForm, setShowAddPostForm] = useState(false);
   const [posts, setPosts] = useState([]);
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   useEffect(() => {
     try {
@@ -23,8 +22,8 @@ export const Home = () => {
         const allPosts = await postService.getPosts();
         const postsWithoutBlocked = allPosts.filter(
           (x) =>
-            !user.blocked.includes(x.userId) &&
-            !user.blockedBy.includes(x.userId)
+            !user?.blocked.includes(x.userId) &&
+            !user?.blockedBy.includes(x.userId)
         );
         setPosts(postsWithoutBlocked);
       })();
@@ -39,7 +38,9 @@ export const Home = () => {
         show={showAddPostForm ? 1 : 0}
         closemodal={() => setShowAddPostForm(false)}
       >
-        {showAddPostForm && <AddPost close={() => setShowAddPostForm(false)} />}
+        {showAddPostForm && user && (
+          <AddPost close={() => setShowAddPostForm(false)} />
+        )}
       </Modal>
       <div className="feed">
         {user && (
@@ -55,7 +56,7 @@ export const Home = () => {
           </div>
         )}
         {posts?.map((post) => {
-          return <Post key={post._id} post={post} />;
+          return <Post key={post?._id} post={post} />;
         })}
       </div>
     </main>

@@ -8,12 +8,12 @@ import { PostMarker } from "../post-marker/PostMarker";
 import { Spinner } from "../spinner/Spinner";
 import { SmallButton } from "../button/Button";
 import { useNavigate } from "react-router-dom";
-import "./MapWithPosts.scss";
 import { Modal } from "../modal/Modal";
 import { AddPost } from "../add-post/AddPost";
 import { calculateDistance } from "../../utils/core";
 import { Input } from "../input/Input";
 import { MdArrowBackIosNew, MdArrowForwardIos } from "react-icons/md";
+import "./MapWithPosts.scss";
 
 export const MapWithPosts = () => {
   const navigate = useNavigate();
@@ -33,12 +33,10 @@ export const MapWithPosts = () => {
       const lat = response.coords.latitude;
       const lng = response.coords.longitude;
       setUserLocation({ lat, lng });
-      console.log({ lat, lng });
     });
     (async () => {
       const postService = new PostService();
       const data = await postService.getPosts();
-      console.log(data);
       setPosts(data);
       setFilteredPosts(data);
     })();
@@ -100,7 +98,7 @@ export const MapWithPosts = () => {
             onClick={(e) => console.log(e.latLng.lat(), e.latLng.lng())}
             mapContainerStyle={{
               width: "100vw",
-              height: "91vh",
+              height: "90vh",
             }}
             center={userLocation}
             zoom={10}

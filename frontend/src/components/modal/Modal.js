@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import "./Modal.scss";
+import React from "react";
 import { AiOutlineCloseCircle } from "react-icons/ai";
+import "./Modal.scss";
 
 export const Modal = ({ closemodal, children, show }) => {
   return (

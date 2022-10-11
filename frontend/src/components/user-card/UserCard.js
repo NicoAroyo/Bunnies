@@ -18,7 +18,6 @@ export const UserCard = ({ user, children }) => {
           {user.firstName} {user.lastName}
         </p>
         {children}
-        {/* <div>{children}</div> */}
       </div>
     </div>
   );

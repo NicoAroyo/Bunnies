@@ -1,20 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { UserPic } from "../../components/user-pic/UserPic";
-import { GenericService } from "../../service/genericService";
-import { PostService } from "../../service/posts/postService";
 import { Post } from "../../components/post/Post";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { currentUser } from "../../redux/features/userSlice";
-import "./Profile.scss";
 import { RelationshipsService } from "../../service/relationships/relationshipsService";
-import { Friend } from "../../components/friend/Friend";
 import { ProfileService } from "../../service/profile/profileService";
 import { SmallButton } from "../../components/button/Button";
 import { formatDateTime } from "../../utils/core";
 import { FaBaby, FaGraduationCap } from "react-icons/fa";
 import { MdOutlineWork } from "react-icons/md";
-import { UserCard, UserCardSmall } from "../../components/user-card/UserCard";
+import { UserCard } from "../../components/user-card/UserCard";
+import "./Profile.scss";
 
 export const Profile = () => {
   const { id } = useParams();
@@ -27,7 +24,6 @@ export const Profile = () => {
     (async () => {
       const profileService = new ProfileService();
       const profile = await profileService.getProfile(id);
-      console.log("PROFILE", profile);
       setProfile(profile);
     })();
   }, [id]);
@@ -110,8 +106,8 @@ export const Profile = () => {
             </div>
 
             <div className="profile-header-bottom">
-              <h4>{profile.posts.length} posts</h4>
-              <h4>{profile.friends.length} friends</h4>
+              <h4>{profile?.posts?.length} posts</h4>
+              <h4>{profile?.friends?.length} friends</h4>
             </div>
             <p className="profile-bio">{profile?.user?.bio}</p>
           </div>

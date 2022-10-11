@@ -9,19 +9,17 @@ import { UsersService } from "../../service/users/usersService";
 import "./EditProfile.scss";
 export const EditProfile = () => {
   const [user, setUser] = useState(useSelector(currentUser));
-  const [unchangedUser, setUnchangedUser] = useState(useSelector(currentUser));
   const userState = useSelector(currentUser);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   useEffect(() => {
     setUser(userState);
-    setUnchangedUser(userState);
   }, [userState]);
 
   const submit = async () => {
     const service = new UsersService();
-    const res = await service.editUser(user, user._id);
+    await service.editUser(user, user._id);
     dispatch(login(user));
     navigate(-1);
   };
