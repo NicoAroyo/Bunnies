@@ -40,6 +40,42 @@ export const Group = () => {
     })();
   }, []);
 
+  const kickMember = async (member) => {
+    await groupService.leaveGroup(groupId, member);
+    const newData = group.dataMembers.filter(
+      (x) => x.toString() !== member._id.toString()
+    );
+    setGroupMembers(newData);
+  };
+  const makeAdmin = async (member) => {
+    await groupService.makeAdmin(groupId, member);
+    const newData = group.dataMembers.push(member._id);
+    setAdmins(newData);
+  };
+  const removeAdmin = async (admin) => {
+    await groupService.removeAdmin(groupId, admin);
+    const newData = group.dataAdmins.filter(
+      (x) => x.toString() !== admin._id.toString()
+    );
+    setAdmins(newData);
+  };
+  const acceptRequest = async (request) => {
+    await groupService.acceptRequest(groupId, request);
+    const newData = group.dataRequests.filter(
+      (x) => x.toString() !== request._id.toString()
+    );
+    const newData2 = group.dataMembers.push(request._id);
+    setRequests(newData);
+    setGroupMembers(newData2);
+  };
+  const rejectRequest = async (request) => {
+    await groupService.cancelRequest(groupId, request);
+    const newData = group.dataRequests.filter(
+      (x) => x.toString() !== request._id.toString()
+    );
+    setRequests(newData);
+  };
+
   const renderPosts = () => {
     return (
       <main className="home">
