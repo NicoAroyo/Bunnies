@@ -22,7 +22,6 @@ export const Group = () => {
   const { groupId } = useParams();
   const user = useSelector(currentUser);
   const [groupMembers, setGroupMembers] = useState([]);
-  const [groupMembersWhoAreFriends, setGroupMemberWhoAreFriends] = useState();
   const [requests, setRequests] = useState([]);
   const [content, setContent] = useState("posts");
   const [isAdmin, setIsAdmin] = useState(false);
@@ -36,7 +35,6 @@ export const Group = () => {
       const group = await groupService.getAllInformation(groupId);
       if (group.group.admins.includes(user._id.toString())) setIsAdmin(true);
       setGroupMembers(group.dataMembers);
-      //   setGroupMemberWhoAreFriends(friendsInGroup);
       setRequests(group.dataRequests);
       setAdmins(group.dataAdmins);
       setPosts(group.dataPosts);
@@ -80,19 +78,6 @@ export const Group = () => {
     //add option to invite friends?
     return (
       <div>
-        <div>
-          {/* {groupMembersWhoAreFriends.map((friendMember) => {
-            return (<div>
-              {friendMember.firstName} {friendMember.lastName}
-            </div>)(
-              isAdmin && (
-                <SmallButton onClick={() => kickMember(friendMember)}>
-                  Kick
-                </SmallButton>
-              )
-            );
-          })} */}
-        </div>
         <div>Memebers</div>
         <div>
           {groupMembers.map((member) => {
@@ -124,9 +109,10 @@ export const Group = () => {
   };
 
   const renderAdmin = () => {
+    console.log(group.group);
     return (
       <div>
-        {group?.creator.includes(user._id.toString()) && (
+        {group.group?.creator.includes(user._id.toString()) && (
           <div>
             {admins?.map((admin) => {
               return (
