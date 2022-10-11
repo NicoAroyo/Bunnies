@@ -123,14 +123,14 @@ export const Group = () => {
                 {isAdmin && (
                   <div>
                     <div>
-                      {/* <SmallButton onClick={() => kickMember(member)}>
+                      <SmallButton onClick={() => kickMember(member)}>
                         Kick
-                      </SmallButton> */}
+                      </SmallButton>
                     </div>
                     <div>
-                      {/* <SmallButton onClick={() => makeAdmin(member)}>
+                      <SmallButton onClick={() => makeAdmin(member)}>
                         Make Admin
-                      </SmallButton> */}
+                      </SmallButton>
                     </div>
                   </div>
                 )}
@@ -154,9 +154,9 @@ export const Group = () => {
                   <div>
                     {admin.firstName} {admin.lastName}
                   </div>
-                  {/* <SmallButton onClick={() => removeAdmin(admin)}>
+                  <SmallButton onClick={() => removeAdmin(admin)}>
                     you aint no admin now
-                  </SmallButton> */}
+                  </SmallButton>
                 </div>
               );
             })}
