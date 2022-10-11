@@ -58,10 +58,7 @@ export const App = () => {
         <Route path="/chats" element={<Chats />}></Route>
         <Route path="/requests" element={<Requests />}></Route>
         <Route path="/groups" element={<GeneralGroups />}></Route>
-<<<<<<< HEAD
         <Route path="/groups/:groupId" element={<Group />}></Route>
-=======
->>>>>>> 56c8eb16ec5051410400e8200da6e6cd786c5d73
       </Routes>
     </>
   );
